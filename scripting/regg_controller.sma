@@ -1,6 +1,5 @@
 #include <amxmodx>
 #include <reapi>
-// #include <map_manager>
 #include "include/regg.inc"
 
 enum {
@@ -22,11 +21,6 @@ public plugin_init() {
 
 public plugin_cfg() {
 	ReGG_Start(getMode());
-}
-
-public ReGG_FinishPost() {
-	server_cmd("restart");
-	// mapm_start_vote(VOTE_BY_SCHEDULER);
 }
 
 ReGG_Mode:getMode() {

@@ -40,6 +40,7 @@ enum Forward {
 	FWD_TeamLevel,
 	FWD_GiveWeapon,
 	FWD_KillEnemy,
+	FWD_PlayerJoin,
 };
 
 new Forwards[Forward][2], FReturn;
@@ -53,6 +54,7 @@ registerForwards() {
 	REGISTER_FORWARD_ARGS(FWD_TeamLevel, "ReGG_TeamLevelPre", "ReGG_TeamLevelPost", FP_CELL, FP_CELL);
 	REGISTER_FORWARD_ARGS(FWD_GiveWeapon, "ReGG_GiveWeaponPre", "ReGG_GiveWeaponPost", FP_CELL, FP_CELL);
 	REGISTER_FORWARD_ARGS(FWD_KillEnemy, "ReGG_KillEnemyPre", "ReGG_KillEnemyPost", FP_CELL, FP_CELL, FP_CELL, FP_CELL, FP_CELL, FP_CELL);
+	REGISTER_FORWARD_ARGS(FWD_PlayerJoin, "ReGG_PlayerJoinPre", "ReGG_PlayerJoinPost", FP_CELL);
 }
 
 destroyForwards() {

@@ -49,6 +49,9 @@ forward ReGG_GiveWeaponPost(const id, const WeaponIdType:value);
 forward ReGG_KillEnemyPre(const killer, const victim, const WeaponIdType:value, const ReGG_Result:result, const oldPoints, const oldLevel);
 forward ReGG_KillEnemyPost(const killer, const victim, const WeaponIdType:value, const ReGG_Result:result, const newPoints, const newLevel);
 
+forward ReGG_PlayerJoinPre(const id);
+forward ReGG_PlayerJoinPost(const id);
+
 native ReGG_Start(const ReGG_Mode:mode);
 native ReGG_Finish();
 native ReGG_GetMode();

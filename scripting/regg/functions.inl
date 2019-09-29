@@ -7,6 +7,7 @@
 #define GET_PLAYER_SLOT(%1,%2,%3) if ((%2 = getTeamSlot(%1)) == ReGG_SlotInvalid) return %3
 
 bool:playerJoin(const id) {
+	EXECUTE_FORWARD_PRE_ARGS(FWD_PlayerJoin, false, id);
 	if (Mode == ReGG_ModeTeam) {
 		new slot;
 		GET_PLAYER_SLOT(id, slot, false);
@@ -38,6 +39,7 @@ bool:playerJoin(const id) {
 	}
 
 	Players[id][PlayerLevel] = min + ((max - min) / 2);
+	EXECUTE_FORWARD_POST_ARGS(FWD_PlayerJoin, id);
 	return true;
 }
 
@@ -234,13 +236,19 @@ ReGG_Result:setPoints(const id, const value) {
 	return setTeamPoints(slot ,value);
 }
 
-ReGG_Result:setPlayerPoints(const id, const value, const bool:forwards = true) {
+ReGG_Result:setPlayerPoints(const id, const value, const bool:add = true, const bool:forwards = true) {
 	if (value == 0) {
 		return ReGG_ResultNone;
 	}
 
 	if (forwards) EXECUTE_FORWARD_PRE_ARGS(FWD_PlayerPoints, ReGG_ResultNone, id, value);
-	Players[id][PlayerPoints] += value;
+
+	new oldValue = Players[id][PlayerPoints];
+	if (add) {
+		Players[id][PlayerPoints] += value;
+	} else {
+		Players[id][PlayerPoints] = value;
+	}
 
 	new ReGG_Result:result = ReGG_ResultNone;
 	if (Players[id][PlayerPoints] >= getPlayerLevelPoints(id)) {
@@ -253,16 +261,22 @@ ReGG_Result:setPlayerPoints(const id, const value, const bool:forwards = true) {
 	if (result != ReGG_ResultNone) {
 		return result;
 	}
-	return value > 0 ? ReGG_ResultPointsUp : ReGG_ResultPointsDown;
+	return Players[id][PlayerPoints] > oldValue ? ReGG_ResultPointsUp : ReGG_ResultPointsDown;
 }
 
-ReGG_Result:setTeamPoints(const slot, const value, const bool:forwards = true) {
+ReGG_Result:setTeamPoints(const slot, const value, const bool:add = true, const bool:forwards = true) {
 	if (value == 0) {
 		return ReGG_ResultNone;
 	}
 
 	if (forwards) EXECUTE_FORWARD_PRE_ARGS(FWD_TeamPoints, ReGG_ResultNone, slot, value);
-	Teams[slot][TeamPoints] += value;
+
+	new oldValue = Teams[slot][TeamPoints];
+	if (add) {
+		Teams[slot][TeamPoints] += value;
+	} else {
+		Teams[slot][TeamPoints] = value;
+	}
 
 	for (new player = 1, slot; player <= MaxClients; player++) {
 		if (!is_user_connected(player) || is_user_hltv(player)) {
@@ -290,7 +304,7 @@ ReGG_Result:setTeamPoints(const slot, const value, const bool:forwards = true) {
 	if (result != ReGG_ResultNone) {
 		return result;
 	}
-	return value > 0 ? ReGG_ResultPointsUp : ReGG_ResultPointsDown;
+	return Teams[slot][TeamPoints] > oldValue ? ReGG_ResultPointsUp : ReGG_ResultPointsDown;
 }
 
 ReGG_Result:setLevel(const id, const value) {
@@ -303,32 +317,39 @@ ReGG_Result:setLevel(const id, const value) {
 	return setTeamLevel(slot, value);
 }
 
-ReGG_Result:setPlayerLevel(const id, const value, const bool:forwards = true) {
-	if (value == 0) {
+ReGG_Result:setPlayerLevel(const id, const value, const bool:add = true, const bool:forwards = true) {
+	if (add && value == 0) {
 		return ReGG_ResultNone;
 	}
 
 	if (forwards) EXECUTE_FORWARD_PRE_ARGS(FWD_PlayerLevel, ReGG_ResultNone, id, value);
 	new ReGG_Result:result = ReGG_ResultNone;
-	new oldLevel = Players[id][PlayerLevel];
-	Players[id][PlayerLevel] += value;
+	new oldValue = Players[id][PlayerLevel];
+	if (add) {
+		Players[id][PlayerLevel] += value;
+	} else {
+		Players[id][PlayerLevel] = value;
+	}
+
 	if (Players[id][PlayerLevel] >= LevelsNum) {
 		Players[id][PlayerLevel] = LevelsNum - 1;
 		result = ReGG_ResultFinish;
-	} else {
-		result = value > 0 ? ReGG_ResultLevelUp : ReGG_ResultLevelDown;
 	}
 
 	if (Players[id][PlayerLevel] < 0) {
 		Players[id][PlayerLevel] = 0;
 	}
 
+	if (result == ReGG_ResultNone) {
+		result = Players[id][PlayerLevel] > oldValue ? ReGG_ResultLevelUp : ReGG_ResultLevelDown;
+	}
+
 	Players[id][PlayerPoints] = 0;
 
-	if (oldLevel != Players[id][PlayerLevel]) {
+	if (oldValue != Players[id][PlayerLevel]) {
 		new newLevel =  Players[id][PlayerLevel];
 		if (Levels[newLevel][LevelWeaponID] != WEAPON_KNIFE) {
-			removeWeapon(id, oldLevel);
+			removeWeapon(id, oldValue);
 		} else {
 			rg_remove_all_items(id, true);
 			giveDefaultWeapons(id);
@@ -340,27 +361,36 @@ ReGG_Result:setPlayerLevel(const id, const value, const bool:forwards = true) {
 	return result;
 }
 
-ReGG_Result:setTeamLevel(const slot, const value, const bool:forwards = true) {
+ReGG_Result:setTeamLevel(const slot, const value, const bool:add = true, const bool:forwards = true) {
 	if (value == 0) {
 		return ReGG_ResultNone;
 	}
 
 	if (forwards) EXECUTE_FORWARD_PRE_ARGS(FWD_TeamLevel, ReGG_ResultNone, slot, value);
 	new ReGG_Result:result = ReGG_ResultNone;
-	new oldLevel = Teams[slot][TeamLevel];
-	Teams[slot][TeamLevel] += value;
+	new oldValue = Teams[slot][TeamLevel];
+	if (add) {
+		Teams[slot][TeamLevel] += value;
+	} else {
+		Teams[slot][TeamLevel] = value;
+	}
+	
 	if (Teams[slot][TeamLevel] >= LevelsNum) {
 		Teams[slot][TeamLevel] = LevelsNum - 1;
 		result = ReGG_ResultFinish;
-	} else {
-		result = value > 0 ? ReGG_ResultLevelUp : ReGG_ResultLevelDown;
 	}
+
 	if (Teams[slot][TeamLevel] < 0) {
 		Teams[slot][TeamLevel] = 0;
 	}
+
+	if (result == ReGG_ResultNone) {
+		result = Teams[slot][TeamLevel] > oldValue ? ReGG_ResultLevelUp : ReGG_ResultLevelDown;
+	}
+
 	Teams[slot][TeamPoints] = 0;
 
-	new newLevel =  Teams[slot][TeamLevel];
+	new newValue = Teams[slot][TeamLevel];
 	for (new player = 1, playerSlot; player <= MaxClients; player++) {
 		if (!is_user_connected(player) || is_user_hltv(player)) {
 			continue;
@@ -375,14 +405,13 @@ ReGG_Result:setTeamLevel(const slot, const value, const bool:forwards = true) {
 		Players[player][PlayerLevel] = Teams[slot][TeamLevel];
 		EXECUTE_FORWARD_POST_ARGS(FWD_PlayerLevel, player, value);
 
-		if (oldLevel != Teams[slot][TeamLevel]) {
-			if (Levels[newLevel][LevelWeaponID] != WEAPON_KNIFE) {
-				removeWeapon(player, oldLevel);
+		if (oldValue != Teams[slot][TeamLevel]) {
+			if (Levels[newValue][LevelWeaponID] != WEAPON_KNIFE) {
+				removeWeapon(player, oldValue);
 			} else {
 				rg_remove_all_items(player, true);
 				giveDefaultWeapons(player);
 			}
-			removeWeapon(player, oldLevel);
 			giveWeapon(player, Teams[slot][TeamLevel]);
 		}
 	}
