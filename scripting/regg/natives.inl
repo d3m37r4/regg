@@ -100,14 +100,14 @@ public NativeGetPoints(const plugin, const argc) {
 	return Teams[slot][TeamPoints];
 }
 
-public ReGG_Result:NativeSetPoints(const plugin, const argc) {
+public bool:NativeSetPoints(const plugin, const argc) {
 	enum { arg_player = 1, arg_points, arg_forwards };
 
-	CHECK_NATIVE_MODE(ReGG_ResultNone)
-	CHECK_NATIVE_ARGS_NUM(argc, arg_points, ReGG_ResultNone)
+	CHECK_NATIVE_MODE(false)
+	CHECK_NATIVE_ARGS_NUM(argc, arg_points, false)
 
 	new player = get_param(arg_player);
-	CHECK_NATIVE_PLAYER(player, ReGG_ResultNone)
+	CHECK_NATIVE_PLAYER(player, false)
 
 	new bool:forwards = false;
 	if (argc >= arg_forwards) { // HACK. Cant compile with ternary operator
@@ -115,12 +115,12 @@ public ReGG_Result:NativeSetPoints(const plugin, const argc) {
 	}
 
 	if (Mode != ReGG_ModeTeam) {
-		return setPlayerPoints(player, get_param(arg_points), false, forwards);
+		return setPlayerPoints(player, get_param(arg_points), forwards);
 	}
 
 	new slot = getTeamSlot(player);
-	CHECK_NATIVE_SLOT(slot, ReGG_ResultNone)
-	return setTeamPoints(slot, get_param(arg_points), false, forwards);
+	CHECK_NATIVE_SLOT(slot, false)
+	return setTeamPoints(slot, get_param(arg_points), forwards);
 }
 
 public NativeGetTeamPoints(const plugin, const argc) {
@@ -140,24 +140,24 @@ public NativeGetTeamPoints(const plugin, const argc) {
 	return Teams[slot][TeamPoints];
 }
 
-public ReGG_Result:NativeSetTeamPoints(const plugin, const argc) {
+public bool:NativeSetTeamPoints(const plugin, const argc) {
 	enum { arg_slot = 1, arg_points, arg_forwards };
 
-	CHECK_NATIVE_MODE(ReGG_ResultNone)
+	CHECK_NATIVE_MODE(false)
 
 	if (Mode != ReGG_ModeTeam) {
 		log_error(AMX_ERR_NATIVE, "Available only in team mode");
-		return ReGG_ResultNone;
+		return false;
 	}
-	CHECK_NATIVE_ARGS_NUM(argc, arg_points, ReGG_ResultNone)
+	CHECK_NATIVE_ARGS_NUM(argc, arg_points, false)
 	new slot = get_param(arg_slot);
-	CHECK_NATIVE_SLOT(slot, ReGG_ResultNone)
+	CHECK_NATIVE_SLOT(slot, false)
 
 	new bool:forwards = false;
 	if (argc >= arg_forwards) { // HACK. Cant compile with ternary operator
 		forwards = bool:get_param(arg_forwards);
 	}
-	return setTeamPoints(slot, get_param(arg_points), false, forwards);
+	return setTeamPoints(slot, get_param(arg_points), forwards);
 }
 
 public NativeGetLevel(const plugin, const argc) {
@@ -179,14 +179,14 @@ public NativeGetLevel(const plugin, const argc) {
 	return Teams[slot][TeamLevel];
 }
 
-public ReGG_Result:NativeSetLevel(const plugin, const argc) {
+public bool:NativeSetLevel(const plugin, const argc) {
 	enum { arg_player = 1, arg_level, arg_forwards };
 
-	CHECK_NATIVE_MODE(ReGG_ResultNone)
-	CHECK_NATIVE_ARGS_NUM(argc, arg_level, ReGG_ResultNone)
+	CHECK_NATIVE_MODE(false)
+	CHECK_NATIVE_ARGS_NUM(argc, arg_level, false)
 
 	new player = get_param(arg_player);
-	CHECK_NATIVE_PLAYER(player, ReGG_ResultNone)
+	CHECK_NATIVE_PLAYER(player, false)
 
 	new bool:forwards = false;
 	if (argc >= arg_forwards) { // HACK. Cant compile with ternary operator
@@ -194,12 +194,12 @@ public ReGG_Result:NativeSetLevel(const plugin, const argc) {
 	}
 
 	if (Mode != ReGG_ModeTeam) {
-		return setPlayerLevel(player, get_param(arg_level), false, forwards);
+		return setPlayerLevel(player, get_param(arg_level), forwards);
 	}
 
 	new slot = getTeamSlot(player);
-	CHECK_NATIVE_SLOT(slot, ReGG_ResultNone)
-	return setTeamLevel(slot, get_param(arg_level), false, forwards);
+	CHECK_NATIVE_SLOT(slot, false)
+	return setTeamLevel(slot, get_param(arg_level), forwards);
 }
 
 public NativeGetTeamLevel(const plugin, const argc) {
@@ -219,24 +219,24 @@ public NativeGetTeamLevel(const plugin, const argc) {
 	return Teams[slot][TeamLevel];
 }
 
-public ReGG_Result:NativeSetTeamLevel(const plugin, const argc) {
+public bool:NativeSetTeamLevel(const plugin, const argc) {
 	enum { arg_slot = 1, arg_level, arg_forwards };
 
-	CHECK_NATIVE_MODE(ReGG_ResultNone)
+	CHECK_NATIVE_MODE(false)
 
 	if (Mode != ReGG_ModeTeam) {
 		log_error(AMX_ERR_NATIVE, "Available only in team mode");
-		return ReGG_ResultNone;
+		return false;
 	}
-	CHECK_NATIVE_ARGS_NUM(argc, arg_level, ReGG_ResultNone)
+	CHECK_NATIVE_ARGS_NUM(argc, arg_level, false)
 	new slot = get_param(arg_slot);
-	CHECK_NATIVE_SLOT(slot, ReGG_ResultNone)
+	CHECK_NATIVE_SLOT(slot, false)
 
 	new bool:forwards = false;
 	if (argc >= arg_forwards) { // HACK. Cant compile with ternary operator
 		forwards = bool:get_param(arg_forwards);
 	}
-	return setTeamLevel(slot, get_param(arg_level), false, forwards);
+	return setTeamLevel(slot, get_param(arg_level), forwards);
 }
 
 public NativeGetLevelPoints(const plugin, const argc) {
@@ -279,12 +279,13 @@ public NativeGetPlayerLevelPoints(const plugin, const argc) {
 	CHECK_NATIVE_PLAYER(player, -1)
 
 	if (Mode != ReGG_ModeTeam) {
-		return getPlayerLevelPoints(player);
+		new level = Players[player][PlayerLevel];
+		return Levels[level][LevelPoints];
 	}
 
 	new slot = getTeamSlot(player);
 	CHECK_NATIVE_SLOT(slot, -1)
-	return getTeamLevelPoints(slot);
+	return getTeamLevelPoints(slot, Teams[slot][TeamLevel]);
 }
 
 public NativeGetTeamLevelPoints(const plugin, const argc) {
@@ -300,6 +301,5 @@ public NativeGetTeamLevelPoints(const plugin, const argc) {
 	CHECK_NATIVE_ARGS_NUM(argc, arg_slot, -1)
 	new slot = get_param(arg_slot);
 	CHECK_NATIVE_SLOT(slot, -1)
-
-	return getTeamLevelPoints(slot);
+	return getTeamLevelPoints(slot, Teams[slot][TeamLevel]);
 }

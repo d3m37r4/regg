@@ -95,9 +95,8 @@ public ReGG_TeamLevelPre(const slot, const value) {
 }
 
 public ReGG_TeamLevelPost(const slot, const value) {
-	new level = ReGG_GetTeamLevel(slot);
-	if (oldTeamLevel != level) {
-		notifyTeam(slot, level, oldTeamLevel < level ? ReGG_ResultLevelUp : ReGG_ResultLevelDown);
+	if (oldTeamLevel != value) {
+		notifyTeam(slot, value, oldTeamLevel < value ? ReGG_ResultLevelUp : ReGG_ResultLevelDown);
 	}
 }
 

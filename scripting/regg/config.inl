@@ -9,8 +9,8 @@
 enum _:config_s {
     // ReGG_Mode:CfgMode,
     Float:CfgNadeRefresh,
-    CfgKnifeStealMode,
-    CfgKnifeStealPoints,
+    CfgStealMode,
+    CfgStealValue,
     CfgAWPOneShot,
     CfgAmmoAmount,
     CfgRefillOnKill,
@@ -55,18 +55,18 @@ registerCvars() {
 
     // 0 - off, 1 - steal level, 2 - steal points
     bind_pcvar_num(create_cvar(
-        "regg_knife_steal_mode", "1",
+        "regg_steal_mode", "1",
         .has_min = true,
         .min_val = 0.0,
         .has_max = true,
         .max_val = 2.0
-    ), Config[CfgKnifeStealMode]);
+    ), Config[CfgStealMode]);
 
     bind_pcvar_num(create_cvar(
-        "regg_knife_steal_points", "3",
+        "regg_steal_value", "3",
         .has_min = true,
         .min_val = 1.0
-    ), Config[CfgKnifeStealPoints]);
+    ), Config[CfgStealValue]);
 
     bind_pcvar_num(create_cvar(
         "regg_awp_oneshot", "1",

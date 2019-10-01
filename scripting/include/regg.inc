@@ -52,18 +52,24 @@ forward ReGG_KillEnemyPost(const killer, const victim, const WeaponIdType:value,
 forward ReGG_PlayerJoinPre(const id);
 forward ReGG_PlayerJoinPost(const id);
 
+forward ReGG_StealPointsPre(cosnt killer, const victim, const value);
+forward ReGG_StealPointsPost(cosnt killer, const victim, const value);
+
+forward ReGG_StealLevelsPre(cosnt killer, const victim, const value);
+forward ReGG_StealLevelsPost(cosnt killer, const victim, const value);
+
 native ReGG_Start(const ReGG_Mode:mode);
 native ReGG_Finish();
 native ReGG_GetMode();
 native ReGG_GetPlayerSlot(const id);
 native ReGG_GetPoints(const id);
-native ReGG_Result:ReGG_SetPoints(const id, const value, const bool:forwards = false);
+native bool:ReGG_SetPoints(const id, const value, const bool:forwards = false);
 native ReGG_GetTeamPoints(const slot);
-native ReGG_Result:ReGG_SetTeamPoints(const slot, const value, const bool:forwards = false);
+native bool:ReGG_SetTeamPoints(const slot, const value, const bool:forwards = false);
 native ReGG_GetLevel(const id);
-native ReGG_Result:ReGG_SetLevel(const id, const value, const bool:forwards = false);
+native bool:ReGG_SetLevel(const id, const value, const bool:forwards = false);
 native ReGG_GetTeamLevel(const slot);
-native ReGG_Result:ReGG_SetTeamLevel(const slot, const value, const bool:forwards = false);
+native bool:ReGG_SetTeamLevel(const slot, const value, const bool:forwards = false);
 native ReGG_GetLevelPoints(const level);
 native ReGG_GetLevelTitle(const level, buffer[], const length);
 native WeaponIdType:ReGG_GetLevelWeapon(const level);

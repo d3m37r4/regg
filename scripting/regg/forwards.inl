@@ -41,6 +41,8 @@ enum Forward {
 	FWD_GiveWeapon,
 	FWD_KillEnemy,
 	FWD_PlayerJoin,
+	FWD_StealPoints,
+	FWD_StealLevels,
 };
 
 new Forwards[Forward][2], FReturn;
@@ -55,6 +57,8 @@ registerForwards() {
 	REGISTER_FORWARD_ARGS(FWD_GiveWeapon, "ReGG_GiveWeaponPre", "ReGG_GiveWeaponPost", FP_CELL, FP_CELL);
 	REGISTER_FORWARD_ARGS(FWD_KillEnemy, "ReGG_KillEnemyPre", "ReGG_KillEnemyPost", FP_CELL, FP_CELL, FP_CELL, FP_CELL, FP_CELL, FP_CELL);
 	REGISTER_FORWARD_ARGS(FWD_PlayerJoin, "ReGG_PlayerJoinPre", "ReGG_PlayerJoinPost", FP_CELL);
+	REGISTER_FORWARD_ARGS(FWD_StealPoints, "ReGG_StealPointsPre", "ReGG_StealPointsPost", FP_CELL, FP_CELL, FP_CELL);
+	REGISTER_FORWARD_ARGS(FWD_StealLevels, "ReGG_StealLevelsPre", "ReGG_StealLevelsPost", FP_CELL, FP_CELL, FP_CELL);
 }
 
 destroyForwards() {

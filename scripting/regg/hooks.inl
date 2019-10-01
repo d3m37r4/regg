@@ -124,7 +124,8 @@ public CBasePlayer_ThrowHeGrenade_Post(const id) {
 public CBasePlayer_Killed_Post(const victim, const killer) {
 	if (victim == killer) {
 		if (Mode != ReGG_ModeTeam) {
-			setPlayerLevel(victim, -1);
+			subPlayerLevel(victim, 1);
+			setPlayerPoints(victim, 0);
 		}
 		return HC_CONTINUE;
 	}
