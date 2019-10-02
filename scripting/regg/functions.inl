@@ -28,11 +28,11 @@ bool:start(const ReGG_Mode:mode) {
 	return true;
 }
 
-bool:finish() {
-	EXECUTE_FORWARD_PRE(FWD_Finish, false);
+bool:finish(const killer, const victim) {
+	EXECUTE_FORWARD_PRE_ARGS(FWD_Finish, false, killer, victim);
 	restoreGameCvars();
 	disableHooks();
-	EXECUTE_FORWARD_POST(FWD_Finish);
+	EXECUTE_FORWARD_POST_ARGS(FWD_Finish, killer, victim);
 
 	Mode = ReGG_ModeNone;
 	rg_restart_round();
@@ -119,7 +119,7 @@ ReGG_Result:killKnife(const killer, const victim) {
 
 	EXECUTE_FORWARD_POST_ARGS(FWD_KillEnemy, killer, victim, WEAPON_KNIFE, result, Players[killer][PlayerPoints], Players[killer][PlayerLevel]);
 	if (result == ReGG_ResultFinish) {
-		finish();
+		finish(killer, victim);
 	}
 	return result;
 }
@@ -186,6 +186,19 @@ removeWeapon(const id, const level) {
 	}
 }
 
+bool:suicide(const id) {
+	EXECUTE_FORWARD_PRE_ARGS(FWD_Suicide, false, id);
+
+	if (Mode == ReGG_ModeTeam) {
+		return false;
+	}
+
+	subPlayerLevel(id, 1);
+	setPlayerPoints(id, 0);
+	EXECUTE_FORWARD_POST_ARGS(FWD_Suicide, id);
+	return true;
+}
+
 ReGG_Result:steal(const killer, const victim) {
 	switch (Config[CfgStealMode]) {
 		case 1: {
@@ -200,8 +213,8 @@ ReGG_Result:steal(const killer, const victim) {
 	return addPoints(killer, 1);
 }
 
-ReGG_Result:stealPoints(const killer, const victim, const value, const bool:forwards = true) {
-	if (forwards) EXECUTE_FORWARD_PRE_ARGS(FWD_StealPoints, ReGG_ResultNone, killer, victim, value);
+ReGG_Result:stealPoints(const killer, const victim, const value) {
+	EXECUTE_FORWARD_PRE_ARGS(FWD_StealPoints, ReGG_ResultNone, killer, victim, value);
 
 	new ReGG_Result:result;
 	new level = Players[killer][PlayerLevel];
@@ -219,7 +232,7 @@ ReGG_Result:stealPoints(const killer, const victim, const value, const bool:forw
 		}
 	}
 	subPoints(victim, value);
-	if (forwards) EXECUTE_FORWARD_POST_ARGS(FWD_StealPoints, killer, victim, value);
+	EXECUTE_FORWARD_POST_ARGS(FWD_StealPoints, killer, victim, value);
 	return result;
 }
 
@@ -251,21 +264,21 @@ ReGG_Result:stealLevels(const killer, const victim, const value, const bool:forw
 	return result;
 }
 
-ReGG_Result:addPoints(const id, const value) {
+ReGG_Result:addPoints(const id, const value, const bool:forwards = true) {
 	if (value <= 0) {
 		return ReGG_ResultNone;
 	}
 
 	if (Mode != ReGG_ModeTeam) {
-		return addPlayerPoints(id, value);
+		return addPlayerPoints(id, value, forwards);
 	}
 
 	new slot;
 	GET_PLAYER_SLOT(id, slot, ReGG_ResultNone);
-	return addTeamPoints(slot ,value);
+	return addTeamPoints(slot ,value, forwards);
 }
 
-ReGG_Result:addPlayerPoints(const id, const value) {
+ReGG_Result:addPlayerPoints(const id, const value, const bool:forwards = true) {
 	new points = Players[id][PlayerPoints] + value;
 	new level = Players[id][PlayerLevel];
 	new needPoints = Levels[level][LevelPoints];
@@ -285,17 +298,17 @@ ReGG_Result:addPlayerPoints(const id, const value) {
 		result = ReGG_ResultLevelUp;
 	}
 
-	if (result != ReGG_ResultPointsUp && !setPlayerLevel(id, level)) {
+	if (result != ReGG_ResultPointsUp && !setPlayerLevel(id, level, forwards)) {
 		return ReGG_ResultNone;
 	}
 
-	if (!setPlayerPoints(id, points)) {
+	if (!setPlayerPoints(id, points, forwards)) {
 		return ReGG_ResultNone;
 	}
 	return result;
 }
 
-ReGG_Result:addTeamPoints(const slot, const value) {
+ReGG_Result:addTeamPoints(const slot, const value, const bool:forwards = true) {
 	new points = Teams[slot][TeamPoints] + value;
 	new level = Teams[slot][TeamLevel];
 	new needPoints = getTeamLevelPoints(slot, level);
@@ -315,31 +328,31 @@ ReGG_Result:addTeamPoints(const slot, const value) {
 		result = ReGG_ResultLevelUp;
 	}
 
-	if (result != ReGG_ResultPointsUp && !setTeamLevel(slot, level)) {
+	if (result != ReGG_ResultPointsUp && !setTeamLevel(slot, level, forwards)) {
 		return ReGG_ResultNone;
 	}
 
-	if (!setTeamPoints(slot, points)) {
+	if (!setTeamPoints(slot, points, forwards)) {
 		return ReGG_ResultNone;
 	}
 	return result;
 }
 
-ReGG_Result:subPoints(const id, const value) {
+ReGG_Result:subPoints(const id, const value, const bool:forwards = true) {
 	if (value <= 0) {
 		return ReGG_ResultNone;
 	}
 
 	if (Mode != ReGG_ModeTeam) {
-		return subPlayerPoints(id, value);
+		return subPlayerPoints(id, value, forwards);
 	}
 
 	new slot;
 	GET_PLAYER_SLOT(id, slot, ReGG_ResultNone);
-	return subTeamPoints(slot, value);
+	return subTeamPoints(slot, value, forwards);
 }
 
-ReGG_Result:subPlayerPoints(const id, const value) {
+ReGG_Result:subPlayerPoints(const id, const value, const bool:forwards = true) {
 	new points = Players[id][PlayerPoints] - value;
 	new level = Players[id][PlayerLevel];
 	new needPoints =  Levels[level][LevelPoints];
@@ -358,16 +371,16 @@ ReGG_Result:subPlayerPoints(const id, const value) {
 		result = ReGG_ResultLevelDown;
 	}
 
-	if (result != ReGG_ResultPointsDown && !setPlayerLevel(id, level)) {
+	if (result != ReGG_ResultPointsDown && !setPlayerLevel(id, level, forwards)) {
 		return ReGG_ResultNone;
 	}
-	if (!setPlayerPoints(id, points)) {
+	if (!setPlayerPoints(id, points, forwards)) {
 		return ReGG_ResultNone;
 	}
 	return result;
 }
 
-ReGG_Result:subTeamPoints(const slot, const value) {
+ReGG_Result:subTeamPoints(const slot, const value, const bool:forwards = true) {
 	new points = Teams[slot][TeamPoints] - value;
 	new level = Teams[slot][TeamLevel];
 	new needPoints = getTeamLevelPoints(slot, level);
@@ -386,23 +399,23 @@ ReGG_Result:subTeamPoints(const slot, const value) {
 		result = ReGG_ResultLevelDown;
 	}
 
-	if (result != ReGG_ResultPointsDown && !setTeamLevel(slot, level)) {
+	if (result != ReGG_ResultPointsDown && !setTeamLevel(slot, level, forwards)) {
 		return ReGG_ResultNone;
 	}
-	if (!setTeamPoints(slot, points)) {
+	if (!setTeamPoints(slot, points, forwards)) {
 		return ReGG_ResultNone;
 	}
 	return result;
 }
 
-bool:setPoints(const id, const value) {
+bool:setPoints(const id, const value, const bool:forwards = true) {
 	if (Mode != ReGG_ModeTeam) {
-		return setPlayerPoints(id, value);
+		return setPlayerPoints(id, value, forwards);
 	}
 
 	new slot;
 	GET_PLAYER_SLOT(id, slot, false);
-	return setTeamPoints(slot, value);
+	return setTeamPoints(slot, value, forwards);
 }
 
 bool:setPlayerPoints(const id, const value, const bool:forwards = true) {
@@ -429,74 +442,84 @@ bool:setTeamPoints(const slot, const value, const bool:forwards = true) {
 	return true;
 }
 
-stock ReGG_Result:addLevel(const id, const value) {
+ReGG_Result:addLevel(const id, const value, const bool:forwards = true) {
 	if (value <= 0) {
 		return ReGG_ResultNone;
 	}
 
 	if (Mode != ReGG_ModeTeam) {
-		return addPlayerLevel(id, value);
+		return addPlayerLevel(id, value, forwards);
 	}
 
 	new slot;
 	GET_PLAYER_SLOT(id, slot, ReGG_ResultNone);
-	return addTeamLevel(slot ,value);
+	return addTeamLevel(slot, value, forwards);
 }
 
-ReGG_Result:addPlayerLevel(const id, const value) {
+ReGG_Result:addPlayerLevel(const id, const value, const bool:forwards = true) {
 	new level = Players[id][PlayerLevel] + value;
 	new ReGG_Result:result = ReGG_ResultLevelUp;
 	if (level >= LevelsNum) {
 		level = LevelsNum - 1;
 		result = ReGG_ResultFinish;
 	}
-	if (!setPlayerLevel(id, level)) {
+	if (!setPlayerLevel(id, level, forwards)) {
 		return ReGG_ResultNone;
 	}
 	return result;
 }
 
-stock ReGG_Result:addTeamLevel(const slot, const value) {
+ReGG_Result:addTeamLevel(const slot, const value, const bool:forwards = true) {
 	new level = Teams[slot][TeamLevel] + value;
 	new ReGG_Result:result = ReGG_ResultLevelUp;
 	if (level >= LevelsNum) {
 		level = LevelsNum - 1;
 		result = ReGG_ResultFinish;
 	}
-	if (!setTeamLevel(slot, level)) {
+	if (!setTeamLevel(slot, level, forwards)) {
 		return ReGG_ResultNone;
 	}
 	return result;
 }
 
-ReGG_Result:subLevel(const id, const value) {
+ReGG_Result:subLevel(const id, const value, const bool:forwards = true) {
 	if (value <= 0) {
 		return ReGG_ResultNone;
 	}
 
 	if (Mode != ReGG_ModeTeam) {
-		return subPlayerLevel(id, value);
+		return subPlayerLevel(id, value, forwards);
 	}
 
 	new slot;
 	GET_PLAYER_SLOT(id, slot, ReGG_ResultNone);
-	return subTeamLevel(slot ,value);
+	return subTeamLevel(slot ,value, forwards);
 }
 
-ReGG_Result:subPlayerLevel(const id, const value) {
+ReGG_Result:subPlayerLevel(const id, const value, const bool:forwards = true) {
 	new level = Players[id][PlayerLevel] - value;
 	if (level < 0) {
 		level = 0;
 	}
-	return setPlayerLevel(id, level) ? ReGG_ResultLevelDown : ReGG_ResultNone;
+	return setPlayerLevel(id, level, forwards) ? ReGG_ResultLevelDown : ReGG_ResultNone;
 }
 
-ReGG_Result:subTeamLevel(const slot, const value) {
+ReGG_Result:subTeamLevel(const slot, const value, const bool:forwards = true) {
 	new level = Teams[slot][TeamLevel] - value;
 	if (level < 0) {
 		level = 0;
 	}
-	return setTeamLevel(slot, level) ? ReGG_ResultLevelDown : ReGG_ResultNone;
+	return setTeamLevel(slot, level, forwards) ? ReGG_ResultLevelDown : ReGG_ResultNone;
+}
+
+bool:setLevel(const id, const value, const bool:forwards = true) {
+	if (Mode != ReGG_ModeTeam) {
+		return setPlayerLevel(id, value, forwards);
+	}
+
+	new slot;
+	GET_PLAYER_SLOT(id, slot, false);
+	return setTeamLevel(slot ,value, forwards);
 }
 
 bool:setPlayerLevel(const id, const value, const bool:forwards = true) {

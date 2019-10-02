@@ -1,3 +1,5 @@
+#pragma semicolon 1
+
 #include <amxmodx>
 #include <reapi>
 #include "include/regg.inc"
@@ -28,9 +30,6 @@ public plugin_precache() {
 public client_putinserver(id) {
 	arrayset(PlayerInfos[id], EOS, sizeof(PlayerInfos[]));
 }
-
-// new bool:NadeLevelAnnounced = false;
-// new bool:KnifeLevelAnnounced = false;
 
 public ReGG_StartPost(const ReGG_Mode:mode) {
 	switch (mode) {
@@ -135,7 +134,7 @@ makeInfoString(const id) {
 	new levelPoints = ReGG_GetPlayerLevelPoints(id);
 	new title[32];
 	ReGG_GetLevelTitle(level, title, charsmax(title));
-	formatex(PlayerInfos[id], charsmax(PlayerInfos[]), "Level: %d (%s)^nKills: %d/%d", level + 1, title, points, levelPoints);
+	formatex(PlayerInfos[id], charsmax(PlayerInfos[]), "Уровень: %d (%s)^nОчков: %d/%d", level + 1, title, points, levelPoints);
 }
 
 notifyTeam(const slot, const level, const ReGG_Result:result) {

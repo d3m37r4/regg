@@ -43,13 +43,14 @@ enum Forward {
 	FWD_PlayerJoin,
 	FWD_StealPoints,
 	FWD_StealLevels,
+	FWD_Suicide,
 };
 
 new Forwards[Forward][2], FReturn;
 
 registerForwards() {
 	REGISTER_FORWARD_ARGS(FWD_Start, "ReGG_StartPre", "ReGG_StartPost", FP_CELL);
-	REGISTER_FORWARD(FWD_Finish, "ReGG_FinishPre", "ReGG_FinishPost");
+	REGISTER_FORWARD_ARGS(FWD_Finish, "ReGG_FinishPre", "ReGG_FinishPost", FP_CELL, FP_CELL);
 	REGISTER_FORWARD_ARGS(FWD_PlayerPoints, "ReGG_PlayerPointsPre", "ReGG_PlayerPointsPost", FP_CELL, FP_CELL);
 	REGISTER_FORWARD_ARGS(FWD_TeamPoints, "ReGG_TeamPointsPre", "ReGG_TeamPointsPost", FP_CELL, FP_CELL);
 	REGISTER_FORWARD_ARGS(FWD_PlayerLevel, "ReGG_PlayerLevelPre", "ReGG_PlayerLevelPost", FP_CELL, FP_CELL);
@@ -59,6 +60,7 @@ registerForwards() {
 	REGISTER_FORWARD_ARGS(FWD_PlayerJoin, "ReGG_PlayerJoinPre", "ReGG_PlayerJoinPost", FP_CELL);
 	REGISTER_FORWARD_ARGS(FWD_StealPoints, "ReGG_StealPointsPre", "ReGG_StealPointsPost", FP_CELL, FP_CELL, FP_CELL);
 	REGISTER_FORWARD_ARGS(FWD_StealLevels, "ReGG_StealLevelsPre", "ReGG_StealLevelsPost", FP_CELL, FP_CELL, FP_CELL);
+	REGISTER_FORWARD_ARGS(FWD_Suicide, "ReGG_SuicidePre", "ReGG_SuicidePost", FP_CELL);
 }
 
 destroyForwards() {

@@ -1,0 +1,34 @@
+body {
+    font-family: consolas;
+    color: #FFFFFF;
+    background-color: #000000;
+    font-size: 20pt;
+    text-align: center;
+}
+
+h3, .map {
+    color: #00FF00;
+}
+
+hr {
+    border: none;
+    height: 2px;
+}
+
+hr.tt {
+    background-color: #FF0000;
+    color: #FF0000;
+}
+
+hr.ct {
+    background-color: #1E90FF;
+    color: #1E90FF;
+}
+
+.tt .name {
+    color: #FF0000;
+}
+
+.ct .name {
+    color: #1E90FF;
+}

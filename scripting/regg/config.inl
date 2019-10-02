@@ -32,6 +32,7 @@ enum _:game_cvars_s {
     GCMaxrounds,
     GCFraglimit,
     GCFreeForAll,
+    GCFriendlyFire,
 }
 
 new config_section_s:CfgSection = CfgSectionNone;
@@ -136,6 +137,10 @@ changeGameCvars() {
         pcvar = get_cvar_pointer("mp_freeforall");
         GameCvars[GCFreeForAll] = get_pcvar_num(pcvar);
         set_pcvar_num(pcvar, 1);
+    } else {
+        pcvar = get_cvar_pointer("mp_friendlyfire");
+        GameCvars[GCFriendlyFire] = get_pcvar_num(pcvar);
+        set_pcvar_num(pcvar, 1);
     }
 }
 
@@ -163,6 +168,9 @@ restoreGameCvars() {
     if (Mode == ReGG_ModeFFA) {
         pcvar = get_cvar_pointer("mp_freeforall");
         set_pcvar_num(pcvar, GameCvars[GCFreeForAll]);
+    } else {
+        pcvar = get_cvar_pointer("mp_friendlyfire");
+        set_pcvar_num(pcvar, GameCvars[GCFriendlyFire]);
     }
 }
 
