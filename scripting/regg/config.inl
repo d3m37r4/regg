@@ -64,7 +64,7 @@ registerCvars() {
     ), Config[CfgStealMode]);
 
     bind_pcvar_num(create_cvar(
-        "regg_steal_value", "3",
+        "regg_steal_value", "1",
         .has_min = true,
         .min_val = 1.0
     ), Config[CfgStealValue]);
