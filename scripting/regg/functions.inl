@@ -24,6 +24,8 @@ bool:start(const ReGG_Mode:mode) {
 	EnableHookChain(Hooks[HookKilled]);
 
 	EXECUTE_FORWARD_POST_ARGS(FWD_Start, mode);
+
+	set_member_game(m_bCompleteReset, true);
 	rg_restart_round();
 	return true;
 }

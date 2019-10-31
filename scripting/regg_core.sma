@@ -41,11 +41,14 @@ enum _:player_s {
 	bool:PlayerJoined,
 	PlayerPoints,
 	PlayerLevel,
+	PlayerLevelPoints,
 };
 
 enum _:team_s {
 	TeamPoints,
 	TeamLevel,
+	TeamPlayers,
+	TeamLevelPoints,
 };
 
 new ReGG_Mode:Mode = ReGG_ModeNone;

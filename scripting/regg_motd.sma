@@ -12,6 +12,12 @@ new const STYLES_URL[] = "http://localhost/regungame.css";
 
 public plugin_init() {
 	register_plugin("[ReAPI] GunGame MOTD", "0.1.0-alpha", "F@nt0M");
+	register_clcmd("radio3", "CmdTest");
+}
+
+public CmdTest(const id) {
+	ReGG_FinishPost(id, id);
+	return PLUGIN_HANDLED;
 }
 
 public ReGG_FinishPost(const killer, const victim) {
@@ -19,16 +25,15 @@ public ReGG_FinishPost(const killer, const victim) {
 }
 
 showMotd(const winner, const looser) {
-	new motd[MAX_MOTD_LENGTH], len = 0;
-
-	new nextMap[MAX_MAPNAME_LENGTH];
+	// new nextMap[MAX_MAPNAME_LENGTH];
 	// get_cvar_string("amx_nextmap", nextMap, charsmax(nextMap));
 	
 	new winnerClassName[3], looserClassName[3];
 	getTeamClassname(winner, winnerClassName, charsmax(winnerClassName));
 	getTeamClassname(looser, looserClassName, charsmax(looserClassName));
 	
-	len = formatex(
+	new motd[MAX_MOTD_LENGTH];
+	new len = formatex(
 		motd, charsmax(motd), 
 		"<!DOCTYPE html>^n<html><head><meta charset=^"utf-8^"><link rel=^"stylesheet^" href=^"%s^"></head>",
 		STYLES_URL
@@ -48,11 +53,13 @@ showMotd(const winner, const looser) {
 		winnerClassName, looserClassName, looser
 	);
 	
-	len += formatex(
-		motd[len], charsmax(motd) - len,
-		"<hr class=^"%s^"><div>Следующая карта: <span class=^"map^">%s</span></div></body></html>",
-		winnerClassName, nextMap
-	);
+	// len += formatex(
+	// 	motd[len], charsmax(motd) - len,
+	// 	"<hr class=^"%s^"><div>Следующая карта: <span class=^"map^">%s</span></div>",
+	// 	winnerClassName, nextMap
+	// );
+
+	formatex(motd[len], charsmax(motd) - len, "</body></html>");
 
 	new players[MAX_PLAYERS], num;
 	get_players(players, num, "ch");
