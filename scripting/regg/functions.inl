@@ -18,7 +18,6 @@ bool:start(const ReGG_Mode:mode) {
 	EnableHookChain(Hooks[HookHasRestrictItem]);
 	EnableHookChain(Hooks[HookDropPlayerItem]);
 	EnableHookChain(Hooks[HookDeadPlayerWeapons]);
-	EnableHookChain(Hooks[HookDeadGiveC4]);
 	EnableHookChain(Hooks[HookOnSpawnEquip]);
 	EnableHookChain(Hooks[HookThrowHeGrenade]);
 	EnableHookChain(Hooks[HookKilled]);

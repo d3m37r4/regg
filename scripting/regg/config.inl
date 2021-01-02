@@ -33,21 +33,16 @@ enum _:game_cvars_s {
     GCFraglimit,
     GCFreeForAll,
     GCFriendlyFire,
+    GCGivePlayerC4,
 }
 
 new config_section_s:CfgSection = CfgSectionNone;
 new Config[config_s];
 new GameCvars[game_cvars_s];
 
-registerCvars() {
-    // bind_pcvar_num(create_cvar(
-    //     "regg_mode", "0",
-    //     .has_min = true,
-    //     .min_val = 0.0,
-    //     .has_max = true,
-    //     .max_val = 4.0
-    // ), Config[CfgMode]);
+new const CONFIG_NAME[] = "ReGunGame.cfg";
 
+registerCvars() {
     bind_pcvar_float(create_cvar(
         "regg_nade_refresh", "5.0",
         .has_min = true,
@@ -133,6 +128,10 @@ changeGameCvars() {
     GameCvars[GCFraglimit] = get_pcvar_num(pcvar);
     set_pcvar_num(pcvar, 0);
 
+    pcvar = get_cvar_pointer("mp_give_player_c4");
+    GameCvars[GCGivePlayerC4] = get_pcvar_num(pcvar);
+    set_pcvar_num(pcvar, 0);
+
     if (Mode == ReGG_ModeFFA) {
         pcvar = get_cvar_pointer("mp_freeforall");
         GameCvars[GCFreeForAll] = get_pcvar_num(pcvar);
@@ -165,6 +164,9 @@ restoreGameCvars() {
     pcvar = get_cvar_pointer("mp_fraglimit");
     set_pcvar_num(pcvar, GameCvars[GCFraglimit]);
 
+	pcvar = get_cvar_pointer("mp_give_player_c4");
+    set_pcvar_num(pcvar, GameCvars[GCGivePlayerC4]);
+
     if (Mode == ReGG_ModeFFA) {
         pcvar = get_cvar_pointer("mp_freeforall");
         set_pcvar_num(pcvar, GameCvars[GCFreeForAll]);
@@ -174,15 +176,27 @@ restoreGameCvars() {
     }
 }
 
-bool:loadCfg() {
+loadCfg() {
+    new filedir[MAX_RESOURCE_PATH_LENGTH];
+    get_localinfo("amxx_configsdir", filedir, charsmax(filedir));
+    format(filedir, charsmax(filedir), "%s/%s/%s", filedir, REGG_MOD_DIR_NAME, CONFIG_NAME);
+
+    if(file_exists(filedir)) {
+        server_cmd("exec %s", filedir);
+    } else {
+        set_fail_state("File '%s' not found!", filedir);
+    }
+}
+
+bool:loadIni() {
     new INIParser:handle = INI_CreateParser();
     if (handle == Invalid_INIParser) {
         return false;
     }
 
-    new file[128];
+    new file[MAX_RESOURCE_PATH_LENGTH];
     get_localinfo("amxx_configsdir", file, charsmax(file));
-    add(file, charsmax(file), "/regg.ini");
+    add(file, charsmax(file), "/regg-lvl.ini");
 
     INI_SetReaders(handle, "ConfigOnKeyValue", "ConfigOnNewSection");
     INI_SetParseEnd(handle, "ConfigOnParseEnd");

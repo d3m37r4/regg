@@ -69,7 +69,7 @@ public plugin_natives() {
 }
 
 public plugin_init() {
-	register_plugin("[ReAPI] GunGame Core", "0.1.0-alpha", "F@nt0M");
+	register_plugin("[ReAPI] GunGame Core", "0.1.1-alpha", "F@nt0M");
 
 	registerCvars();
 	registerHooks();
@@ -79,6 +79,7 @@ public plugin_init() {
 
 public plugin_cfg() {
 	loadCfg();
+	loadIni();
 }
 
 public plugin_end() {

@@ -10,7 +10,6 @@ enum _:hook_s {
 	HookChain:HookHasRestrictItem,
 	HookChain:HookDropPlayerItem,
 	HookChain:HookDeadPlayerWeapons,
-	HookChain:HookDeadGiveC4,
 	HookChain:HookFShouldSwitchWeapon,
 	HookChain:HookOnSpawnEquip,
 	HookChain:HookThrowHeGrenade,
@@ -25,7 +24,6 @@ registerHooks() {
 	Hooks[HookHasRestrictItem] = RegisterHookChain(RG_CBasePlayer_HasRestrictItem, "CBasePlayer_HasRestrictItem_Pre", false);
 	Hooks[HookDropPlayerItem] = RegisterHookChain(RG_CBasePlayer_DropPlayerItem, "CBasePlayer_DropPlayerItem_Pre", false);
 	Hooks[HookDeadPlayerWeapons] = RegisterHookChain(RG_CSGameRules_DeadPlayerWeapons, "CSGameRules_DeadPlayerWeapons_Pre", false);
-	Hooks[HookDeadGiveC4] = RegisterHookChain(RG_CSGameRules_GiveC4, "CSGameRules_GiveC4_Pre", false);
 
 	Hooks[HookFShouldSwitchWeapon] = RegisterHookChain(RG_CSGameRules_FShouldSwitchWeapon, "CSGameRules_FShouldSwitchWeapon_Pre", false);
 
@@ -89,10 +87,6 @@ public CBasePlayer_DropPlayerItem_Pre() {
 
 public CSGameRules_DeadPlayerWeapons_Pre() {
 	SetHookChainReturn(ATYPE_INTEGER, GR_PLR_DROP_GUN_NO);
-	return HC_SUPERCEDE;
-}
-
-public CSGameRules_GiveC4_Pre() {
 	return HC_SUPERCEDE;
 }
 
