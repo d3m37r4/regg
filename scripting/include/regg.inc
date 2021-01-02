@@ -84,8 +84,3 @@ native ReGG_GetLevelTitle(const level, buffer[], const length);
 native WeaponIdType:ReGG_GetLevelWeapon(const level);
 native ReGG_GetPlayerLevelPoints(const id);
 native ReGG_GetTeamLevelPoints(const slot);
-
-/**
- * Mod resources directory.
- */
-stock const REGG_MOD_DIR_NAME[MAX_NAME_LENGTH] = "ReGunGame";

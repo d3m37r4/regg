@@ -40,6 +40,7 @@ new config_section_s:CfgSection = CfgSectionNone;
 new Config[config_s];
 new GameCvars[game_cvars_s];
 
+new const REGG_MOD_DIR_NAME[MAX_NAME_LENGTH] = "ReGunGame";
 new const CONFIG_NAME[] = "ReGunGame.cfg";
 
 registerCvars() {
@@ -164,7 +165,7 @@ restoreGameCvars() {
     pcvar = get_cvar_pointer("mp_fraglimit");
     set_pcvar_num(pcvar, GameCvars[GCFraglimit]);
 
-	pcvar = get_cvar_pointer("mp_give_player_c4");
+    pcvar = get_cvar_pointer("mp_give_player_c4");
     set_pcvar_num(pcvar, GameCvars[GCGivePlayerC4]);
 
     if (Mode == ReGG_ModeFFA) {
@@ -196,7 +197,7 @@ bool:loadIni() {
 
     new file[MAX_RESOURCE_PATH_LENGTH];
     get_localinfo("amxx_configsdir", file, charsmax(file));
-    add(file, charsmax(file), "/regg-lvl.ini");
+    format(file, charsmax(file), "%s/%s/regg-lvl.ini", file, REGG_MOD_DIR_NAME);
 
     INI_SetReaders(handle, "ConfigOnKeyValue", "ConfigOnNewSection");
     INI_SetParseEnd(handle, "ConfigOnParseEnd");
