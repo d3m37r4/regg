@@ -52,7 +52,6 @@ public CSGameRules_CleanUpMap_Post() {
 	if (BlockMapConditions) {
 		removeHostageEntities();
 	}
-	removeArmouryEntities();
 }
 
 public CSGameRules_RestartRound_Post() {
@@ -96,7 +95,6 @@ toggleBlock(const bool:blocked = true) {
 		}
 
 		EnableHookChain(CleanUpMapPost);
-		removeArmouryEntities();
 		removeTargetNameEntities();
 	} else {
 		if (BlockMapConditions) {
@@ -123,7 +121,6 @@ toggleBlock(const bool:blocked = true) {
 		}
 
 		DisableHookChain(CleanUpMapPost);
-		restoreArmouryEntities();
 		restoreTargetNameEntities();
 	}
 }
@@ -169,22 +166,6 @@ restoreHostageEntities() {
 		set_entvar(ent, var_effects, get_entvar(ent, var_effects) & ~EF_NODRAW);
 		set_entvar(ent, var_solid, SOLID_SLIDEBOX);
 		set_entvar(ent, var_nextthink, get_gametime() + 0.01);
-	}
-}
-
-removeArmouryEntities() {
-	new ent;
-	while((ent = rg_find_ent_by_class(ent, "armoury_entity"))) {
-		set_entvar(ent, var_effects, get_entvar(ent, var_effects) | EF_NODRAW);
-		set_entvar(ent, var_solid, SOLID_NOT);
-	}
-}
-
-restoreArmouryEntities() {
-	new ent;
-	while((ent = rg_find_ent_by_class(ent, "armoury_entity"))) {
-		set_entvar(ent, var_effects, get_entvar(ent, var_effects) & ~EF_NODRAW);
-		set_entvar(ent, var_solid, SOLID_TRIGGER);
 	}
 }
 
