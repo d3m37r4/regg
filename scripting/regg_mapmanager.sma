@@ -1,11 +1,11 @@
 #include <amxmodx>
 #include <map_manager>
-#include "include/regg.inc"
+#include <regg>
 
 new Float:Timeout;
 
 public plugin_init() {
-	register_plugin("[ReAPI] GunGame Map Manager", "0.1.0-alpha", "F@nt0M");
+	register_plugin("[ReGG] Map Manager", REGG_VERSION_STR, "F@nt0M");
 
 	bind_pcvar_float(create_cvar(
 		"regg_mapchange_timeout", "10.0",

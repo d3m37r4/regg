@@ -34,12 +34,6 @@
 		return %1; \
 	}
 
-enum ReGG_ChangetType {
-	ReGG_ChangetTypeSet,
-	ReGG_ChangetTypeAdd,
-	ReGG_ChangetTypeSub,
-};
-
 registerNatives() {
 	register_native("ReGG_Start", "NativeStart", 0);
 	register_native("ReGG_Finish", "NativeFinish", 0);

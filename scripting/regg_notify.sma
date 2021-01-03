@@ -1,5 +1,5 @@
 #include <amxmodx>
-#include "include/regg.inc"
+#include <regg>
 
 new const COMMANDS[][] = {
 	"Террористов",
@@ -13,7 +13,7 @@ public plugin_precache() {
 }
 
 public plugin_init() {
-    register_plugin("[ReAPI] GunGame Notify", "0.1.0-alpha", "F@nt0M");
+    register_plugin("[ReGG] Notify", REGG_VERSION_STR, "F@nt0M");
     state none;
 }
 

@@ -1,7 +1,7 @@
 #include <amxmodx>
 #include <engine>
 #include <reapi>
-#include "include/regg.inc"
+#include <regg>
 
 new BlockMapConditions;
 new bool:Blocked = false;
@@ -10,7 +10,7 @@ new bool:CTCantBuy, bool:TCantBuy;
 new bool:MapHasBombTarget, bool:MapHasBombZone, bool:MapHasRescueZone, bool:MapHasBuyZone, bool:MapHasEscapeZone, bool:MapHasVIPSafetyZone;
 
 public plugin_init() {
-	register_plugin("[ReAPI] GunGame Map Cleaner", "0.1.0-alpha", "F@nt0M");
+	register_plugin("[ReGG] Map Cleaner", REGG_VERSION_STR, "F@nt0M");
 
 	bind_pcvar_num(create_cvar(
 		"regg_block_map_conditions", "1",

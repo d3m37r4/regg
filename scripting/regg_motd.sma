@@ -2,7 +2,7 @@
 
 #include <amxmodx>
 #include <reapi>
-#include "include/regg.inc"
+#include <regg>
 
 #if !defined MAX_MAPNAME_LENGTH
 	#define MAX_MAPNAME_LENGTH 64
@@ -11,7 +11,7 @@
 new const STYLES_URL[] = "http://localhost/regungame.css";
 
 public plugin_init() {
-	register_plugin("[ReAPI] GunGame MOTD", "0.1.0-alpha", "F@nt0M");
+	register_plugin("[ReGG] MOTD", REGG_VERSION_STR, "F@nt0M");
 	register_clcmd("radio3", "CmdTest");
 }
 

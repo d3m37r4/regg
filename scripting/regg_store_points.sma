@@ -1,5 +1,5 @@
 #include <amxmodx>
-#include "include/regg.inc"
+#include <regg>
 
 enum _:store_s {
     StorePoints,
@@ -9,7 +9,7 @@ enum _:store_s {
 new Trie:Store = Invalid_Trie;
 
 public plugin_init() {
-	register_plugin("[ReAPI] GunGame Map Manager", "0.1.0-alpha", "F@nt0M");
+	register_plugin("[ReGG] Map Manager", REGG_VERSION_STR, "F@nt0M");
 }
 
 public plugin_end() {

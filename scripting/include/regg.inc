@@ -4,6 +4,26 @@
 
 #define _regg_included
 
+/********************************************************
+*			   NOTE ON SEMANTIC VERSIONING				*
+********************************************************/
+
+/**
+*	MAJOR_VERSION: When backward incompatible API changes are made.
+*	MINOR_VERSION: When adding new functionality without breaking backward compatibility.
+*	MAINTENANCE_VERSION: When backward compatible corrections are made.
+**/
+
+#define REGG_MAJOR_VERSION				0
+#define REGG_MINOR_VERSION				1
+#define REGG_MAINTENANCE_VERSION		2
+
+#define REGG_VERSION					str_to_num(fmt("%d%d%d", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_MAINTENANCE_VERSION))
+#define REGG_VERSION_STR				fmt("%d.%d.%d-alpha", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_MAINTENANCE_VERSION)
+
+stock const REGG_DIR_NAME[MAX_NAME_LENGTH] = "regg";		// Mod directory name
+stock const REGG_MAIN_CFG_FILE[] = "regg-main.cfg";		// Main config file of mod
+
 enum ReGG_Mode {
 	ReGG_ModeNone,
 	ReGG_ModeSingle,
@@ -23,6 +43,7 @@ enum ReGG_Result {
 	ReGG_ResultPointsDown,
 	ReGG_ResultLevelUp,
 	ReGG_ResultLevelDown,
+	ReGG_ResultFinish,
 };
 
 enum ReGG_ChangetType {

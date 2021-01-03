@@ -2,7 +2,7 @@
 
 #include <amxmodx>
 #include <reapi>
-#include "include/regg.inc"
+#include <regg>
 
 const TASK_INFO_ID = 1;
 
@@ -10,7 +10,7 @@ new SyncHudStats;
 new PlayerInfos[MAX_PLAYERS + 1][256];
 
 public plugin_init() {
-	register_plugin("[ReAPI] GunGame Informer", "0.1.0-alpha", "F@nt0M");
+	register_plugin("[ReGG] Informer", REGG_VERSION_STR, "F@nt0M");
 	SyncHudStats = CreateHudSyncObj();
 	state disabled;
 }
