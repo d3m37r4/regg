@@ -13,7 +13,7 @@ public plugin_precache() {
 }
 
 public plugin_init() {
-    register_plugin("[ReAPI] GunGame Notify", REGG_VERSION_STR, "F@nt0M");
+    register_plugin("[ReGG] Notify", REGG_VERSION_STR, "F@nt0M");
     state none;
 }
 
