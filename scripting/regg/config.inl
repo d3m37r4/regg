@@ -34,6 +34,7 @@ enum _:game_cvars_s {
     GCFreeForAll,
     GCFriendlyFire,
     GCGivePlayerC4,
+    GCWeaponsAllowMapPlaced,
 }
 
 new config_section_s:CfgSection = CfgSectionNone;
@@ -133,6 +134,10 @@ changeGameCvars() {
     GameCvars[GCGivePlayerC4] = get_pcvar_num(pcvar);
     set_pcvar_num(pcvar, 0);
 
+    pcvar = get_cvar_pointer("mp_weapons_allow_map_placed");
+    GameCvars[GCWeaponsAllowMapPlaced] = get_pcvar_num(pcvar);
+    set_pcvar_num(pcvar, 0);
+
     if (Mode == ReGG_ModeFFA) {
         pcvar = get_cvar_pointer("mp_freeforall");
         GameCvars[GCFreeForAll] = get_pcvar_num(pcvar);
@@ -167,6 +172,9 @@ restoreGameCvars() {
 
     pcvar = get_cvar_pointer("mp_give_player_c4");
     set_pcvar_num(pcvar, GameCvars[GCGivePlayerC4]);
+
+    pcvar = get_cvar_pointer("mp_weapons_allow_map_placed");
+    set_pcvar_num(pcvar, GameCvars[GCWeaponsAllowMapPlaced]);
 
     if (Mode == ReGG_ModeFFA) {
         pcvar = get_cvar_pointer("mp_freeforall");
