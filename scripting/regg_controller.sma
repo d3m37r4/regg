@@ -1,6 +1,6 @@
 #include <amxmodx>
 #include <reapi>
-#include "include/regg.inc"
+#include <regg>
 
 enum {
 	ModeSingle = 0,

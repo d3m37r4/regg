@@ -1,5 +1,5 @@
 #include <amxmodx>
-#include "include/regg.inc"
+#include <regg>
 
 enum _:store_s {
     StorePoints,

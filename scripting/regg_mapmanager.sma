@@ -1,6 +1,6 @@
 #include <amxmodx>
 #include <map_manager>
-#include "include/regg.inc"
+#include <regg>
 
 new Float:Timeout;
 

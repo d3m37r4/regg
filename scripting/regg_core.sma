@@ -2,33 +2,12 @@
 
 #include <amxmodx>
 #include <reapi>
+#include <regg>
 
 const TASK_GRENADE_ID = 50;
 const MAX_LEVELS = 30;
 const MAX_LEVEL_TITLE_LENGTH = 32;
 const MAX_GRENADE_WEAPONS = 5;
-
-enum ReGG_Mode {
-	ReGG_ModeNone,
-	ReGG_ModeSingle,
-	ReGG_ModeTeam,
-	ReGG_ModeFFA,
-};
-
-enum (+=1) {
-	ReGG_SlotInvalid = -1,
-	ReGG_SlotT,
-	ReGG_SlotCT,
-};
-
-enum ReGG_Result {
-	ReGG_ResultNone,
-	ReGG_ResultPointsUp,
-	ReGG_ResultPointsDown,
-	ReGG_ResultLevelUp,
-	ReGG_ResultLevelDown,
-	ReGG_ResultFinish,
-};
 
 enum _:level_s {
 	WeaponIdType:LevelWeaponID,

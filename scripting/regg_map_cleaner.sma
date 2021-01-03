@@ -1,7 +1,7 @@
 #include <amxmodx>
 #include <engine>
 #include <reapi>
-#include "include/regg.inc"
+#include <regg>
 
 new BlockMapConditions;
 new bool:Blocked = false;

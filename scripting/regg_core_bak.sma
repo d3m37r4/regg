@@ -1,6 +1,7 @@
 #include <amxmodx>
 #include <hamsandwich>
 #include <reapi>
+#include <regg>
 
 #define rg_get_user_team(%1) TeamName:get_member(%1, m_iTeam)
 

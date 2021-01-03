@@ -40,6 +40,7 @@ enum ReGG_Result {
 	ReGG_ResultPointsDown,
 	ReGG_ResultLevelUp,
 	ReGG_ResultLevelDown,
+	ReGG_ResultFinish,
 };
 
 enum ReGG_ChangetType {

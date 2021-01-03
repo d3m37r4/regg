@@ -2,7 +2,7 @@
 
 #include <amxmodx>
 #include <reapi>
-#include "include/regg.inc"
+#include <regg>
 
 const TASK_INFO_ID = 1;
 

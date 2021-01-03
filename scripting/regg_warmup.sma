@@ -1,6 +1,6 @@
 #include <amxmodx>
 #include <reapi>
-#include "include/regg.inc"
+#include <regg>
 
 enum _:game_cvars_s {
 	GCRoundInfinite[32],

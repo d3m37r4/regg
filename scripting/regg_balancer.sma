@@ -1,5 +1,6 @@
 #include <amxmodx>
 #include <reapi>
+#include <regg>
 
 new bool:BalanceTeams = false;
 

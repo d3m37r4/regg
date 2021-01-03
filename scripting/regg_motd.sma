@@ -2,7 +2,7 @@
 
 #include <amxmodx>
 #include <reapi>
-#include "include/regg.inc"
+#include <regg>
 
 #if !defined MAX_MAPNAME_LENGTH
 	#define MAX_MAPNAME_LENGTH 64
