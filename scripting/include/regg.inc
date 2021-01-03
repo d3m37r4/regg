@@ -4,6 +4,23 @@
 
 #define _regg_included
 
+/********************************************************
+*			   NOTE ON SEMANTIC VERSIONING				*
+********************************************************/
+
+/**
+*	MAJOR_VERSION: When backward incompatible API changes are made.
+*	MINOR_VERSION: When adding new functionality without breaking backward compatibility.
+*	MAINTENANCE_VERSION: When backward compatible corrections are made.
+**/
+
+#define REGG_MAJOR_VERSION				0
+#define REGG_MINOR_VERSION				1
+#define REGG_MAINTENANCE_VERSION		2
+
+#define REGG_VERSION					str_to_num(fmt("%d%d%d", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_MAINTENANCE_VERSION))
+#define REGG_VERSION_STR				fmt("%d.%d.%d-alpha", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_MAINTENANCE_VERSION)
+
 enum ReGG_Mode {
 	ReGG_ModeNone,
 	ReGG_ModeSingle,

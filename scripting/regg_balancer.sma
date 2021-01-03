@@ -4,7 +4,7 @@
 new bool:BalanceTeams = false;
 
 public plugin_init() {
-	register_plugin("[ReAPI] GunGame Balancer", "0.1.0-alpha", "F@nt0M");
+	register_plugin("[ReAPI] GunGame Balancer", REGG_VERSION_STR, "F@nt0M");
 
 	RegisterHookChain(RG_CBasePlayer_Killed, "CBasePlayer_Killed_Post", true);
 	RegisterHookChain(RG_CBasePlayer_CanSwitchTeam, "CBasePlayer_CanSwitchTeam_Pre", false);

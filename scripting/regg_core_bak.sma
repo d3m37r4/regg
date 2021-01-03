@@ -115,7 +115,7 @@ new Teams[2][Team];
 new PlayersLevel[MAX_PLAYERS + 1];
 
 public plugin_init() {
-	register_plugin("[ReAPI] GunGame Core", "0.1.0-alpha", "F@nt0M");
+	register_plugin("[ReAPI] GunGame Core", REGG_VERSION_STR, "F@nt0M");
 
 	// RegisterHookChain(RH_SV_DropClient, "SV_DropClient_Post", true);
 	Hooks[HookHasRestrictItem] = RegisterHookChain(RG_CBasePlayer_HasRestrictItem, "CBasePlayer_HasRestrictItem_Pre", false);

@@ -14,7 +14,7 @@ new SyncHudStats;
 new LeaderInfo[256];
 
 public plugin_init() {
-	register_plugin("[ReAPI] GunGame Leader", "0.1.0-alpha", "F@nt0M");
+	register_plugin("[ReAPI] GunGame Leader", REGG_VERSION_STR, "F@nt0M");
 	SyncHudStats = CreateHudSyncObj();
 	state none;
 }

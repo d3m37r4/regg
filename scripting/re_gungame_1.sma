@@ -101,7 +101,7 @@ public plugin_precache() {
 }
 
 public plugin_init() {
-	register_plugin("[ReAPI] GunGame", "0.1.0-alpha", "F@nt0M");
+	register_plugin("[ReAPI] GunGame", REGG_VERSION_STR, "F@nt0M");
 
 	if (EntitySpawnHook) {
 		unregister_forward(FM_Spawn, EntitySpawnHook);

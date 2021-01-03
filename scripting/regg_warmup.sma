@@ -23,7 +23,7 @@ new status_s:Status = StatusNone;
 new WarmupTime, WarmupTimeOut;
 
 public plugin_init() {
-	register_plugin("[ReAPI] GunGame Informer", "0.1.0-alpha", "F@nt0M");
+	register_plugin("[ReAPI] GunGame Informer", REGG_VERSION_STR, "F@nt0M");
 
 	HookHasRestrictItem = RegisterHookChain(RG_CBasePlayer_HasRestrictItem, "CBasePlayer_HasRestrictItem_Pre", false);
 	DisableHookChain(HookHasRestrictItem);

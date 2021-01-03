@@ -10,7 +10,7 @@ new SyncHudStats;
 new PlayerInfos[MAX_PLAYERS + 1][256];
 
 public plugin_init() {
-	register_plugin("[ReAPI] GunGame Informer", "0.1.0-alpha", "F@nt0M");
+	register_plugin("[ReAPI] GunGame Informer", REGG_VERSION_STR, "F@nt0M");
 	SyncHudStats = CreateHudSyncObj();
 	state disabled;
 }
