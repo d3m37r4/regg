@@ -41,9 +41,6 @@ new config_section_s:CfgSection = CfgSectionNone;
 new Config[config_s];
 new GameCvars[game_cvars_s];
 
-new const REGG_MOD_DIR_NAME[MAX_NAME_LENGTH] = "ReGunGame";
-new const CONFIG_NAME[] = "ReGunGame.cfg";
-
 registerCvars() {
     bind_pcvar_float(create_cvar(
         "regg_nade_refresh", "5.0",
@@ -188,7 +185,7 @@ restoreGameCvars() {
 loadCfg() {
     new filedir[MAX_RESOURCE_PATH_LENGTH];
     get_localinfo("amxx_configsdir", filedir, charsmax(filedir));
-    format(filedir, charsmax(filedir), "%s/%s/%s", filedir, REGG_MOD_DIR_NAME, CONFIG_NAME);
+    format(filedir, charsmax(filedir), "%s/%s/%s", filedir, REGG_DIR_NAME, REGG_MAIN_CFG_FILE);
 
     if(file_exists(filedir)) {
         server_cmd("exec %s", filedir);
@@ -205,7 +202,7 @@ bool:loadIni() {
 
     new file[MAX_RESOURCE_PATH_LENGTH];
     get_localinfo("amxx_configsdir", file, charsmax(file));
-    format(file, charsmax(file), "%s/%s/regg-lvl.ini", file, REGG_MOD_DIR_NAME);
+    format(file, charsmax(file), "%s/%s/regg-levels.ini", file, REGG_DIR_NAME);
 
     INI_SetReaders(handle, "ConfigOnKeyValue", "ConfigOnNewSection");
     INI_SetParseEnd(handle, "ConfigOnParseEnd");
