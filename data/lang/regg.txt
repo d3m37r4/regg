@@ -1,0 +1,11 @@
+[ru]
+REGG_MOTD_TEAM_CT = Контр-Террористы
+REGG_MOTD_TEAM_T = Террористы
+
+REGG_INFORMER = Оружие: %s | Уровень: %d/%d | Очков: %d/%d
+
+REGG_LEADER = Лидер: 
+REGG_NO_LEADER = нет
+
+REGG_TEAM_LEADER_CT = CT
+REGG_TEAM_LEADER_T = TT

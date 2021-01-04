@@ -15,8 +15,8 @@
 **/
 
 #define REGG_MAJOR_VERSION				0
-#define REGG_MINOR_VERSION				1
-#define REGG_MAINTENANCE_VERSION		2
+#define REGG_MINOR_VERSION				2
+#define REGG_MAINTENANCE_VERSION		4
 
 #define REGG_VERSION					str_to_num(fmt("%d%d%d", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_MAINTENANCE_VERSION))
 #define REGG_VERSION_STR				fmt("%d.%d.%d-alpha", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_MAINTENANCE_VERSION)
@@ -103,5 +103,6 @@ native bool:ReGG_SetTeamLevel(const slot, const value, const ReGG_ChangetType:ty
 native ReGG_GetLevelPoints(const level);
 native ReGG_GetLevelTitle(const level, buffer[], const length);
 native WeaponIdType:ReGG_GetLevelWeapon(const level);
+native ReGG_GetLevelMax();
 native ReGG_GetPlayerLevelPoints(const id);
 native ReGG_GetTeamLevelPoints(const slot);

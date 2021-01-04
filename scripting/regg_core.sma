@@ -49,6 +49,8 @@ public plugin_natives() {
 
 public plugin_init() {
 	register_plugin("[ReGG] Core", REGG_VERSION_STR, "F@nt0M");
+	
+	register_dictionary("regg.txt");
 
 	registerCvars();
 	registerHooks();
@@ -59,6 +61,10 @@ public plugin_init() {
 public plugin_cfg() {
 	loadCfg();
 	loadIni();
+}
+
+public OnConfigsExecuted() {
+    register_cvar("regg_version", REGG_VERSION_STR, FCVAR_SERVER|FCVAR_SPONLY|FCVAR_UNLOGGED);
 }
 
 public plugin_end() {

@@ -5,11 +5,6 @@
 
 const TASK_INFO_ID = 1;
 
-// new const COMMANDS[][] = {
-// 	"Террористов",
-// 	"Контр-Террористов"
-// };
-
 new SyncHudStats;
 new LeaderInfo[256];
 
@@ -47,47 +42,85 @@ public ReGG_PlayerLevelPost(const id, const value) <single> {
 }
 public ReGG_PlayerLevelPost(const id, const value) <team,none> {}
 
+public ReGG_TeamLevelPost(const slot, const value) <team> {
+	checkLeaders();
+}
+public ReGG_TeamLevelPost(const slot, const value) <single,none> {}
+
 public TaskInfo() {
 	set_hudmessage(250, 250, 250, -1.0, 0.05, 0, 0.0, 20.0, 0.0, 0.0, -1);
 	ShowSyncHudMsg(0, SyncHudStats, LeaderInfo);
 }
 
 checkLeaders() {
+	new ReGG_Mode:mode = ReGG_Mode:ReGG_GetMode();
 	new lastLeader = 0;
+	new lastTeamLeader = 0;
 	new leadersNum = 0;
 	new leadersLevel = 0;
+	new CT, TT;
 
-	new players[MAX_PLAYERS], num, player, i;
-	new levels[MAX_PLAYERS + 1];
-	get_players(players, num, "h");
-	for (i = 0; i < num; i++) {
-		player = players[i];
-		levels[player] = ReGG_GetLevel(player);
-		if (levels[player] > leadersLevel) {
-			leadersLevel = levels[player];
-		}
-	}
+	if (mode == ReGG_ModeTeam) {
+		new lvlCT = ReGG_GetTeamLevel(ReGG_SlotCT);
+		new lvlT = ReGG_GetTeamLevel(ReGG_SlotT);
 
-	if (leadersLevel <= 0) {
-		return;
-	}
-	for (i = 0; i < num; i++) {
-		player = players[i];
-		if (levels[player] >= leadersLevel) {
-			lastLeader = player;
-			leadersNum++;
-		}
-	}
-
-	if (leadersNum > 0) {
-		new title[32];
-		ReGG_GetLevelTitle(leadersLevel, title, charsmax(title));
-		if (leadersNum > 1) {
-			formatex(LeaderInfo, charsmax(LeaderInfo), "Лидер: %n + %d^nУровень %d (%s)", lastLeader, leadersNum, leadersLevel + 1, title);
+		if (lvlCT > lvlT){
+			leadersNum = 1;
+			leadersLevel = lvlCT;
+			lastTeamLeader = CT;
+		} else if (lvlT > lvlCT) {
+			leadersNum = 1;
+			leadersLevel = lvlT;
+			lastTeamLeader = TT;
 		} else {
-			formatex(LeaderInfo, charsmax(LeaderInfo), "Лидер: %n^nУровень %d (%s)", lastLeader, leadersLevel + 1, title);
+			leadersNum = 2;
+			leadersLevel = lvlCT;
+		}
+		
+		if (leadersLevel <= 0) {
+			return;
 		}
 	} else {
-		formatex(LeaderInfo, charsmax(LeaderInfo), "Лидер: Отсутсвует");
+		new players[MAX_PLAYERS], num, player, i;
+		new levels[MAX_PLAYERS + 1];
+		get_players(players, num, "h");
+		for (i = 0; i < num; i++) {
+			player = players[i];
+			levels[player] = ReGG_GetLevel(player);
+			if (levels[player] > leadersLevel) {
+				leadersLevel = levels[player];
+			}
+		}
+
+		if (leadersLevel <= 0) {
+			return;
+		}
+
+		for (i = 0; i < num; i++) {
+			player = players[i];
+			if (levels[player] >= leadersLevel) {
+				lastLeader = player;
+				leadersNum++;
+			}
+		}
+	}
+	if (leadersNum > 0) {
+		new titleLeader[32];
+		ReGG_GetLevelTitle(leadersLevel, titleLeader, charsmax(titleLeader));
+		if (leadersNum > 1) {
+			if (mode == ReGG_ModeTeam) {
+				formatex(LeaderInfo, charsmax(LeaderInfo), "%L %L + %L  [ %s ]", LANG_PLAYER, "REGG_LEADER", LANG_PLAYER, "REGG_TEAM_LEADER_CT", LANG_PLAYER, "REGG_TEAM_LEADER_T", titleLeader);
+			} else {
+				formatex(LeaderInfo, charsmax(LeaderInfo), "%L %n + (%d) [ %s ]", LANG_PLAYER, "REGG_LEADER", lastLeader, leadersNum, titleLeader);
+			}
+		} else {
+			if (mode == ReGG_ModeTeam) {
+				formatex(LeaderInfo, charsmax(LeaderInfo), "%L %L [ %s ]", LANG_PLAYER, "REGG_LEADER",  LANG_PLAYER, lastTeamLeader == CT ? "REGG_TEAM_LEADER_CT" : "REGG_TEAM_LEADER_T", titleLeader);
+			} else {
+				formatex(LeaderInfo, charsmax(LeaderInfo), "%L %n [ %s ]", LANG_PLAYER, "REGG_LEADER", lastLeader, titleLeader);
+			}
+		}
+	} else {
+			formatex(LeaderInfo, charsmax(LeaderInfo), "%L", LANG_PLAYER, "REGG_NO_LEADER");
 	}
 }

@@ -61,8 +61,10 @@ public TaskInfo() {
 makeInfoString(const id) {
 	new points = ReGG_GetPoints(id);
 	new level = ReGG_GetLevel(id);
+	new levelMax = ReGG_GetLevelMax();
 	new levelPoints = ReGG_GetPlayerLevelPoints(id);
 	new title[32];
 	ReGG_GetLevelTitle(level, title, charsmax(title));
-	formatex(PlayerInfos[id], charsmax(PlayerInfos[]), "Уровень: %d (%s)^nОчков: %d/%d", level + 1, title, points, levelPoints);
+
+	formatex(PlayerInfos[id], charsmax(PlayerInfos[]), "%L", LANG_PLAYER, "REGG_INFORMER", title, level + 1, levelMax, points, levelPoints);
 }

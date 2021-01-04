@@ -50,6 +50,7 @@ registerNatives() {
 	register_native("ReGG_GetLevelPoints", "NativeGetLevelPoints", 0);
 	register_native("ReGG_GetLevelTitle", "NativeGetLevelTitle", 0);
 	register_native("ReGG_GetLevelWeapon", "NativeGetLevelWeapon", 0);
+	register_native("ReGG_GetLevelMax", "NativeGetLevelMax", 0);
 	register_native("ReGG_GetPlayerLevelPoints", "NativeGetPlayerLevelPoints", 0);
 	register_native("ReGG_GetTeamLevelPoints", "NativeGetTeamLevelPoints", 0);
 }
@@ -310,6 +311,10 @@ public WeaponIdType:NativeGetLevelWeapon(const plugin, const argc) {
 	CHECK_NATIVE_LEVEL(level, WEAPON_NONE)
 
 	return Levels[level][LevelWeaponID];
+}
+
+public NativeGetLevelMax(const plugin, const argc) {
+	return LevelsNum;
 }
 
 public NativeGetPlayerLevelPoints(const plugin, const argc) {
