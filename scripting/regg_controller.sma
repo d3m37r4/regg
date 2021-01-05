@@ -1,5 +1,4 @@
 #include <amxmodx>
-#include <reapi>
 #include <regg>
 
 enum {
@@ -24,7 +23,7 @@ public plugin_cfg() {
 }
 
 ReGG_Mode:getMode() {
-	switch (Mode) {
+	switch(Mode) {
 		case ModeTeam: {
 			return ReGG_ModeTeam;
 		}
