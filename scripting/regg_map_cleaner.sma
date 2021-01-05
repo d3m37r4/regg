@@ -4,9 +4,9 @@
 
 new BlockMapConditions;
 new bool:Blocked = false;
-new HookChain:CheckMapConditionsPre, HookChain:CleanUpMapPost, /*HookChain:RestartRoundPost,*/ HookChain:PlayerSpawnPost;
+new HookChain:CheckMapConditionsPre, HookChain:CleanUpMapPost, HookChain:PlayerSpawnPost;
 new bool:CTCantBuy, bool:TCantBuy;
-new bool:MapHasBombTarget, bool:MapHasBombZone, bool:MapHasRescueZone/*, bool:MapHasBuyZone*/, bool:MapHasEscapeZone, bool:MapHasVIPSafetyZone;
+new bool:MapHasBombTarget, bool:MapHasBombZone, bool:MapHasRescueZone, bool:MapHasEscapeZone, bool:MapHasVIPSafetyZone;
 
 public plugin_init() {
 	register_plugin("[ReGG] Map Cleaner", REGG_VERSION_STR, "F@nt0M");
@@ -19,11 +19,9 @@ public plugin_init() {
 
 	CheckMapConditionsPre = RegisterHookChain(RG_CSGameRules_CheckMapConditions, "CSGameRules_CheckMapConditions_Pre", false);
 	CleanUpMapPost = RegisterHookChain(RG_CSGameRules_CleanUpMap, "CSGameRules_CleanUpMap_Post", true);
-	//RestartRoundPost = RegisterHookChain(RG_CSGameRules_RestartRound, "CSGameRules_RestartRound_Post", true);
 	PlayerSpawnPost = RegisterHookChain(RG_CBasePlayer_Spawn, "CBasePlayer_Spawn_Post", true);
 	DisableHookChain(CheckMapConditionsPre);
 	DisableHookChain(CleanUpMapPost);
-	//DisableHookChain(RestartRoundPost);
 	DisableHookChain(PlayerSpawnPost);
 }
 
@@ -53,10 +51,6 @@ public CSGameRules_CleanUpMap_Post() {
 	}
 }
 
-/*public CSGameRules_RestartRound_Post() {
-	removeHostageEntities();
-}*/
-
 public CBasePlayer_Spawn_Post(const id) {
 	set_member(id, m_tmHandleSignals, get_gametime() + 9999.0);
 }
@@ -69,7 +63,6 @@ toggleBlock(const bool:blocked = true) {
 	if(Blocked) {
 		if(BlockMapConditions) {
 			EnableHookChain(CheckMapConditionsPre);
-			//EnableHookChain(RestartRoundPost);
 			EnableHookChain(PlayerSpawnPost);
 
 			MapHasBombTarget = get_member_game(m_bMapHasBombTarget);
@@ -99,7 +92,6 @@ toggleBlock(const bool:blocked = true) {
 	} else {
 		if(BlockMapConditions) {
 			DisableHookChain(CheckMapConditionsPre);
-			//DisableHookChain(RestartRoundPost);
 			DisableHookChain(PlayerSpawnPost);
 
 			set_member_game(m_bMapHasBombTarget, MapHasBombTarget);
