@@ -1,5 +1,4 @@
 #include <amxmodx>
-#include <engine>
 #include <reapi>
 #include <regg>
 
@@ -29,7 +28,7 @@ public plugin_init() {
 }
 
 public plugin_pause() {
-	if (Blocked) {
+	if(Blocked) {
 		toggleBlock(false);
 	}
 }
@@ -49,7 +48,7 @@ public CSGameRules_CheckMapConditions_Pre() {
 }
 
 public CSGameRules_CleanUpMap_Post() {
-	if (BlockMapConditions) {
+	if(BlockMapConditions) {
 		removeHostageEntities();
 	}
 }
@@ -63,12 +62,12 @@ public CBasePlayer_Spawn_Post(const id) {
 }
 
 toggleBlock(const bool:blocked = true) {
-	if (blocked == Blocked) {
+	if(blocked == Blocked) {
 		return;
 	}
 	Blocked = blocked;
-	if (Blocked) {
-		if (BlockMapConditions) {
+	if(Blocked) {
+		if(BlockMapConditions) {
 			EnableHookChain(CheckMapConditionsPre);
 			EnableHookChain(RestartRoundPost);
 			EnableHookChain(PlayerSpawnPost);
@@ -97,7 +96,7 @@ toggleBlock(const bool:blocked = true) {
 		EnableHookChain(CleanUpMapPost);
 		removeTargetNameEntities();
 	} else {
-		if (BlockMapConditions) {
+		if(BlockMapConditions) {
 			DisableHookChain(CheckMapConditionsPre);
 			DisableHookChain(RestartRoundPost);
 			DisableHookChain(PlayerSpawnPost);
@@ -113,8 +112,8 @@ toggleBlock(const bool:blocked = true) {
 
 			restoreHostageEntities();
 
-			for (new player = 1; player <= MaxClients; player++) {
-				if (is_user_connected(player)) {
+			for(new player = 1; player <= MaxClients; player++) {
+				if(is_user_connected(player)) {
 					set_member(player, m_tmHandleSignals, 0.0);
 				}
 			}
@@ -128,44 +127,20 @@ toggleBlock(const bool:blocked = true) {
 removeHostageEntities() {
 	new ent;
 	while((ent = rg_find_ent_by_class(ent, "hostage_entity"))) {
-		set_entvar(ent, var_health, 0.0);
-		set_entvar(ent, var_takedamage, DAMAGE_NO);
-		set_entvar(ent, var_movetype, MOVETYPE_NONE);
-		set_entvar(ent, var_deadflag, DEAD_DEAD);              
-		set_entvar(ent, var_effects, get_entvar(ent, var_effects) | EF_NODRAW);
-		set_entvar(ent, var_solid, SOLID_NOT);
-		set_entvar(ent, var_nextthink, -1.0);
+		removeEntity(ent);
 	}
 	while((ent = rg_find_ent_by_class(ent, "monster_scientist"))) {
-		set_entvar(ent, var_health, 0.0);
-		set_entvar(ent, var_takedamage, DAMAGE_NO);
-		set_entvar(ent, var_movetype, MOVETYPE_NONE);
-		set_entvar(ent, var_deadflag, DEAD_DEAD);              
-		set_entvar(ent, var_effects, get_entvar(ent, var_effects) | EF_NODRAW);
-		set_entvar(ent, var_solid, SOLID_NOT);
-		set_entvar(ent, var_nextthink, -1.0);
+		removeEntity(ent);
 	}
 }
 
 restoreHostageEntities() {
 	new ent;
 	while((ent = rg_find_ent_by_class(ent, "hostage_entity"))) {
-		set_entvar(ent, var_health, Float:get_entvar(ent, var_max_health));
-		set_entvar(ent, var_takedamage, DAMAGE_YES);
-		set_entvar(ent, var_movetype, MOVETYPE_STEP);
-		set_entvar(ent, var_deadflag, DEAD_NO);              
-		set_entvar(ent, var_effects, get_entvar(ent, var_effects) & ~EF_NODRAW);
-		set_entvar(ent, var_solid, SOLID_SLIDEBOX);
-		set_entvar(ent, var_nextthink, get_gametime() + 0.01);
+		restoreEntity(ent);
 	}
 	while((ent = rg_find_ent_by_class(ent, "monster_scientist"))) {
-		set_entvar(ent, var_health, Float:get_entvar(ent, var_max_health));
-		set_entvar(ent, var_takedamage, DAMAGE_YES);
-		set_entvar(ent, var_movetype, MOVETYPE_STEP);
-		set_entvar(ent, var_deadflag, DEAD_NO);              
-		set_entvar(ent, var_effects, get_entvar(ent, var_effects) & ~EF_NODRAW);
-		set_entvar(ent, var_solid, SOLID_SLIDEBOX);
-		set_entvar(ent, var_nextthink, get_gametime() + 0.01);
+		restoreEntity(ent);
 	}
 }
 
@@ -187,4 +162,24 @@ restoreTargetNameEntities() {
 	while((ent = rg_find_ent_by_class(ent, "game_player_equip"))) {
 		set_entvar(ent, var_targetname,"equipment");
 	}
+}
+
+removeEntity(const entity) {
+	set_entvar(entity, var_health, 0.0);
+	set_entvar(entity, var_takedamage, DAMAGE_NO);
+	set_entvar(entity, var_movetype, MOVETYPE_NONE);
+	set_entvar(entity, var_deadflag, DEAD_DEAD);              
+	set_entvar(entity, var_effects, get_entvar(entity, var_effects) | EF_NODRAW);
+	set_entvar(entity, var_solid, SOLID_NOT);
+	set_entvar(entity, var_nextthink, -1.0);
+}
+
+restoreEntity(const entity) {
+	set_entvar(entity, var_health, Float:get_entvar(entity, var_max_health));
+	set_entvar(entity, var_takedamage, DAMAGE_YES);
+	set_entvar(entity, var_movetype, MOVETYPE_STEP);
+	set_entvar(entity, var_deadflag, DEAD_NO);              
+	set_entvar(entity, var_effects, get_entvar(entity, var_effects) & ~EF_NODRAW);
+	set_entvar(entity, var_solid, SOLID_SLIDEBOX);
+	set_entvar(entity, var_nextthink, get_gametime() + 0.01);
 }
