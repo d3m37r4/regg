@@ -36,6 +36,7 @@ enum _:game_cvars_s {
     GCGivePlayerC4,
     GCWeaponsAllowMapPlaced,
     Float:GCBuyTime,
+    GCItemStaytime,
 }
 
 new config_section_s:CfgSection = CfgSectionNone;
@@ -140,7 +141,11 @@ changeGameCvars() {
     GameCvars[GCBuyTime] = get_pcvar_float(pcvar);
     set_pcvar_float(pcvar, 0.0);
 
-    if (Mode == ReGG_ModeFFA) {
+    pcvar = get_cvar_pointer("mp_item_staytime");
+    GameCvars[GCItemStaytime] = get_pcvar_num(pcvar);
+    set_pcvar_num(pcvar, 0);
+
+    if(Mode == ReGG_ModeFFA) {
         pcvar = get_cvar_pointer("mp_freeforall");
         GameCvars[GCFreeForAll] = get_pcvar_num(pcvar);
         set_pcvar_num(pcvar, 1);
@@ -181,7 +186,10 @@ restoreGameCvars() {
     pcvar = get_cvar_pointer("mp_buytime");
     set_pcvar_float(pcvar, GameCvars[GCBuyTime]);
 
-    if (Mode == ReGG_ModeFFA) {
+    pcvar = get_cvar_pointer("mp_item_staytime");
+    set_pcvar_num(pcvar, GameCvars[GCItemStaytime]);
+
+    if(Mode == ReGG_ModeFFA) {
         pcvar = get_cvar_pointer("mp_freeforall");
         set_pcvar_num(pcvar, GameCvars[GCFreeForAll]);
     } else {
@@ -218,13 +226,13 @@ bool:loadIni() {
 }
 
 public bool:ConfigOnNewSection(const INIParser:handle, const section[]) {
-    if (CfgSection == CfgSectionLevel) {
+    if(CfgSection == CfgSectionLevel) {
         LevelsNum++;
     }
 
-    if (strcmp(section, "GRENADE") == 0) {
+    if(strcmp(section, "GRENADE") == 0) {
         CfgSection = CfgSectionGrenade;
-    } else if (strcmp(section, "LEVEL") == 0) {
+    } else if(strcmp(section, "LEVEL") == 0) {
         CfgSection = CfgSectionLevel;
     } else {
         CfgSection = CfgSectionNone;
@@ -233,7 +241,7 @@ public bool:ConfigOnNewSection(const INIParser:handle, const section[]) {
 }
 
 public bool:ConfigOnKeyValue(const INIParser:handle, const key[], const value[]) {
-    switch (CfgSection) {
+    switch(CfgSection) {
         case CfgSectionGrenade: {
             if (GrenadeWeaponsNum < MAX_GRENADE_WEAPONS - 1) {
                 new WeaponIdType:wid = rg_get_weapon_info(value, WI_ID);
@@ -261,7 +269,7 @@ public bool:ConfigOnKeyValue(const INIParser:handle, const key[], const value[])
 }
 
 public ConfigOnParseEnd(INIParser:handle, bool:halted, any:data) {
-    if (CfgSection == CfgSectionLevel) {
+    if(CfgSection == CfgSectionLevel) {
         LevelsNum++;
     }
     INI_DestroyParser(handle);
