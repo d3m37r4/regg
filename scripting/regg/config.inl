@@ -35,6 +35,7 @@ enum _:game_cvars_s {
     GCFriendlyFire,
     GCGivePlayerC4,
     GCWeaponsAllowMapPlaced,
+    Float:GCBuyTime,
 }
 
 new config_section_s:CfgSection = CfgSectionNone;
@@ -135,6 +136,10 @@ changeGameCvars() {
     GameCvars[GCWeaponsAllowMapPlaced] = get_pcvar_num(pcvar);
     set_pcvar_num(pcvar, 0);
 
+    pcvar = get_cvar_pointer("mp_buytime");
+    GameCvars[GCBuyTime] = get_pcvar_float(pcvar);
+    set_pcvar_float(pcvar, 0.0);
+
     if (Mode == ReGG_ModeFFA) {
         pcvar = get_cvar_pointer("mp_freeforall");
         GameCvars[GCFreeForAll] = get_pcvar_num(pcvar);
@@ -172,6 +177,9 @@ restoreGameCvars() {
 
     pcvar = get_cvar_pointer("mp_weapons_allow_map_placed");
     set_pcvar_num(pcvar, GameCvars[GCWeaponsAllowMapPlaced]);
+
+    pcvar = get_cvar_pointer("mp_buytime");
+    set_pcvar_float(pcvar, GameCvars[GCBuyTime]);
 
     if (Mode == ReGG_ModeFFA) {
         pcvar = get_cvar_pointer("mp_freeforall");
