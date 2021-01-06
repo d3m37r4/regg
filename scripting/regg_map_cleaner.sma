@@ -1,13 +1,12 @@
 #include <amxmodx>
-#include <engine>
 #include <reapi>
 #include <regg>
 
 new BlockMapConditions;
 new bool:Blocked = false;
-new HookChain:CheckMapConditionsPre, HookChain:CleanUpMapPost, HookChain:RestartRoundPost, HookChain:PlayerSpawnPost;
+new HookChain:CheckMapConditionsPre, HookChain:CleanUpMapPost, HookChain:PlayerSpawnPost;
 new bool:CTCantBuy, bool:TCantBuy;
-new bool:MapHasBombTarget, bool:MapHasBombZone, bool:MapHasRescueZone, bool:MapHasBuyZone, bool:MapHasEscapeZone, bool:MapHasVIPSafetyZone;
+new bool:MapHasBombTarget, bool:MapHasBombZone, bool:MapHasRescueZone, bool:MapHasEscapeZone, bool:MapHasVIPSafetyZone;
 
 public plugin_init() {
 	register_plugin("[ReGG] Map Cleaner", REGG_VERSION_STR, "F@nt0M");
@@ -20,16 +19,14 @@ public plugin_init() {
 
 	CheckMapConditionsPre = RegisterHookChain(RG_CSGameRules_CheckMapConditions, "CSGameRules_CheckMapConditions_Pre", false);
 	CleanUpMapPost = RegisterHookChain(RG_CSGameRules_CleanUpMap, "CSGameRules_CleanUpMap_Post", true);
-	RestartRoundPost = RegisterHookChain(RG_CSGameRules_RestartRound, "CSGameRules_RestartRound_Post", true);
 	PlayerSpawnPost = RegisterHookChain(RG_CBasePlayer_Spawn, "CBasePlayer_Spawn_Post", true);
 	DisableHookChain(CheckMapConditionsPre);
 	DisableHookChain(CleanUpMapPost);
-	DisableHookChain(RestartRoundPost);
 	DisableHookChain(PlayerSpawnPost);
 }
 
 public plugin_pause() {
-	if (Blocked) {
+	if(Blocked) {
 		toggleBlock(false);
 	}
 }
@@ -49,13 +46,9 @@ public CSGameRules_CheckMapConditions_Pre() {
 }
 
 public CSGameRules_CleanUpMap_Post() {
-	if (BlockMapConditions) {
+	if(BlockMapConditions) {
 		removeHostageEntities();
 	}
-}
-
-public CSGameRules_RestartRound_Post() {
-	removeHostageEntities();
 }
 
 public CBasePlayer_Spawn_Post(const id) {
@@ -63,27 +56,21 @@ public CBasePlayer_Spawn_Post(const id) {
 }
 
 toggleBlock(const bool:blocked = true) {
-	if (blocked == Blocked) {
+	if(blocked == Blocked) {
 		return;
 	}
 	Blocked = blocked;
-	if (Blocked) {
-		if (BlockMapConditions) {
+	if(Blocked) {
+		if(BlockMapConditions) {
 			EnableHookChain(CheckMapConditionsPre);
-			EnableHookChain(RestartRoundPost);
 			EnableHookChain(PlayerSpawnPost);
 
-			CTCantBuy = get_member_game(m_bCTCantBuy);
-			TCantBuy = get_member_game(m_bTCantBuy);
 			MapHasBombTarget = get_member_game(m_bMapHasBombTarget);
 			MapHasBombZone = get_member_game(m_bMapHasBombZone);
 			MapHasRescueZone = get_member_game(m_bMapHasRescueZone);
-			MapHasBuyZone = get_member_game(m_bMapHasBuyZone);
 			MapHasEscapeZone = get_member_game(m_bMapHasEscapeZone);
 			MapHasVIPSafetyZone = get_member_game(m_bMapHasVIPSafetyZone);
 
-			set_member_game(m_bCTCantBuy, true);
-			set_member_game(m_bTCantBuy, true);
 			set_member_game(m_bMapHasBombTarget, false);
 			set_member_game(m_bMapHasBombZone, false);
 			set_member_game(m_bMapHasRescueZone, false);
@@ -94,31 +81,36 @@ toggleBlock(const bool:blocked = true) {
 			removeHostageEntities();
 		}
 
+		CTCantBuy = get_member_game(m_bCTCantBuy);
+		TCantBuy = get_member_game(m_bTCantBuy);
+
+		set_member_game(m_bCTCantBuy, true);
+		set_member_game(m_bTCantBuy, true);
+
 		EnableHookChain(CleanUpMapPost);
 		removeTargetNameEntities();
 	} else {
-		if (BlockMapConditions) {
+		if(BlockMapConditions) {
 			DisableHookChain(CheckMapConditionsPre);
-			DisableHookChain(RestartRoundPost);
 			DisableHookChain(PlayerSpawnPost);
 
-			set_member_game(m_bCTCantBuy, CTCantBuy);
-			set_member_game(m_bTCantBuy, TCantBuy);
 			set_member_game(m_bMapHasBombTarget, MapHasBombTarget);
 			set_member_game(m_bMapHasBombZone, MapHasBombZone);
 			set_member_game(m_bMapHasRescueZone, MapHasRescueZone);
-			set_member_game(m_bMapHasBuyZone, MapHasBuyZone);
 			set_member_game(m_bMapHasEscapeZone, MapHasEscapeZone);
 			set_member_game(m_bMapHasVIPSafetyZone, MapHasVIPSafetyZone);
 
 			restoreHostageEntities();
 
-			for (new player = 1; player <= MaxClients; player++) {
-				if (is_user_connected(player)) {
+			for(new player = 1; player <= MaxClients; player++) {
+				if(is_user_connected(player)) {
 					set_member(player, m_tmHandleSignals, 0.0);
 				}
 			}
 		}
+
+		set_member_game(m_bCTCantBuy, CTCantBuy);
+		set_member_game(m_bTCantBuy, TCantBuy);
 
 		DisableHookChain(CleanUpMapPost);
 		restoreTargetNameEntities();
@@ -128,44 +120,20 @@ toggleBlock(const bool:blocked = true) {
 removeHostageEntities() {
 	new ent;
 	while((ent = rg_find_ent_by_class(ent, "hostage_entity"))) {
-		set_entvar(ent, var_health, 0.0);
-		set_entvar(ent, var_takedamage, DAMAGE_NO);
-		set_entvar(ent, var_movetype, MOVETYPE_NONE);
-		set_entvar(ent, var_deadflag, DEAD_DEAD);              
-		set_entvar(ent, var_effects, get_entvar(ent, var_effects) | EF_NODRAW);
-		set_entvar(ent, var_solid, SOLID_NOT);
-		set_entvar(ent, var_nextthink, -1.0);
+		removeEntity(ent);
 	}
 	while((ent = rg_find_ent_by_class(ent, "monster_scientist"))) {
-		set_entvar(ent, var_health, 0.0);
-		set_entvar(ent, var_takedamage, DAMAGE_NO);
-		set_entvar(ent, var_movetype, MOVETYPE_NONE);
-		set_entvar(ent, var_deadflag, DEAD_DEAD);              
-		set_entvar(ent, var_effects, get_entvar(ent, var_effects) | EF_NODRAW);
-		set_entvar(ent, var_solid, SOLID_NOT);
-		set_entvar(ent, var_nextthink, -1.0);
+		removeEntity(ent);
 	}
 }
 
 restoreHostageEntities() {
 	new ent;
 	while((ent = rg_find_ent_by_class(ent, "hostage_entity"))) {
-		set_entvar(ent, var_health, Float:get_entvar(ent, var_max_health));
-		set_entvar(ent, var_takedamage, DAMAGE_YES);
-		set_entvar(ent, var_movetype, MOVETYPE_STEP);
-		set_entvar(ent, var_deadflag, DEAD_NO);              
-		set_entvar(ent, var_effects, get_entvar(ent, var_effects) & ~EF_NODRAW);
-		set_entvar(ent, var_solid, SOLID_SLIDEBOX);
-		set_entvar(ent, var_nextthink, get_gametime() + 0.01);
+		restoreEntity(ent);
 	}
 	while((ent = rg_find_ent_by_class(ent, "monster_scientist"))) {
-		set_entvar(ent, var_health, Float:get_entvar(ent, var_max_health));
-		set_entvar(ent, var_takedamage, DAMAGE_YES);
-		set_entvar(ent, var_movetype, MOVETYPE_STEP);
-		set_entvar(ent, var_deadflag, DEAD_NO);              
-		set_entvar(ent, var_effects, get_entvar(ent, var_effects) & ~EF_NODRAW);
-		set_entvar(ent, var_solid, SOLID_SLIDEBOX);
-		set_entvar(ent, var_nextthink, get_gametime() + 0.01);
+		restoreEntity(ent);
 	}
 }
 
@@ -187,4 +155,24 @@ restoreTargetNameEntities() {
 	while((ent = rg_find_ent_by_class(ent, "game_player_equip"))) {
 		set_entvar(ent, var_targetname,"equipment");
 	}
+}
+
+removeEntity(const entity) {
+	set_entvar(entity, var_health, 0.0);
+	set_entvar(entity, var_takedamage, DAMAGE_NO);
+	set_entvar(entity, var_movetype, MOVETYPE_NONE);
+	set_entvar(entity, var_deadflag, DEAD_DEAD);              
+	set_entvar(entity, var_effects, get_entvar(entity, var_effects) | EF_NODRAW);
+	set_entvar(entity, var_solid, SOLID_NOT);
+	set_entvar(entity, var_nextthink, -1.0);
+}
+
+restoreEntity(const entity) {
+	set_entvar(entity, var_health, Float:get_entvar(entity, var_max_health));
+	set_entvar(entity, var_takedamage, DAMAGE_YES);
+	set_entvar(entity, var_movetype, MOVETYPE_STEP);
+	set_entvar(entity, var_deadflag, DEAD_NO);              
+	set_entvar(entity, var_effects, get_entvar(entity, var_effects) & ~EF_NODRAW);
+	set_entvar(entity, var_solid, SOLID_SLIDEBOX);
+	set_entvar(entity, var_nextthink, get_gametime() + 0.01);
 }

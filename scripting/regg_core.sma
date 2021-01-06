@@ -69,19 +69,19 @@ public OnConfigsExecuted() {
 
 public plugin_end() {
 	destroyForwards();
-	if (Mode != ReGG_ModeNone) {
+	if(Mode != ReGG_ModeNone) {
 		restoreGameCvars();
 	}
 }
 
 public plugin_pause() {
-	if (Mode != ReGG_ModeNone) {
+	if(Mode != ReGG_ModeNone) {
 		restoreGameCvars();
 	}
 }
 
 public plugin_unpause() {
-	if (Mode != ReGG_ModeNone) {
+	if(Mode != ReGG_ModeNone) {
 		changeGameCvars();
 	}
 }
@@ -94,12 +94,12 @@ public client_putinserver(id) {
 
 public TaskGiveGrenade(id) {
 	id -= TASK_GRENADE_ID;
-	if (!is_user_connected(id)) {
+	if(!is_user_connected(id)) {
 		return;
 	}
 
 	new level = Players[id][PlayerLevel];
-	if (Levels[level][LevelWeaponID] == WEAPON_HEGRENADE) {
+	if(Levels[level][LevelWeaponID] == WEAPON_HEGRENADE) {
 		rg_give_item(id, "weapon_hegrenade");
 	}
 }

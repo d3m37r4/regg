@@ -9,7 +9,6 @@ enum _:hook_s {
 	HookChain:HookRestartRound,
 	HookChain:HookHasRestrictItem,
 	HookChain:HookDropPlayerItem,
-	HookChain:HookDeadPlayerWeapons,
 	HookChain:HookFShouldSwitchWeapon,
 	HookChain:HookOnSpawnEquip,
 	HookChain:HookThrowHeGrenade,
@@ -23,8 +22,6 @@ registerHooks() {
 	Hooks[HookRestartRound] = RegisterHookChain(RG_CSGameRules_RestartRound, "CSGameRules_RestartRound_Pre", false);
 	Hooks[HookHasRestrictItem] = RegisterHookChain(RG_CBasePlayer_HasRestrictItem, "CBasePlayer_HasRestrictItem_Pre", false);
 	Hooks[HookDropPlayerItem] = RegisterHookChain(RG_CBasePlayer_DropPlayerItem, "CBasePlayer_DropPlayerItem_Pre", false);
-	Hooks[HookDeadPlayerWeapons] = RegisterHookChain(RG_CSGameRules_DeadPlayerWeapons, "CSGameRules_DeadPlayerWeapons_Pre", false);
-
 	Hooks[HookFShouldSwitchWeapon] = RegisterHookChain(RG_CSGameRules_FShouldSwitchWeapon, "CSGameRules_FShouldSwitchWeapon_Pre", false);
 
 	Hooks[HookOnSpawnEquip] = RegisterHookChain(RG_CBasePlayer_OnSpawnEquip, "CBasePlayer_OnSpawnEquip_Pre", false);
@@ -33,13 +30,13 @@ registerHooks() {
 }
 
 disableHooks() {
-	for (new i = 0; i < sizeof(Hooks); i++) {
+	for(new i = 0; i < sizeof(Hooks); i++) {
 		DisableHookChain(HookChain:Hooks[i]);
 	}
 }
 
 toggleShouldSwitchWeapon(const bool:enable) {
-    if (enable) {
+    if(enable) {
         EnableHookChain(Hooks[HookFShouldSwitchWeapon]);
     } else {
         DisableHookChain(Hooks[HookFShouldSwitchWeapon]);
@@ -47,7 +44,7 @@ toggleShouldSwitchWeapon(const bool:enable) {
 }
 
 public SV_DropClient_Post(const id) {
-	if (Mode != ReGG_ModeTeam) {
+	if(Mode != ReGG_ModeTeam) {
 		return HC_CONTINUE;
 	}
 
@@ -55,20 +52,20 @@ public SV_DropClient_Post(const id) {
 }
 
 public CSGameRules_RestartRound_Pre() {
-	if (!get_member_game(m_bCompleteReset)) {
+	if(!get_member_game(m_bCompleteReset)) {
 		return HC_CONTINUE;
 	}
-	for (new player = 1; player <= MaxClients; player++) {
+	for(new player = 1; player <= MaxClients; player++) {
 		Players[player][PlayerPoints] = 0;
 		Players[player][PlayerLevel] = 0;
 
-		if (is_user_connected(player) && (TEAM_TERRORIST <= TeamName:get_member(player, m_iTeam) <= TEAM_CT)) {
+		if(is_user_connected(player) && (TEAM_TERRORIST <= TeamName:get_member(player, m_iTeam) <= TEAM_CT)) {
 			rg_remove_all_items(player, true);
 			giveDefaultWeapons(player);
 			giveWeapon(player, 0);
 		}
 	}
-	for (new slot = ReGG_SlotT; slot <= ReGG_SlotCT; slot++) {
+	for(new slot = ReGG_SlotT; slot <= ReGG_SlotCT; slot++) {
 		Teams[slot][TeamPoints] = 0;
 		Teams[slot][TeamLevel] = 0;
 	}
@@ -85,29 +82,26 @@ public CBasePlayer_DropPlayerItem_Pre() {
 	return HC_SUPERCEDE;
 }
 
-public CSGameRules_DeadPlayerWeapons_Pre() {
-	SetHookChainReturn(ATYPE_INTEGER, GR_PLR_DROP_GUN_NO);
-	return HC_SUPERCEDE;
-}
-
 public CSGameRules_FShouldSwitchWeapon_Pre() {
 	SetHookChainReturn(ATYPE_INTEGER, 0);
 	return HC_SUPERCEDE;
 }
 
 public CBasePlayer_OnSpawnEquip_Pre(const id) {
-	if (!is_user_alive(id)) {
+	if(!is_user_alive(id)) {
 		return HC_CONTINUE;
 	}
 
-	if (!Players[id][PlayerJoined]) {
+	if(!Players[id][PlayerJoined]) {
 		playerJoin(id);
 		Players[id][PlayerJoined] = true;
 	}
 
 	giveDefaultWeapons(id);
-
 	giveWeapon(id, Players[id][PlayerLevel]);
+
+	set_member(id, m_iHideHUD, get_member(id, m_iHideHUD) | HIDEHUD_MONEY);
+
 	return HC_SUPERCEDE;
 }
 
@@ -116,20 +110,20 @@ public CBasePlayer_ThrowHeGrenade_Post(const id) {
 }
 
 public CBasePlayer_Killed_Post(const victim, const killer) {
-	if (victim == killer) {
+	if(victim == killer) {
 		suicide(victim);
 		return HC_CONTINUE;
 	}
 
-	if (!is_user_connected(killer) || !rg_is_player_can_takedamage(victim, killer)) {
+	if(!is_user_connected(killer) || !rg_is_player_can_takedamage(victim, killer)) {
 		return HC_CONTINUE;
 	}
 
-	if (get_member(victim, m_bKilledByGrenade)) {
+	if(get_member(victim, m_bKilledByGrenade)) {
 		killGrenade(killer, victim);
-	} else if (get_entvar(victim, var_dmg_inflictor) == killer){
+	} else if(get_entvar(victim, var_dmg_inflictor) == killer){
 		new weapon = get_member(killer, m_pActiveItem);
-		if (get_member(weapon, m_iId) == WEAPON_KNIFE) {
+		if(get_member(weapon, m_iId) == WEAPON_KNIFE) {
 			killKnife(killer, victim);
 		} else {
 			killWeapon(killer, victim, weapon);
