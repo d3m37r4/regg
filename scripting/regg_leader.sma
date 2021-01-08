@@ -15,7 +15,7 @@ public plugin_init() {
 }
 
 public ReGG_StartPost(const ReGG_Mode:mode) {
-	switch (mode) {
+	switch(mode) {
 		case ReGG_ModeSingle, ReGG_ModeFFA: {
 			state single;
 		}
@@ -60,11 +60,11 @@ checkLeaders() {
 	new leadersLevel = 0;
 	new CT, TT;
 
-	if (mode == ReGG_ModeTeam) {
+	if(mode == ReGG_ModeTeam) {
 		new lvlCT = ReGG_GetTeamLevel(ReGG_SlotCT);
 		new lvlT = ReGG_GetTeamLevel(ReGG_SlotT);
 
-		if (lvlCT > lvlT){
+		if(lvlCT > lvlT) {
 			leadersNum = 1;
 			leadersLevel = lvlCT;
 			lastTeamLeader = CT;
@@ -77,44 +77,44 @@ checkLeaders() {
 			leadersLevel = lvlCT;
 		}
 		
-		if (leadersLevel <= 0) {
+		if(leadersLevel <= 0) {
 			return;
 		}
 	} else {
 		new players[MAX_PLAYERS], num, player, i;
 		new levels[MAX_PLAYERS + 1];
 		get_players(players, num, "h");
-		for (i = 0; i < num; i++) {
+		for(i = 0; i < num; i++) {
 			player = players[i];
 			levels[player] = ReGG_GetLevel(player);
-			if (levels[player] > leadersLevel) {
+			if(levels[player] > leadersLevel) {
 				leadersLevel = levels[player];
 			}
 		}
 
-		if (leadersLevel <= 0) {
+		if(leadersLevel <= 0) {
 			return;
 		}
 
-		for (i = 0; i < num; i++) {
+		for(i = 0; i < num; i++) {
 			player = players[i];
-			if (levels[player] >= leadersLevel) {
+			if(levels[player] >= leadersLevel) {
 				lastLeader = player;
 				leadersNum++;
 			}
 		}
 	}
-	if (leadersNum > 0) {
+	if(leadersNum > 0) {
 		new titleLeader[32];
 		ReGG_GetLevelTitle(leadersLevel, titleLeader, charsmax(titleLeader));
-		if (leadersNum > 1) {
-			if (mode == ReGG_ModeTeam) {
+		if(leadersNum > 1) {
+			if(mode == ReGG_ModeTeam) {
 				formatex(LeaderInfo, charsmax(LeaderInfo), "%L %L + %L  [ %s ]", LANG_PLAYER, "REGG_LEADER", LANG_PLAYER, "REGG_TEAM_LEADER_CT", LANG_PLAYER, "REGG_TEAM_LEADER_T", titleLeader);
 			} else {
 				formatex(LeaderInfo, charsmax(LeaderInfo), "%L %n + (%d) [ %s ]", LANG_PLAYER, "REGG_LEADER", lastLeader, leadersNum, titleLeader);
 			}
 		} else {
-			if (mode == ReGG_ModeTeam) {
+			if(mode == ReGG_ModeTeam) {
 				formatex(LeaderInfo, charsmax(LeaderInfo), "%L %L [ %s ]", LANG_PLAYER, "REGG_LEADER",  LANG_PLAYER, lastTeamLeader == CT ? "REGG_TEAM_LEADER_CT" : "REGG_TEAM_LEADER_T", titleLeader);
 			} else {
 				formatex(LeaderInfo, charsmax(LeaderInfo), "%L %n [ %s ]", LANG_PLAYER, "REGG_LEADER", lastLeader, titleLeader);

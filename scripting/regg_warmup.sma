@@ -111,7 +111,7 @@ public CBasePlayer_Spawn_Post(const id) {
 	set_member(id, m_iHideHUD, get_member(id, m_iHideHUD) | HIDEHUD_MONEY);
 
 	set_hudmessage(HudColor[red], HudColor[green], HudColor[blue], HudPos[x], HudPos[y], .holdtime = MaxHudHoldTime);
-	ShowSyncHudMsg(id, SyncHud, "Разминочный раунд");
+	ShowSyncHudMsg(id, SyncHud, "%L", LANG_PLAYER, "REGG_WARMUP_HUD");
 
 	return HC_CONTINUE;
 }
@@ -140,7 +140,7 @@ public startWarmUp() {
 
 	set_task(float(WarmupTime), "stopWarmUp");
 
-	client_print(0, print_center, "Начался разминочный раунд!");
+	client_print(0, print_center, "%L", LANG_PLAYER, "REGG_WARMUP_START");
 	DebugMode && log_amx("Warmup mode is started!");
 }
 
@@ -165,7 +165,7 @@ public stopWarmUp() {
 
 	ReGG_Start(Mode);
 
-	client_print(0, print_center, "Разминка завершена!^rПриготовьтесь к бою, игра началась!");
+	client_print(0, print_center, "%L", LANG_PLAYER, "REGG_WARMUP_END");
 	DebugMode && log_amx("Warmup mode is finished!");
 }
 

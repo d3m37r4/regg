@@ -4,7 +4,9 @@
 #include <reapi>
 #include <regg>
 
-#define MAX_MAPNAME_LENGTH 64
+#if !defined MAX_MAPNAME_LENGTH
+	#define MAX_MAPNAME_LENGTH 64
+#endif
 
 #define rg_get_user_team(%0) get_member(%0, m_iTeam)
 

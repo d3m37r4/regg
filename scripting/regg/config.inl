@@ -11,6 +11,7 @@ enum _:config_s {
     Float:CfgNadeRefresh,
     CfgStealMode,
     CfgStealValue,
+    CfgTeamStealValue,
     CfgAWPOneShot,
     CfgAmmoAmount,
     CfgRefillOnKill,
@@ -64,6 +65,12 @@ registerCvars() {
         .has_min = true,
         .min_val = 1.0
     ), Config[CfgStealValue]);
+
+    bind_pcvar_num(create_cvar(
+        "regg_team_steal_value", "3",
+        .has_min = true,
+        .min_val = 1.0
+    ), Config[CfgTeamStealValue]);
 
     bind_pcvar_num(create_cvar(
         "regg_awp_oneshot", "1",

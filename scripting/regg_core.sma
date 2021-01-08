@@ -61,10 +61,8 @@ public plugin_init() {
 public plugin_cfg() {
 	loadCfg();
 	loadIni();
-}
 
-public OnConfigsExecuted() {
-    register_cvar("regg_version", REGG_VERSION_STR, FCVAR_SERVER|FCVAR_SPONLY|FCVAR_UNLOGGED);
+	register_cvar("regg_version", REGG_VERSION_STR, FCVAR_SERVER|FCVAR_SPONLY|FCVAR_UNLOGGED);
 }
 
 public plugin_end() {

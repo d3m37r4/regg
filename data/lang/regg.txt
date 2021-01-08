@@ -1,6 +1,8 @@
 [ru]
-REGG_MOTD_TEAM_CT = Контр-Террористы
-REGG_MOTD_TEAM_T = Террористы
+REGG_PREFIX = ^1[^4REGG^1]
+
+REGG_TEAM_CT = Контр-Террористы
+REGG_TEAM_T = Террористы
 
 REGG_INFORMER = Оружие: %s | Уровень: %d/%d | Очков: %d/%d
 
@@ -9,3 +11,19 @@ REGG_NO_LEADER = нет
 
 REGG_TEAM_LEADER_CT = CT
 REGG_TEAM_LEADER_T = TT
+
+REGG_LVL_UP = ^3Вы ^1поднялись на ^4%d ^1[^4%s^1] уровень.
+REGG_LVL_DOWN = ^3Вы ^1опустились на ^4%d ^1[^4%s^1] уровень.
+
+REGG_LVL_TEAM_UP = ^3Ваша ^1команда поднялась на ^4%d ^1[^4%s^1] уровень.
+REGG_LVL_TEAM_DOWN = ^3Ваша ^1команда опустилась на ^4%d ^1[^4%s^1] уровень.
+
+REGG_LVL_TEAM_UP_ALL = ^1Команда ^3%s ^1поднялась на ^4%d ^1[^4%s^1] уровень.
+REGG_LVL_TEAM_DOWN_ALL = ^1Команда ^3%s ^1опустилась на ^4%d ^1[^4%s^1] уровень.
+
+REGG_STEAL_LVL = ^3%n ^1украл уровень у ^4%n
+REGG_STEAL_POINTS = ^3%n ^1украл ^4%d ^1очка у ^4%n
+
+REGG_WARMUP_HUD = Разминочный раунд
+REGG_WARMUP_START = Начался разминочный раунд!
+REGG_WARMUP_END = Разминка завершена!^rПриготовьтесь к бою, игра началась!

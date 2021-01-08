@@ -1,10 +1,12 @@
 #include <amxmodx>
 #include <hamsandwich>
 #include <reapi>
+#include <regg>
 
 new bool:BlockAnim = false;
 
 public plugin_init() {
+	register_plugin("[ReGG] Block Send Wpn Anim", REGG_VERSION_STR, "F@nt0M");
 	for (new WeaponIdType:wid = WEAPON_P228, wname[32]; wid <= WEAPON_P90; wid++) {
 		switch (wid) {
 			case WEAPON_GLOCK, WEAPON_C4, WEAPON_HEGRENADE, WEAPON_SMOKEGRENADE, WEAPON_FLASHBANG: {}

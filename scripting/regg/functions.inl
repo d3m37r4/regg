@@ -200,16 +200,18 @@ bool:suicide(const id) {
 }
 
 ReGG_Result:steal(const killer, const victim) {
-	switch(Config[CfgStealMode]) {
-		case 1: {
-			return stealLevels(killer, victim, Config[CfgStealValue]);
+	if(Mode == ReGG_ModeTeam) {
+		return stealPoints(killer, victim, Config[CfgTeamStealValue]);
+	} else {
+		switch(Config[CfgStealMode]) {
+			case 1: {
+				return stealLevels(killer, victim, Config[CfgStealValue]);
+			}
+			case 2: {
+				return stealPoints(killer, victim, Config[CfgStealValue]);
+			}
 		}
-
-		case 2: {
-			return stealPoints(killer, victim, Config[CfgStealValue]);
-		}
-	}
-
+    }
 	return addPoints(killer, 1);
 }
 
