@@ -2,48 +2,54 @@
 #include <regg>
 
 enum _:store_s {
-    StorePoints,
-    StoreLevel,
+	StorePoints,
+	StoreLevel,
 };
 
 new Trie:Store = Invalid_Trie;
 
 public plugin_init() {
-	register_plugin("[ReGG] Map Manager", REGG_VERSION_STR, "F@nt0M");
+	register_plugin("[ReGG] Store Points", REGG_VERSION_STR, "F@nt0M");
 }
 
 public plugin_end() {
-    if (Store != Invalid_Trie) {
-        TrieDestroy(Store);
-    }
+	if(Store != Invalid_Trie) {
+		TrieDestroy(Store);
+	}
 }
 
-public client_disconnected() {
+public client_disconnected(id) {
+	new auth[MAX_AUTHID_LENGTH];
+	get_user_authid(id, auth, charsmax(auth));
 
+	new store[store_s]
+	store[StorePoints] = ReGG_GetPoints(id);
+	store[StoreLevel] = ReGG_GetLevel(id);
+	TrieSetArray(Store, auth, store, sizeof store);
 }
 
 public ReGG_StartPost(const ReGG_Mode:mode) {
-    if (mode == ReGG_ModeSingle || mode == ReGG_ModeFFA) {
-        Store = TrieCreate();
-        state enabled;
-    }
+	if(mode == ReGG_ModeSingle || mode == ReGG_ModeFFA) {
+		Store = TrieCreate();
+		state enabled;
+	}
 }
 
 public ReGG_PlayerJoinPre(const id) <enabled> {
-    new auth[MAX_AUTHID_LENGTH];
-    get_user_authid(id, auth, charsmax(auth));
-    if (!TrieKeyExists(Store, auth)) {
-        return PLUGIN_CONTINUE;
-    }
+	new auth[MAX_AUTHID_LENGTH];
+	get_user_authid(id, auth, charsmax(auth));
+	if(!TrieKeyExists(Store, auth)) {
+		return PLUGIN_CONTINUE;
+	}
 
-    new store[store_s];
-    TrieGetArray(Store, auth, store, sizeof store);
-    ReGG_SetPoints(id, store[StorePoints]);
-    ReGG_SetLevel(id, store[StoreLevel]);
+	new store[store_s];
+	TrieGetArray(Store, auth, store, sizeof store);
+	ReGG_SetPoints(id, store[StorePoints], ReGG_ChangetTypeSet);
+	ReGG_SetLevel(id, store[StoreLevel], ReGG_ChangetTypeSet);
 
-    return PLUGIN_HANDLED;
+	return PLUGIN_HANDLED;
 }
 
 public ReGG_PlayerJoinPre(const id) <> {
-    return PLUGIN_CONTINUE;
+	return PLUGIN_CONTINUE;
 }

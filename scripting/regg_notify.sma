@@ -185,10 +185,10 @@ public ReGG_StealLevelsPost(const killer, const victim, const value) <single> {
 	client_print_color(0, killer, "%L %L", LANG_PLAYER, "REGG_PREFIX", LANG_PLAYER, "REGG_STEAL_LVL", killer, victim);
 }
 
-public ReGG_StealLevelsPost(const killer, const victim, const value) <none> {}
+public ReGG_StealLevelsPost(const killer, const victim, const value) <team, none> {}
 
 public ReGG_StealPointsPost(const killer, const victim, const value) <single, team> {
-	client_print_color(0, killer, "%L %L", LANG_PLAYER, "REGG_PREFIX", LANG_PLAYER, "REGG_STEAL_LVL", killer, value, victim);
+	client_print_color(0, killer, "%L %L", LANG_PLAYER, "REGG_PREFIX", LANG_PLAYER, "REGG_STEAL_POINTS", killer, value, victim);
 }
 
 public ReGG_StealPointsPost(const killer, const victim, const value) <none> {}
