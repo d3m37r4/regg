@@ -26,7 +26,7 @@ public CBasePlayer_Killed_Post() {
 
 public CBasePlayer_CanSwitchTeam_Pre(const id) {
 	if (is_user_alive(id)) {
-		SetHookChainReturn(ATYPE_INTEGER, 0);
+		SetHookChainReturn(ATYPE_BOOL, 0);
 		return HC_SUPERCEDE;
 	}
 
