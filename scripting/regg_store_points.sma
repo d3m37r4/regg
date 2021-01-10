@@ -8,6 +8,8 @@ enum _:store_s {
 
 new Trie:Store = Invalid_Trie;
 
+new store[store_s];
+
 public plugin_init() {
 	register_plugin("[ReGG] Store Points", REGG_VERSION_STR, "F@nt0M");
 }
@@ -22,7 +24,6 @@ public client_disconnected(id) {
 	new auth[MAX_AUTHID_LENGTH];
 	get_user_authid(id, auth, charsmax(auth));
 
-	new store[store_s]
 	store[StorePoints] = ReGG_GetPoints(id);
 	store[StoreLevel] = ReGG_GetLevel(id);
 	TrieSetArray(Store, auth, store, sizeof store);
@@ -42,7 +43,6 @@ public ReGG_PlayerJoinPre(const id) <enabled> {
 		return PLUGIN_CONTINUE;
 	}
 
-	new store[store_s];
 	TrieGetArray(Store, auth, store, sizeof store);
 	ReGG_SetPoints(id, store[StorePoints], ReGG_ChangetTypeSet);
 	ReGG_SetLevel(id, store[StoreLevel], ReGG_ChangetTypeSet);
