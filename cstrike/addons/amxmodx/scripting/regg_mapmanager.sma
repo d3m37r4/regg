@@ -1,5 +1,4 @@
 #include <amxmodx>
-#include <map_manager>
 #include <regg>
 
 new VoteType;
@@ -21,7 +20,7 @@ public ReGG_FinishPost(const killer, const victim) {
 public MapChange() {
 	switch(VoteType){
 		case 1: {
-			mapm_start_vote(VOTE_BY_SCHEDULER);
+			server_cmd("mapm_start_vote");
 		}
 		case 2: {
 			server_cmd("map_govote");

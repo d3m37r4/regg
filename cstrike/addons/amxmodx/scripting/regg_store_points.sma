@@ -21,12 +21,16 @@ public plugin_end() {
 }
 
 public client_disconnected(id) {
-	new auth[MAX_AUTHID_LENGTH];
-	get_user_authid(id, auth, charsmax(auth));
+	new ReGG_Mode:mode = ReGG_Mode:ReGG_GetMode();
 
-	store[StorePoints] = ReGG_GetPoints(id);
-	store[StoreLevel] = ReGG_GetLevel(id);
-	TrieSetArray(Store, auth, store, sizeof store);
+	if(mode == ReGG_ModeSingle || mode == ReGG_ModeFFA) {
+		new auth[MAX_AUTHID_LENGTH];
+		get_user_authid(id, auth, charsmax(auth));
+
+		store[StorePoints] = ReGG_GetPoints(id);
+		store[StoreLevel] = ReGG_GetLevel(id);
+		TrieSetArray(Store, auth, store, sizeof store);
+	}
 }
 
 public ReGG_StartPost(const ReGG_Mode:mode) {

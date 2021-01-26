@@ -98,7 +98,12 @@ public CBasePlayer_OnSpawnEquip_Pre(const id) {
 	}
 
 	giveDefaultWeapons(id);
-	giveWeapon(id, Players[id][PlayerLevel]);
+	if(Mode == ReGG_ModeTeam) {
+		new slot = getTeamSlot(id);
+		giveWeapon(id, Teams[slot][TeamLevel]);
+	} else {
+		giveWeapon(id, Players[id][PlayerLevel]);
+	}
 
 	set_member(id, m_iHideHUD, get_member(id, m_iHideHUD) | HIDEHUD_MONEY);
 

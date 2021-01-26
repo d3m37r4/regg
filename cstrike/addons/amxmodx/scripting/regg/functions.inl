@@ -544,7 +544,7 @@ bool:setPlayerLevel(const id, const value, const bool:forwards = true) {
 
 bool:setTeamLevel(const slot, const value, const bool:forwards = true) {
 	if(forwards) EXECUTE_FORWARD_PRE_ARGS(FWD_TeamLevel, false, slot, value);
-
+	new oldValue = Teams[slot][TeamLevel];
 	Teams[slot][TeamLevel] = value;
 	for(new player = 1, playerSlot; player <= MaxClients; player++) {
 		if (!is_user_connected(player) || is_user_hltv(player)) {
@@ -553,7 +553,15 @@ bool:setTeamLevel(const slot, const value, const bool:forwards = true) {
 
 		playerSlot = getTeamSlot(player);
 		if(playerSlot == slot) {
-			setPlayerLevel(player, value, forwards);
+			if(oldValue != Teams[slot][TeamLevel]) {
+				if(Levels[value][LevelWeaponID] != WEAPON_KNIFE) {
+					removeWeapon(player, oldValue);
+				} else {
+					rg_remove_all_items(player);
+					giveDefaultWeapons(player);
+				}
+				giveWeapon(player, Teams[slot][TeamLevel]);
+			}
 		}
 	}
 

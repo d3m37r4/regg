@@ -115,7 +115,7 @@ checkLeaders() {
 			}
 		} else {
 			if(mode == ReGG_ModeTeam) {
-				formatex(LeaderInfo, charsmax(LeaderInfo), "%L %L [ %s ]", LANG_PLAYER, "REGG_LEADER",  LANG_PLAYER, lastTeamLeader == CT ? "REGG_TEAM_LEADER_CT" : "REGG_TEAM_LEADER_T", titleLeader);
+				formatex(LeaderInfo, charsmax(LeaderInfo), "%L %L [ %s ]", LANG_PLAYER, "REGG_LEADER", LANG_PLAYER, lastTeamLeader == CT ? "REGG_TEAM_LEADER_CT" : "REGG_TEAM_LEADER_T", titleLeader);
 			} else {
 				formatex(LeaderInfo, charsmax(LeaderInfo), "%L %n [ %s ]", LANG_PLAYER, "REGG_LEADER", lastLeader, titleLeader);
 			}
