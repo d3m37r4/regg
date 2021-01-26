@@ -56,12 +56,11 @@ public plugin_init() {
 	registerHooks();
 	disableHooks();
 	registerForwards();
+	loadCfg();
+	loadIni();
 }
 
 public plugin_cfg() {
-	loadCfg();
-	loadIni();
-
 	register_cvar("regg_version", REGG_VERSION_STR, FCVAR_SERVER|FCVAR_SPONLY|FCVAR_UNLOGGED);
 }
 

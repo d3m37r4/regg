@@ -7,7 +7,7 @@ new VoteType;
 public plugin_init() {
 	register_plugin("[ReGG] Map Manager", REGG_VERSION_STR, "F@nt0M");
 	
-	bind_pcvar_float(create_cvar(
+	bind_pcvar_num(create_cvar(
 		"regg_mapchange_type", "1",
 		.has_min = true, 
 		.min_val = 1.0
