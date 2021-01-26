@@ -24,7 +24,10 @@ public MapChange() {
 			mapm_start_vote(VOTE_BY_SCHEDULER);
 		}
 		case 2: {
-			server_cmd("map_govote")
+			server_cmd("map_govote");
+		}
+		case 3: {
+			server_cmd("mapm_startvote");
 		}
 	}
 }
