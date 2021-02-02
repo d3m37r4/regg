@@ -58,7 +58,7 @@ checkLeaders() {
 	new lastTeamLeader = 0;
 	new leadersNum = 0;
 	new leadersLevel = 0;
-	new CT, TT;
+	enum {CT, TT};
 
 	if(mode == ReGG_ModeTeam) {
 		new lvlCT = ReGG_GetTeamLevel(ReGG_SlotCT);
