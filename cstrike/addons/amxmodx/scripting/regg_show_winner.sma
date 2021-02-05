@@ -16,13 +16,13 @@ enum pos {
 	Float:Y
 };
 
-new SyncHudWinner, ShowWinnerType, HudWinnerColor[MAX_LENGTH], HudWinnerPos[MAX_LENGTH], Float:HudWinnerTime;
+new SyncszWinnerMsg, ShowWinnerType, HudWinnerColor[MAX_LENGTH], HudWinnerPos[MAX_LENGTH], HudWinnerTime;
 new HudColor[color], Float:HudPos[pos];
 
 public plugin_init() {
 	register_plugin("[ReGG] Show Winner", REGG_VERSION_STR, "Jumper & d3m37r4");
 	
-	SyncHudWinner = CreateHudSyncObj();
+	SyncszWinnerMsg = CreateHudSyncObj();
 	
 	bind_pcvar_num(create_cvar(
 		"regg_show_winner", "0",
@@ -38,8 +38,8 @@ public plugin_init() {
 		"regg_show_winner_hud_pos", "-1.0 0.65"
 	), HudWinnerPos, charsmax(HudWinnerPos));
 	
-	bind_pcvar_float(create_cvar(
-		"regg_show_winner_time", "10.0",
+	bind_pcvar_num(create_cvar(
+		"regg_show_winner_time", "10",
 		.has_min = true, .min_val = 5.0
 	), HudWinnerTime);
 }
@@ -51,7 +51,6 @@ public plugin_cfg() {
 		HudColor[G] = str_to_num(sColor[G]);
 		HudColor[B] = str_to_num(sColor[B]);
 	}
-
 	if(parse(HudWinnerPos, sPos[X], charsmax(sPos[]), sPos[Y], charsmax(sPos[])) == 2) {
 		HudPos[X] = str_to_float(sPos[X]);
 		HudPos[Y] = str_to_float(sPos[Y]);
@@ -64,73 +63,33 @@ public ReGG_FinishPost(const killer, const victim) {
 
 showWinner(const winner, const looser) {
 	new ReGG_Mode:mode = ReGG_Mode:ReGG_GetMode();
-
+	new slotWinner = ReGG_GetPlayerSlot(winner);
+	new szWinnerMsg[191], szHudMsg[256];
 	if(ShowWinnerType == 0) {
-		if(mode == ReGG_ModeTeam) {
-			new slotWinner = ReGG_GetPlayerSlot(winner);
-			new slotLooser = ReGG_GetPlayerSlot(looser);
-
-			client_print_color(
-				0, 
-				slotWinner == ReGG_SlotT ? print_team_red : print_team_blue, 
-				"%L %L %L^1!!!", 
-				LANG_PLAYER, "REGG_PREFIX", 
-				LANG_PLAYER, "REGG_SHOW_WINNER_TEAM",
-				LANG_PLAYER, slotWinner == ReGG_SlotT ? "REGG_TEAM_T" : "REGG_TEAM_CT"
-			);
-			client_print_color(
-				0, 
-				slotLooser == ReGG_SlotT ? print_team_red : print_team_blue, 
-				"%L %L", 
-				LANG_PLAYER, "REGG_PREFIX", 
-				LANG_PLAYER, "REGG_SHOW_LOOSER",
-				looser
-			);
-		} else if(mode == ReGG_ModeSingle){
-			client_print_color(
-				0, 
-				print_team_default, 
-				"%L %L^1!!!", 
-				LANG_PLAYER, "REGG_PREFIX", 
-				LANG_PLAYER, "REGG_SHOW_WINNER" 
-			);
-			client_print_color(
-				0, 
-				print_team_default, 
-				"%L %L", 
-				LANG_PLAYER, "REGG_PREFIX", 
-				LANG_PLAYER, "REGG_SHOW_LOOSER",
-				looser
-			);
-		} else {
-			client_print_color(
-				0, 
-				print_team_default, 
-				"%L %L %L^1!!!", 
-				LANG_PLAYER, "REGG_PREFIX", 
-				LANG_PLAYER, "REGG_SHOW_WINNER_FFA",
-				winner
-			);
-			client_print_color(
-				0, 
-				print_team_default, 
-				"%L %L", 
-				LANG_PLAYER, "REGG_PREFIX", 
-				LANG_PLAYER, "REGG_SHOW_LOOSER_FFA",
-				looser
-			);
+		switch(mode) {
+			case ReGG_ModeTeam: {
+				formatex(szWinnerMsg, charsmax(szWinnerMsg), "%L %L %L^1!!!", LANG_PLAYER, "REGG_PREFIX", LANG_PLAYER, "REGG_SHOW_WINNER_TEAM", LANG_PLAYER, slotWinner == ReGG_SlotT ? "REGG_TEAM_T" : "REGG_TEAM_CT");
+				client_print_color(0, slotWinner == ReGG_SlotT ? print_team_red : print_team_blue, szWinnerMsg);
+			}
+			case ReGG_ModeSingle: {
+				formatex(szWinnerMsg, charsmax(szWinnerMsg), "%L %L", LANG_PLAYER, "REGG_PREFIX", LANG_PLAYER, "REGG_SHOW_WINNER", winner);
+			}
+			case ReGG_ModeFFA: {
+				formatex(szWinnerMsg, charsmax(szWinnerMsg), "%L %L", LANG_PLAYER, "REGG_PREFIX", LANG_PLAYER, "REGG_SHOW_WINNER_FFA", winner);
+			}
 		}
+		if(mode != ReGG_ModeTeam) {
+			client_print_color(0, print_team_default, szWinnerMsg);
+		}
+		client_print_color(0, print_team_default, "%L %L", LANG_PLAYER, "REGG_PREFIX", LANG_PLAYER, "REGG_SHOW_LOOSER", winner);
 	} else if(ShowWinnerType == 1) {
-		new HudWinner[256];
-
-		if(mode == ReGG_ModeTeam){
-			new slotWinner = ReGG_GetPlayerSlot(winner);
-			formatex(HudWinner, charsmax(HudWinner), "%L", LANG_PLAYER, "REGG_SHOW_WINNER_HUD_TEAM", fmt("%L", LANG_PLAYER, slotWinner == ReGG_SlotT ? "REGG_TEAM_T" : "REGG_TEAM_CT"), looser);
+		if(mode == ReGG_ModeTeam) {
+			formatex(szHudMsg, charsmax(szHudMsg), "%L", LANG_PLAYER, "REGG_SHOW_WINNER_HUD_TEAM", fmt("%L", LANG_PLAYER, slotWinner == ReGG_SlotT ? "REGG_TEAM_T" : "REGG_TEAM_CT"), looser);
 		} else {
-			formatex(HudWinner, charsmax(HudWinner), "%L", LANG_PLAYER, "REGG_SHOW_WINNER_HUD", winner, looser);
+			formatex(szHudMsg, charsmax(szHudMsg), "%L", LANG_PLAYER, "REGG_SHOW_WINNER_HUD", winner, looser);
 		}
 
-		set_hudmessage(HudColor[R], HudColor[G], HudColor[B], HudPos[X], HudPos[Y], .holdtime = HudWinnerTime);
-		ShowSyncHudMsg(0, SyncHudWinner, HudWinner);
+		set_hudmessage(HudColor[R], HudColor[G], HudColor[B], HudPos[X], HudPos[Y], .holdtime = float(HudWinnerTime));
+		ShowSyncHudMsg(0, SyncszWinnerMsg, szHudMsg);
 	}
 }

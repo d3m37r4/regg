@@ -12,12 +12,11 @@ REGG_NO_LEADER = нет
 REGG_TEAM_LEADER_CT = CT
 REGG_TEAM_LEADER_T = TT
 
-REGG_SHOW_WINNER = Победил игрок ^3%n
+REGG_SHOW_WINNER = Победил игрок ^3%n^1!!!
 REGG_SHOW_WINNER_TEAM = ^1Победила команда^3
-REGG_SHOW_LOOSER = ^1Последним был убит ^3%n
+REGG_SHOW_LOOSER = ^1Последним был убит ^4%n
 
-REGG_SHOW_WINNER_FFA = Победил игрок ^4%n
-REGG_SHOW_LOOSER_FFA = ^1Последним был убит ^4%n
+REGG_SHOW_WINNER_FFA = Победил игрок ^4%n^1!!!
 
 REGG_SHOW_WINNER_HUD = Победил игрок %n!!!^nПоследним был убит %n
 REGG_SHOW_WINNER_HUD_TEAM = Победила команда %s!!!^nПоследним был убит %n
