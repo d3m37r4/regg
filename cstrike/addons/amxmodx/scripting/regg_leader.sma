@@ -35,6 +35,7 @@ public ReGG_StartPost(const ReGG_Mode:mode) {
 public ReGG_FinishPost() {
 	state none;
 	remove_task(TASK_INFO_ID);
+	ClearSyncHud(0, SyncHudStats);
 }
 
 public ReGG_PlayerLevelPost(const id, const value) <single> {
