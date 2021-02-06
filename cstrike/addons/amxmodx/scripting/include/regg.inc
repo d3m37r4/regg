@@ -4,6 +4,11 @@
 
 #define _regg_included
 
+// for AMXX_VERSION_NUM < 1.10.0
+#if !defined is_user_authorized
+	native is_user_authorized(index);
+#endif
+
 /********************************************************
 *			   NOTE ON SEMANTIC VERSIONING				*
 ********************************************************/
@@ -16,7 +21,7 @@
 
 #define REGG_MAJOR_VERSION				0
 #define REGG_MINOR_VERSION				2
-#define REGG_MAINTENANCE_VERSION		25
+#define REGG_MAINTENANCE_VERSION		26
 
 #define REGG_VERSION					str_to_num(fmt("%d%d%d", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_MAINTENANCE_VERSION))
 #define REGG_VERSION_STR				fmt("%d.%d.%d-alpha", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_MAINTENANCE_VERSION)
