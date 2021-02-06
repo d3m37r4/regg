@@ -4,6 +4,11 @@
 
 #define _regg_included
 
+// for AMXX_VERSION_NUM < 1.10.0
+#if !defined is_user_authorized
+	native is_user_authorized(index);
+#endif
+
 /********************************************************
 *			   NOTE ON SEMANTIC VERSIONING				*
 ********************************************************/
