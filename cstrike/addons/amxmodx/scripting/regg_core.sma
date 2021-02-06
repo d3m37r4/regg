@@ -95,7 +95,13 @@ public TaskGiveGrenade(id) {
 		return;
 	}
 
-	new level = Players[id][PlayerLevel];
+	new level;
+	if(Mode == ReGG_ModeTeam) {
+		new slot = getTeamSlot(id);
+		level = Teams[slot][TeamLevel];
+	} else {
+		level = Players[id][PlayerLevel];
+	}
 	if(Levels[level][LevelWeaponID] == WEAPON_HEGRENADE) {
 		rg_give_item(id, "weapon_hegrenade");
 	}
