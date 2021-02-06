@@ -90,6 +90,7 @@ showWinner(const winner, const looser) {
 		}
 
 		client_print_color(0, print_type, buffer);
+		client_print_color(0, print_team_default, "%L %L", LANG_PLAYER, "REGG_PREFIX", LANG_PLAYER, "REGG_SHOW_LOOSER", winner);
 	}
 
 	if(ShowWinnerType == ShowWinnerType_Hud) {
