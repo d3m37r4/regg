@@ -1,11 +1,10 @@
 # GunGame Mod for Counter-Strike 1.6
 
 ## What is this?
-GunGame is one of most dynamic modifications in terms of gameplay. In this it is similar to CSDM mod, which uses a similar game mechanic:
-- purchase menu is not available;
-- money is not given out;
-- weapon cannot be thrown away and it disappears after death of the owner.
-
+GunGame is one of most dynamic modifications in terms of gameplay. In this it is similar to CSDM mod, which uses a similar game mechanic: <br>
+– purchase menu is not available; <br>
+– money is not given out; <br>
+– weapon cannot be thrown away and it disappears after death of the owner. <br>
 In the GunGame modification, players are respawned with a weapon corresponding to their level and a knife. For killing enemy, player is awarded a new level, and with it a weapon. By default, knife - is last weapon you can get. Winner will be player who is the first to commit murders with a knife (in team mode, team that was this player in wins).
  
 ## Composition of the modification
@@ -17,7 +16,8 @@ In the GunGame modification, players are respawned with a weapon corresponding t
 `regg_map_cleaner` - clearing maps from unnecessary entities <br>
 `regg_notify` - notification plugin <br>
 `regg_warmup` - warmup mode before starting main mode <br>
-`regg_show_winner` - shows winner at end of game
+`regg_show_winner` - shows winner at end of game <br>
+`regg_block_send_wpn_anim` - blocks animation of changing weapons
 
 Requirements
 =============
