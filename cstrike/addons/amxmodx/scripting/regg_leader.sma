@@ -35,6 +35,7 @@ public ReGG_StartPost(const ReGG_Mode:mode) {
 public ReGG_FinishPost() {
 	state none;
 	remove_task(TASK_INFO_ID);
+	ClearSyncHud(0, SyncHudStats);
 }
 
 public ReGG_PlayerLevelPost(const id, const value) <single> {
@@ -58,7 +59,7 @@ checkLeaders() {
 	new lastTeamLeader = 0;
 	new leadersNum = 0;
 	new leadersLevel = 0;
-	new CT, TT;
+	enum {CT, TT};
 
 	if(mode == ReGG_ModeTeam) {
 		new lvlCT = ReGG_GetTeamLevel(ReGG_SlotCT);

@@ -80,7 +80,13 @@ ReGG_Result:killWeapon(const killer, const victim, const weapon) {
 	new WeaponIdType:wid = WeaponIdType:get_member(weapon, m_iId);
 	EXECUTE_FORWARD_PRE_ARGS(FWD_KillEnemy, ReGG_ResultNone, killer, victim, wid, ReGG_ResultNone, Players[killer][PlayerPoints], Players[killer][PlayerLevel]);
 
-	new level = Players[killer][PlayerLevel];
+	new level;
+	if(Mode == ReGG_ModeTeam) {
+		new slot = getTeamSlot(killer);
+		level = Teams[slot][TeamLevel];
+	} else {
+		level = Players[killer][PlayerLevel];
+	}
 	new ReGG_Result:result = ReGG_ResultNone;
 	if(Levels[level][LevelWeaponID] != WEAPON_HEGRENADE) {
 		result = addPoints(killer, 1);
@@ -95,7 +101,14 @@ ReGG_Result:killWeapon(const killer, const victim, const weapon) {
 ReGG_Result:killGrenade(const killer, const victim) {
 	EXECUTE_FORWARD_PRE_ARGS(FWD_KillEnemy, ReGG_ResultNone, killer, victim, WEAPON_HEGRENADE, ReGG_ResultNone, Players[killer][PlayerPoints], Players[killer][PlayerLevel]);
 
-	new level = Players[killer][PlayerLevel];
+	new level;
+	if(Mode == ReGG_ModeTeam) {
+		new slot = getTeamSlot(killer);
+		level = Teams[slot][TeamLevel];
+	} else {
+		level = Players[killer][PlayerLevel];
+	}
+
 	if(Levels[level][LevelWeaponID] != WEAPON_HEGRENADE) {
 		EXECUTE_FORWARD_POST_ARGS(FWD_KillEnemy, killer, victim, WEAPON_HEGRENADE, ReGG_ResultNone, Players[killer][PlayerPoints], Players[killer][PlayerLevel]);
 		return ReGG_ResultNone;
@@ -219,7 +232,14 @@ ReGG_Result:stealPoints(const killer, const victim, const value) {
 	EXECUTE_FORWARD_PRE_ARGS(FWD_StealPoints, ReGG_ResultNone, killer, victim, value);
 
 	new ReGG_Result:result;
-	new level = Players[killer][PlayerLevel];
+	new level;
+	if(Mode == ReGG_ModeTeam) {
+		new slot = getTeamSlot(killer);
+		level = Teams[slot][TeamLevel];
+	} else {
+		level = Players[killer][PlayerLevel];
+	}
+
 	switch(Levels[level][LevelWeaponID]) {
 		case WEAPON_KNIFE: {
 			result = addPoints(killer, 1);
