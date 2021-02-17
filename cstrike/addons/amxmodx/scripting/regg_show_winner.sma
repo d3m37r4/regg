@@ -24,6 +24,7 @@ new ShowWinnerType;
 
 new HudWinnerTime;
 new SyncHud;
+new cvar_buffer[12];
 
 #define parseColors(%1,%2) parse(%1, %2[red], charsmax(%2[]), %2[green], charsmax(%2[]), %2[blue], charsmax(%2[]))
 #define parseCoordinates(%1,%2) parse(%1, %2[x], charsmax(%2[]), %2[y], charsmax(%2[]))
@@ -42,20 +43,19 @@ public plugin_init() {
 		.has_min = true, .min_val = 5.0
 	), HudWinnerTime);
 
-	new buffer[12];
 	bind_pcvar_string(create_cvar(
 		"regg_show_winner_hud_color", "255 255 255"
-	), buffer, charsmax(buffer));
+	), cvar_buffer, charsmax(cvar_buffer));
 
-	if(!parseColorValue(buffer)) {
+	if(!parseColorValue(cvar_buffer)) {
 		set_fail_state("Invalid value from 'regg_show_winner_hud_color'.");
 	}
 
 	bind_pcvar_string(create_cvar(
 		"regg_show_winner_hud_pos", "-1.0 0.65"
-	), buffer, charsmax(buffer));
+	), cvar_buffer, charsmax(cvar_buffer));
 
-	if(!parseCoordinateValue(buffer)) {
+	if(!parseCoordinateValue(cvar_buffer)) {
 		set_fail_state("Invalid value from 'regg_show_winner_hud_pos'.");
 	}
 
