@@ -92,7 +92,7 @@ public ReGG_StartPost(const ReGG_Mode:mode) {
 
 public ReGG_FinishPost() {
 	state none;
-	PlaySound(0, fmt("%a", ArrayGetStringHandle(Winner, random(WinnerNum))));
+	PlaySound(0, Winner, WinnerNum);
 }
 
 public ReGG_KillEnemyPost(const killer, const victim, const WeaponIdType:value, const ReGG_Result:result) <single> {
@@ -104,7 +104,7 @@ public ReGG_KillEnemyPost(const killer, const victim, const WeaponIdType:value, 
 		case ReGG_ResultPointsDown: {}
 
 		case ReGG_ResultLevelUp: {
-			PlaySound(killer, fmt("%a", ArrayGetStringHandle(LevelUp, random(LevelUpNum))));
+			PlaySound(killer, LevelUp, LevelUpNum);
 
 			new level = ReGG_GetLevel(killer);
 			new title[32];
@@ -113,7 +113,7 @@ public ReGG_KillEnemyPost(const killer, const victim, const WeaponIdType:value, 
 		}
 
 		case ReGG_ResultLevelDown: {
-			PlaySound(killer, fmt("%a", ArrayGetStringHandle(LevelDown, random(LevelDownNum))));
+			PlaySound(killer, LevelDown, LevelDownNum);
 			new level = ReGG_GetLevel(killer);
 			new title[32];
 			ReGG_GetLevelTitle(level, title, charsmax(title));
@@ -156,7 +156,7 @@ notifyTeam(const slot, const level, const ReGG_Result:result) {
 		switch(result) {
 			case ReGG_ResultLevelUp: {
 				if(playerSlot == slot) {
-					PlaySound(player, fmt("%a", ArrayGetStringHandle(LevelUp, random(LevelUpNum))));
+					PlaySound(player, LevelUp, LevelUpNum);
 					client_print_color(player, print_team_default, "%L %L", LANG_PLAYER, "REGG_PREFIX", LANG_PLAYER, "REGG_LVL_TEAM_UP", level + 1, title);
 				} else {
 					client_print_color(
@@ -168,7 +168,7 @@ notifyTeam(const slot, const level, const ReGG_Result:result) {
 
 			case ReGG_ResultLevelDown: {
 				if(playerSlot == slot) {
-					PlaySound(player, fmt("%a", ArrayGetStringHandle(LevelDown, random(LevelDownNum))));
+					PlaySound(player, LevelDown, LevelDownNum);
 					client_print_color(player, print_team_default, "%L %L", LANG_PLAYER, "REGG_PREFIX", LANG_PLAYER, "REGG_LVL_TEAM_DOWN", level + 1, title);
 				} else {
 					client_print_color(
@@ -196,10 +196,10 @@ public ReGG_StealPointsPost(const killer, const victim, const value) <none> {}
 public ReGG_GiveWeaponPost(const id, const WeaponIdType:value) {
 	if(fistGrenadeLvl && value == WEAPON_HEGRENADE) {
 		fistGrenadeLvl = false;
-		PlaySound(0, fmt("%a", ArrayGetStringHandle(GrenadeLevel, random(GrenadeLevelNum))));
+		PlaySound(0, GrenadeLevel, GrenadeLevelNum);
 	} else if (firtKnifeLvl && value == WEAPON_KNIFE) {
 		firtKnifeLvl = false;
-		PlaySound(0, fmt("%a", ArrayGetStringHandle(KnifeLevel, random(KnifeLevelNum))));
+		PlaySound(0, KnifeLevel, KnifeLevelNum);
 	}
 }
 
@@ -296,9 +296,15 @@ bool:PrecacheSoundEx(Array:arr, const keys[]) {
 	return true;
 }
 
-PlaySound(const id, const sound[]) {
+PlaySound(const id, Array:arr, const arr_num) {
+	if(arr_num == 0) {
+		return;
+	}
+	static sound[MAX_RESOURCE_PATH_LENGTH];
+	ArrayGetString(arr, random(arr_num), sound, charsmax(sound));
+
 	if(IsMp3Format(sound)) {
-		client_cmd(id, "stopsound; mp3 play %s", sound);
+		client_cmd(id, "stopsound; mp3 stop; mp3 play %s", sound);
 	} else {
 		rg_send_audio(id, sound);
 	}
