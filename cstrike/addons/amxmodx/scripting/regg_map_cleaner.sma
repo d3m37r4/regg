@@ -9,7 +9,7 @@ new bool:CTCantBuy, bool:TCantBuy;
 new bool:MapHasBombTarget, bool:MapHasBombZone, bool:MapHasRescueZone, bool:MapHasEscapeZone, bool:MapHasVIPSafetyZone;
 
 public plugin_init() {
-	register_plugin("[ReGG] Map Cleaner", REGG_VERSION_STR, "F@nt0M");
+	register_plugin("[ReGG] Map Cleaner", REGG_VERSION_STR, "Jumper & d3m37r4");
 
 	bind_pcvar_num(create_cvar(
 		"regg_block_map_conditions", "1",

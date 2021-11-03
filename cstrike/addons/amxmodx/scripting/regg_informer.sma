@@ -10,7 +10,7 @@ new SyncHudStats;
 new PlayerInfos[MAX_PLAYERS + 1][256];
 
 public plugin_init() {
-	register_plugin("[ReGG] Informer", REGG_VERSION_STR, "F@nt0M");
+	register_plugin("[ReGG] Informer", REGG_VERSION_STR, "Jumper & d3m37r4");
 	SyncHudStats = CreateHudSyncObj();
 	state disabled;
 }

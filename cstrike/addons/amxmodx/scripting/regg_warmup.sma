@@ -53,7 +53,7 @@ new SyncHud;
 new bool:DebugMode;
 
 public plugin_init() {
-	register_plugin("[ReGG] WarmUp", REGG_VERSION_STR, "F@nt0M");
+	register_plugin("[ReGG] WarmUp", REGG_VERSION_STR, "Jumper & d3m37r4");
 
 	registerHooks();
 	toggleHooks(StateDisable);

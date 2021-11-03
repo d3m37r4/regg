@@ -48,7 +48,7 @@ public plugin_natives() {
 }
 
 public plugin_init() {
-	register_plugin("[ReGG] Core", REGG_VERSION_STR, "F@nt0M");
+	register_plugin("[ReGG] Core", REGG_VERSION_STR, "Jumper & d3m37r4");
 	
 	register_dictionary("regg.txt");
 

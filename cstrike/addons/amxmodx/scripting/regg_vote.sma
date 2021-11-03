@@ -149,7 +149,7 @@ public menu_vote(const id) {
 		menu_additem(menu, fmt("%L", LANG_PLAYER, "REGG_MODE_FFA"), "2");
 	}
 	
-	menu_setprop(menu, MEXIT_NEVER -1);
+	menu_setprop(menu, MPROP_EXIT, MEXIT_NEVER);
 
 	menu_display(id, menu, 0);
 

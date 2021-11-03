@@ -5,7 +5,7 @@
 new bool:BalanceTeams = false;
 
 public plugin_init() {
-	register_plugin("[ReGG] Balancer", REGG_VERSION_STR, "F@nt0M");
+	register_plugin("[ReGG] Balancer", REGG_VERSION_STR, "Jumper & d3m37r4");
 
 	RegisterHookChain(RG_CBasePlayer_Killed, "CBasePlayer_Killed_Post", true);
 	RegisterHookChain(RG_CBasePlayer_CanSwitchTeam, "CBasePlayer_CanSwitchTeam_Pre", false);

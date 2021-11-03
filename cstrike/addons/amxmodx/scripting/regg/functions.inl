@@ -138,10 +138,14 @@ ReGG_Result:killKnife(const killer, const victim) {
 }
 
 giveDefaultWeapons(const id) {
-	if(Config[CfgGiveArmor] > 0) {
-		rg_set_user_armor(id, Config[CfgGiveArmor], Config[CfgGiveHelmet] ? ARMOR_VESTHELM : ARMOR_KEVLAR);
+	switch(ArmorType:Config[CfgFreeArmor]) {
+		case ARMOR_KEVLAR: {
+			rg_set_user_armor(id, 100, ARMOR_KEVLAR);
+		}
+		case ARMOR_VESTHELM: {
+			rg_set_user_armor(id, 100, ARMOR_VESTHELM);
+		}
 	}
-
 	rg_give_item(id, "weapon_knife");
 }
 
@@ -192,8 +196,16 @@ removeWeapon(const id, const level) {
 		return;
 	}
 	new WeaponIdType:wid = Levels[level][LevelWeaponID];
-	if(wid != WEAPON_KNIFE) {
-		new wname[32];
+	new wname[32];
+	if(wid == WEAPON_HEGRENADE) {
+		for(new i = 0; i < GrenadeWeaponsNum; i++) {
+			rg_get_weapon_info(GrenadeWeapons[i], WI_NAME, wname, charsmax(wname));
+			rg_remove_item(id, wname, true);
+		}
+		rg_get_weapon_info(wid, WI_NAME, wname, charsmax(wname));
+		rg_remove_item(id, wname, true);
+	}
+	else if(wid != WEAPON_KNIFE) {
 		rg_get_weapon_info(wid, WI_NAME, wname, charsmax(wname));
 		rg_remove_item(id, wname, true);
 	}

@@ -67,7 +67,7 @@ public plugin_precache() {
 }
 
 public plugin_init() {
-	register_plugin("[ReGG] Notify", REGG_VERSION_STR, "F@nt0M");
+	register_plugin("[ReGG] Notify", REGG_VERSION_STR, "Jumper & d3m37r4");
 	state none;
 	
 	firtKnifeLvl = true;
@@ -280,13 +280,21 @@ bool:PrecacheSoundEx(Array:arr, const keys[]) {
 		log_amx("Invalid sound file! Parse string '%s'. Only sound files in wav or mp3 format should be used!", keys);
 		return false;
 	}
+
 	static Sound[MAX_RESOURCE_PATH_LENGTH];
 	formatex(Sound, charsmax(Sound), "sound/%s", keys);
-	ArrayPushString(arr, Sound);
+
+	if(IsMp3Format(keys)) {
+		ArrayPushString(arr, Sound);
+	} else {
+		ArrayPushString(arr, keys);
+	}
+
 	if(!file_exists(Sound)) {
 		log_amx("File missing '%s'.", Sound);
 		return false;
 	}
+
 	if(IsMp3Format(keys)) {
 		precache_generic(Sound);
 	} else {
@@ -304,7 +312,7 @@ PlaySound(const id, Array:arr, const arr_num) {
 	ArrayGetString(arr, random(arr_num), sound, charsmax(sound));
 
 	if(IsMp3Format(sound)) {
-		client_cmd(id, "stopsound; mp3 stop; mp3 play %s", sound);
+		client_cmd(id, "mp3 play %s", sound);
 	} else {
 		rg_send_audio(id, sound);
 	}

@@ -11,7 +11,7 @@ new Trie:Store = Invalid_Trie;
 new store[store_s];
 
 public plugin_init() {
-	register_plugin("[ReGG] Store Points", REGG_VERSION_STR, "F@nt0M");
+	register_plugin("[ReGG] Store Points", REGG_VERSION_STR, "Jumper & d3m37r4");
 }
 
 public plugin_end() {
