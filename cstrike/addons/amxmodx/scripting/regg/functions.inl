@@ -615,8 +615,25 @@ getTeamSlot(const id) {
 }
 
 getTeamLevelPoints(const slot, const level) {
-	new points = getTeamPlayers(slot) * Levels[level][LevelPoints];
-	return Levels[level][LevelMod] != 100 ? Levels[level][LevelMod] * points / 100 : points;
+	new points;
+	new point_s = getTeamPlayers(slot) * Levels[level][LevelPoints];
+	new lvlmod = Levels[level][LevelMod];
+	if(lvlmod != 100) {
+		points = roundPoints(lvlmod, point_s);
+	} else {
+		points = point_s;
+	}
+
+	return points;
+}
+
+roundPoints(num1, num2) {
+	new Float:fNum1 = float(num1);
+	new Float:fNum2 = float(num2);
+	new Float:value = fNum1 * fNum2 / 100.0;
+	new num = floatround(value, floatround_ceil);
+
+	return num;
 }
 
 getTeamPlayers(const slot) {
