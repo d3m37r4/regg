@@ -52,22 +52,21 @@ public SV_DropClient_Post(const id) {
 }
 
 public CSGameRules_RestartRound_Pre() {
-	if(!get_member_game(m_bCompleteReset)) {
-		return HC_CONTINUE;
-	}
-	for(new player = 1; player <= MaxClients; player++) {
-		Players[player][PlayerPoints] = 0;
-		Players[player][PlayerLevel] = 0;
+	if(get_member_game(m_bCompleteReset)) {
+		for(new player = 1; player <= MaxClients; player++) {
+			Players[player][PlayerPoints] = 0;
+			Players[player][PlayerLevel] = 0;
 
-		if(is_user_connected(player) && (TEAM_TERRORIST <= TeamName:get_member(player, m_iTeam) <= TEAM_CT)) {
-			rg_remove_all_items(player, true);
-			giveDefaultWeapons(player);
-			giveWeapon(player, 0);
+			if(is_user_connected(player) && (TEAM_TERRORIST <= TeamName:get_member(player, m_iTeam) <= TEAM_CT)) {
+				rg_remove_all_items(player, true);
+				giveDefaultWeapons(player);
+				giveWeapon(player, 0);
+			}
 		}
-	}
-	for(new slot = ReGG_SlotT; slot <= ReGG_SlotCT; slot++) {
-		Teams[slot][TeamPoints] = 0;
-		Teams[slot][TeamLevel] = 0;
+		for(new slot = ReGG_SlotT; slot <= ReGG_SlotCT; slot++) {
+			Teams[slot][TeamPoints] = 0;
+			Teams[slot][TeamLevel] = 0;
+		}
 	}
 	return HC_CONTINUE;
 }
