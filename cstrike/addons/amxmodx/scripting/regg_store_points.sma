@@ -11,7 +11,7 @@ new Trie:Store = Invalid_Trie;
 new store[store_s];
 
 public plugin_init() {
-	register_plugin("[ReGG] Store Points", REGG_VERSION_STR, "F@nt0M");
+	register_plugin("[ReGG] Store Points", REGG_VERSION_STR, "Jumper & d3m37r4");
 }
 
 public plugin_end() {
@@ -41,16 +41,18 @@ public ReGG_StartPost(const ReGG_Mode:mode) {
 }
 
 public ReGG_PlayerJoinPre(const id) <enabled> {
+	new ReGG_Mode:mode = ReGG_Mode:ReGG_GetMode();
 	new auth[MAX_AUTHID_LENGTH];
 	get_user_authid(id, auth, charsmax(auth));
 	if(!TrieKeyExists(Store, auth)) {
 		return PLUGIN_CONTINUE;
 	}
 
-	TrieGetArray(Store, auth, store, sizeof store);
-	ReGG_SetPoints(id, store[StorePoints], ReGG_ChangetTypeSet);
-	ReGG_SetLevel(id, store[StoreLevel], ReGG_ChangetTypeSet);
-
+	if(mode == ReGG_ModeSingle || mode == ReGG_ModeFFA) {
+		TrieGetArray(Store, auth, store, sizeof store);
+		ReGG_SetPoints(id, store[StorePoints], ReGG_ChangetTypeSet);
+		ReGG_SetLevel(id, store[StoreLevel], ReGG_ChangetTypeSet);
+	}
 	return PLUGIN_HANDLED;
 }
 

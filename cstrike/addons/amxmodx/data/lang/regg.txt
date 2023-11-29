@@ -36,3 +36,11 @@ REGG_STEAL_POINTS = ^3%n ^1украл ^4%d ^1очка у ^4%n
 REGG_WARMUP_HUD = Разминочный раунд
 REGG_WARMUP_START = Начался разминочный раунд!
 REGG_WARMUP_END = Разминка завершена!^rПриготовьтесь к бою, игра началась!
+
+REGG_VOTE_MENU = Голосование за выбор режима игры:
+REGG_MODE_SINGLE = Одиночный
+REGG_MODE_TEAM = Командный
+REGG_MODE_FFA = FFA
+REGG_PLAYER_VOTE = Игрок ^4%n ^1проголосовал за режим ^4%s
+REGG_END_VOTE = Голосование окончено, выбран режим игры ^4%s
+REGG_VOTE_ENDED = Голосование уже окончено!

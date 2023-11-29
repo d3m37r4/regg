@@ -4,7 +4,7 @@
 new VoteType;
 
 public plugin_init() {
-	register_plugin("[ReGG] Map Manager", REGG_VERSION_STR, "F@nt0M");
+	register_plugin("[ReGG] Map Manager", REGG_VERSION_STR, "Jumper & d3m37r4");
 	
 	bind_pcvar_num(create_cvar(
 		"regg_mapchange_type", "1",

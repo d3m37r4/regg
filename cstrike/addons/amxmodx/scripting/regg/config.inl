@@ -15,8 +15,7 @@ enum _:config_s {
     CfgAWPOneShot,
     CfgAmmoAmount,
     CfgRefillOnKill,
-    CfgGiveArmor,
-    CfgGiveHelmet,
+    CfgFreeArmor,
 };
 
 enum config_section_s {
@@ -95,18 +94,12 @@ registerCvars() {
     ), Config[CfgRefillOnKill]);
 
     bind_pcvar_num(create_cvar(
-        "regg_give_armor", "100",
-        .has_min = true,
-        .min_val = 0.0
-    ), Config[CfgGiveArmor]);
-
-    bind_pcvar_num(create_cvar(
-        "regg_give_helmet", "1",
+        "regg_free_armor", "0",
         .has_min = true,
         .min_val = 0.0,
         .has_max = true,
-        .max_val = 1.0
-    ), Config[CfgGiveHelmet]);
+        .max_val = 2.0
+    ), Config[CfgFreeArmor]);
 }
 
 changeGameCvars() {
@@ -159,7 +152,7 @@ changeGameCvars() {
     } else {
         pcvar = get_cvar_pointer("mp_friendlyfire");
         GameCvars[GCFriendlyFire] = get_pcvar_num(pcvar);
-        set_pcvar_num(pcvar, 1);
+        set_pcvar_num(pcvar, 0);
     }
 }
 

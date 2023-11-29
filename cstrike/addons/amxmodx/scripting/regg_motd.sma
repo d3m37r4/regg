@@ -13,7 +13,7 @@
 new const STYLES_URL[] = "http://localhost/regungame.css";
 
 public plugin_init() {
-	register_plugin("[ReGG] MOTD", REGG_VERSION_STR, "F@nt0M");
+	register_plugin("[ReGG] MOTD", REGG_VERSION_STR, "Jumper & d3m37r4");
 }
 
 public ReGG_FinishPost(const killer, const victim) {

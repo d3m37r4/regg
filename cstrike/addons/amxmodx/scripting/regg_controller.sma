@@ -10,7 +10,7 @@ enum {
 new Mode;
 
 public plugin_init() {
-	register_plugin("[ReGG] Controller", REGG_VERSION_STR, "F@nt0M");
+	register_plugin("[ReGG] Controller", REGG_VERSION_STR, "Jumper & d3m37r4");
 	bind_pcvar_num(create_cvar(
 		"regg_mode", "0",
 		.has_min = true, .min_val = 0.0,
