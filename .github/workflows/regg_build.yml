@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [ "alpha-release" ]
+    paths-ignore:
+      - "**.md"
+      - "**.css"
+      - "**.wav"
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  regg_build_job:
+    name: "Regg build"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Declare some variables
+        shell: bash
+        run: |
+          echo "COMMIT_SHA_SHORT=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
+          
+      - name: Setup latest ReAPI includes
+        env:
+          REPO: "s1lentq/reapi"
+        run: |
+          mkdir -p dep/reapi
+          cd dep/reapi
+
+          curl \
+            --silent \
+            https://api.github.com/repos/$REPO/releases/latest | \
+            grep "browser_download_url" | \
+            grep -Eo 'https://[^\"]*' | \
+            xargs wget
+
+          7z x *.zip
+
+          echo "REAPI_INCLUDE_PATH=$(pwd)/addons/amxmodx/scripting/include" >> $GITHUB_ENV
+
+      - name: Setup AMXXPawn Compiler
+        uses: wopox1337/setup-amxxpawn@v1.0.2
+        with:
+          version: "1.10.5428"
+
+      - name: Compile AMXX plugins
+        working-directory: cstrike/addons/amxmodx/scripting/
+        env:
+          REAPI_INCLUDE: ${{env.REAPI_INCLUDE_PATH}}
+        run: |
+          mkdir ../plugins/
+
+          for sourcefile in *.sma;
+          do
+            amxxfile="`echo $sourcefile | sed -e 's/\.sma$/.amxx/'`"
+            echo -n "Compiling $sourcefile ... "
+
+            amxxpc $sourcefile -o"../plugins/$amxxfile" \
+              -i"include" \
+              -i"$REAPI_INCLUDE"
+          done
+
+      - name: Move files
+        run: |
+          mkdir publish
+          mv cstrike/ publish/
+
+          echo "COMMIT SHA = ${{ env.COMMIT_SHA_SHORT }}"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: regg-${{ env.COMMIT_SHA_SHORT }}-dev
+          path: publish/*
+          
