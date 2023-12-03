@@ -15,32 +15,28 @@ enum _:hook_s {
 	HookChain:HookKilled,
 };
 
-new Hooks[hook_s];
+new HookChain:Hooks[hook_s];
 
 registerHooks() {
 	Hooks[HookDropClient] = RegisterHookChain(RH_SV_DropClient, "SV_DropClient_Post", true);
-	Hooks[HookRestartRound] = RegisterHookChain(RG_CSGameRules_RestartRound, "CSGameRules_RestartRound_Pre", false);
+	Hooks[HookRestartRound] = RegisterHookChain(RG_CSGameRules_RestartRound, "CSGameRules_RestartRound_Post", false);
 	Hooks[HookHasRestrictItem] = RegisterHookChain(RG_CBasePlayer_HasRestrictItem, "CBasePlayer_HasRestrictItem_Pre", false);
 	Hooks[HookDropPlayerItem] = RegisterHookChain(RG_CBasePlayer_DropPlayerItem, "CBasePlayer_DropPlayerItem_Pre", false);
 	Hooks[HookFShouldSwitchWeapon] = RegisterHookChain(RG_CSGameRules_FShouldSwitchWeapon, "CSGameRules_FShouldSwitchWeapon_Pre", false);
-
-	Hooks[HookOnSpawnEquip] = RegisterHookChain(RG_CBasePlayer_OnSpawnEquip, "CBasePlayer_OnSpawnEquip_Pre", false);
+	Hooks[HookOnSpawnEquip] = RegisterHookChain(RG_CBasePlayer_OnSpawnEquip, "CBasePlayer_OnSpawnEquip_Post", true);
 	Hooks[HookThrowHeGrenade] = RegisterHookChain(RG_ThrowHeGrenade, "CBasePlayer_ThrowHeGrenade_Post", true);
 	Hooks[HookKilled] = RegisterHookChain(RG_CBasePlayer_Killed, "CBasePlayer_Killed_Post", true);
 }
 
 disableHooks() {
 	for(new i = 0; i < sizeof(Hooks); i++) {
-		DisableHookChain(HookChain:Hooks[i]);
+		Hooks[i] && DisableHookChain(Hooks[i]);
+		// DisableHookChain(HookChain:Hooks[i]);
 	}
 }
 
 toggleShouldSwitchWeapon(const bool:enable) {
-    if(enable) {
-        EnableHookChain(Hooks[HookFShouldSwitchWeapon]);
-    } else {
-        DisableHookChain(Hooks[HookFShouldSwitchWeapon]);
-    }
+	enable ? EnableHookChain(Hooks[HookFShouldSwitchWeapon]) : DisableHookChain(Hooks[HookFShouldSwitchWeapon]);
 }
 
 public SV_DropClient_Post(const id) {
@@ -51,29 +47,34 @@ public SV_DropClient_Post(const id) {
 	return HC_CONTINUE;
 }
 
-public CSGameRules_RestartRound_Pre() {
-	if(get_member_game(m_bCompleteReset)) {
-		for(new player = 1; player <= MaxClients; player++) {
-			Players[player][PlayerPoints] = 0;
-			Players[player][PlayerLevel] = 0;
+public CSGameRules_RestartRound_Post() {
+	log_amx(">>>>>>>>>>>>>>>>>>>> CSGameRules_RestartRound_Post()");
+	// if(!get_member_game(m_bCompleteReset))  {
+	// 	return HC_CONTINUE;
+	// }
 
-			if(is_user_connected(player) && (TEAM_TERRORIST <= TeamName:get_member(player, m_iTeam) <= TEAM_CT)) {
-				rg_remove_all_items(player, true);
-				giveDefaultWeapons(player);
-				giveWeapon(player, 0);
-			}
-		}
-		for(new slot = ReGG_SlotT; slot <= ReGG_SlotCT; slot++) {
-			Teams[slot][TeamPoints] = 0;
-			Teams[slot][TeamLevel] = 0;
-		}
+	// for(new player = 1; player <= MaxClients; player++) {
+	// 	log_amx("Players[player][PlayerPoints] = %d | Players[player][PlayerLevel] = %d", Players[player][PlayerPoints], Players[player][PlayerLevel]);
+	// 	Players[player][PlayerPoints] = 0;
+	// 	Players[player][PlayerLevel] = 0;
+	// }
+
+	// for(new slot = ReGG_SlotT; slot <= ReGG_SlotCT; slot++) {
+	// 	Teams[slot][TeamPoints] = 0;
+	// 	Teams[slot][TeamLevel] = 0;
+	// }
+
+	if(get_member_game(m_bCompleteReset))  {
+		resetPlayersStats();
+		resetTeamsStats();
 	}
-	return HC_CONTINUE;
+
+	// return HC_CONTINUE;
 }
 
 public CBasePlayer_HasRestrictItem_Pre() {
-	SetHookChainReturn(ATYPE_BOOL, true);
-	return HC_SUPERCEDE;
+	// SetHookChainReturn(ATYPE_BOOL, true);
+	// return HC_SUPERCEDE;
 }
 
 public CBasePlayer_DropPlayerItem_Pre() {
@@ -86,7 +87,7 @@ public CSGameRules_FShouldSwitchWeapon_Pre() {
 	return HC_SUPERCEDE;
 }
 
-public CBasePlayer_OnSpawnEquip_Pre(const id) {
+public CBasePlayer_OnSpawnEquip_Post(const id) {
 	if(!is_user_alive(id)) {
 		return HC_CONTINUE;
 	}
@@ -96,7 +97,6 @@ public CBasePlayer_OnSpawnEquip_Pre(const id) {
 		Players[id][PlayerJoined] = true;
 	}
 
-	giveDefaultWeapons(id);
 	if(Mode == ReGG_ModeTeam) {
 		new slot = getTeamSlot(id);
 		giveWeapon(id, Teams[slot][TeamLevel]);
@@ -105,8 +105,7 @@ public CBasePlayer_OnSpawnEquip_Pre(const id) {
 	}
 
 	set_member(id, m_iHideHUD, get_member(id, m_iHideHUD) | HIDEHUD_MONEY);
-
-	return HC_SUPERCEDE;
+	return HC_CONTINUE;
 }
 
 public CBasePlayer_ThrowHeGrenade_Post(const id) {

@@ -28,6 +28,7 @@ public ReGG_FinishPost() {
 	state disabled;
 	remove_task(TASK_INFO_ID);
 	ClearSyncHud(0, SyncHudStats);
+	arrayset(PlayerInfos[0][0], 0, sizeof(PlayerInfos) * sizeof(PlayerInfos[]));
 }
 
 public ReGG_PlayerJoinPost(const id) <enabled> {

@@ -102,6 +102,7 @@ public TaskGiveGrenade(id) {
 	} else {
 		level = Players[id][PlayerLevel];
 	}
+	
 	if(Levels[level][LevelWeaponID] == WEAPON_HEGRENADE) {
 		rg_give_item(id, "weapon_hegrenade");
 	}

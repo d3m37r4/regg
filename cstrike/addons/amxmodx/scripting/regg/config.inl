@@ -35,9 +35,18 @@ enum _:game_cvars_s {
     GCFriendlyFire,
     GCGivePlayerC4,
     GCWeaponsAllowMapPlaced,
+    GCFreeArmor,
+    GCTDefaultGrenades[32],
+    GCTGivePlayerKnife,
+    GCTDefaultWeaponsSecondary[32],
+    GCTDefaultWeaponsPrimary[32],
+    GCCTDefaultGrenades[32],
+    GCCTGivePlayerKnife,
+    GCCTDefaultWeaponsSecondary[32],
+    GCCTDefaultWeaponsPrimary[32],
     Float:GCBuyTime,
     GCItemStaytime,
-}
+};
 
 new config_section_s:CfgSection = CfgSectionNone;
 new Config[config_s];
@@ -137,6 +146,42 @@ changeGameCvars() {
     GameCvars[GCWeaponsAllowMapPlaced] = get_pcvar_num(pcvar);
     set_pcvar_num(pcvar, 0);
 
+    pcvar = get_cvar_pointer("mp_t_default_grenades");
+    get_pcvar_string(pcvar, GameCvars[GCTDefaultGrenades], charsmax(GameCvars[GCTDefaultGrenades]));
+    set_pcvar_string(pcvar, "");
+
+    pcvar = get_cvar_pointer("mp_t_give_player_knife");
+    GameCvars[GCTGivePlayerKnife] = get_pcvar_num(pcvar);
+    set_pcvar_num(pcvar, 1);
+
+    pcvar = get_cvar_pointer("mp_t_default_weapons_secondary");
+    get_pcvar_string(pcvar, GameCvars[GCTDefaultWeaponsSecondary], charsmax(GameCvars[GCTDefaultWeaponsSecondary]));
+    set_pcvar_string(pcvar, "");
+
+    pcvar = get_cvar_pointer("mp_t_default_weapons_primary");
+    get_pcvar_string(pcvar, GameCvars[GCTDefaultWeaponsPrimary], charsmax(GameCvars[GCTDefaultWeaponsPrimary]));
+    set_pcvar_string(pcvar, "");
+
+    pcvar = get_cvar_pointer("mp_ct_default_grenades");
+    get_pcvar_string(pcvar, GameCvars[GCCTDefaultGrenades], charsmax(GameCvars[GCCTDefaultGrenades]));
+    set_pcvar_string(pcvar, "");
+
+    pcvar = get_cvar_pointer("mp_ct_give_player_knife");
+    GameCvars[GCCTGivePlayerKnife] = get_pcvar_num(pcvar);
+    set_pcvar_num(pcvar, 1);
+
+    pcvar = get_cvar_pointer("mp_ct_default_weapons_secondary");
+    get_pcvar_string(pcvar, GameCvars[GCCTDefaultWeaponsSecondary], charsmax(GameCvars[GCCTDefaultWeaponsSecondary]));
+    set_pcvar_string(pcvar, "");
+
+    pcvar = get_cvar_pointer("mp_ct_default_weapons_primary");
+    get_pcvar_string(pcvar, GameCvars[GCCTDefaultWeaponsPrimary], charsmax(GameCvars[GCCTDefaultWeaponsPrimary]));
+    set_pcvar_string(pcvar, "");
+
+    pcvar = get_cvar_pointer("mp_free_armor");
+    GameCvars[GCFreeArmor] = get_pcvar_num(pcvar);
+    set_pcvar_num(pcvar, Config[CfgFreeArmor]);
+
     pcvar = get_cvar_pointer("mp_buytime");
     GameCvars[GCBuyTime] = get_pcvar_float(pcvar);
     set_pcvar_float(pcvar, 0.0);
@@ -182,6 +227,33 @@ restoreGameCvars() {
 
     pcvar = get_cvar_pointer("mp_weapons_allow_map_placed");
     set_pcvar_num(pcvar, GameCvars[GCWeaponsAllowMapPlaced]);
+
+    pcvar = get_cvar_pointer("mp_t_default_grenades");
+    set_pcvar_string(pcvar, GameCvars[GCTDefaultGrenades]);
+
+    pcvar = get_cvar_pointer("mp_t_give_player_knife");
+    set_pcvar_num(pcvar, GameCvars[GCTGivePlayerKnife]);
+
+    pcvar = get_cvar_pointer("mp_t_default_weapons_secondary");
+    set_pcvar_string(pcvar, GameCvars[GCTDefaultWeaponsSecondary]);
+
+    pcvar = get_cvar_pointer("mp_t_default_weapons_primary");
+    set_pcvar_string(pcvar, GameCvars[GCTDefaultWeaponsPrimary]);
+
+    pcvar = get_cvar_pointer("mp_ct_default_grenades");
+    set_pcvar_string(pcvar, GameCvars[GCCTDefaultGrenades]);
+
+    pcvar = get_cvar_pointer("mp_ct_give_player_knife");
+    set_pcvar_num(pcvar, GameCvars[GCCTGivePlayerKnife]);
+
+    pcvar = get_cvar_pointer("mp_ct_default_weapons_secondary");
+    set_pcvar_string(pcvar, GameCvars[GCCTDefaultWeaponsSecondary]);
+
+    pcvar = get_cvar_pointer("mp_ct_default_weapons_primary");
+    set_pcvar_string(pcvar, GameCvars[GCCTDefaultWeaponsPrimary]);
+
+    pcvar = get_cvar_pointer("mp_free_armor");
+    set_pcvar_num(pcvar, GameCvars[GCFreeArmor]);
 
     pcvar = get_cvar_pointer("mp_buytime");
     set_pcvar_float(pcvar, GameCvars[GCBuyTime]);
