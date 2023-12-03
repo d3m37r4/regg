@@ -19,7 +19,7 @@ new HookChain:Hooks[hook_s];
 
 registerHooks() {
 	Hooks[HookDropClient] = RegisterHookChain(RH_SV_DropClient, "SV_DropClient_Post", true);
-	Hooks[HookRestartRound] = RegisterHookChain(RG_CSGameRules_RestartRound, "CSGameRules_RestartRound_Post", false);
+	Hooks[HookRestartRound] = RegisterHookChain(RG_CSGameRules_RestartRound, "CSGameRules_RestartRound_Pre", false);
 	Hooks[HookHasRestrictItem] = RegisterHookChain(RG_CBasePlayer_HasRestrictItem, "CBasePlayer_HasRestrictItem_Pre", false);
 	Hooks[HookDropPlayerItem] = RegisterHookChain(RG_CBasePlayer_DropPlayerItem, "CBasePlayer_DropPlayerItem_Pre", false);
 	Hooks[HookFShouldSwitchWeapon] = RegisterHookChain(RG_CSGameRules_FShouldSwitchWeapon, "CSGameRules_FShouldSwitchWeapon_Pre", false);
@@ -47,8 +47,8 @@ public SV_DropClient_Post(const id) {
 	return HC_CONTINUE;
 }
 
-public CSGameRules_RestartRound_Post() {
-	log_amx(">>>>>>>>>>>>>>>>>>>> CSGameRules_RestartRound_Post()");
+public CSGameRules_RestartRound_Pre() {
+	log_amx(">>>>>>>>>>>>>>>>>>>> CSGameRules_RestartRound_Pre()");
 	// if(!get_member_game(m_bCompleteReset))  {
 	// 	return HC_CONTINUE;
 	// }
