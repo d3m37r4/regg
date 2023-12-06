@@ -7,8 +7,6 @@
 #include <amxmisc>
 
 enum _:config_s {
-    // ReGG_Mode:CfgMode,
-    Float:CfgNadeRefresh,
     CfgStealMode,
     CfgStealValue,
     CfgTeamStealValue,
@@ -53,12 +51,6 @@ new Config[config_s];
 new GameCvars[game_cvars_s];
 
 registerCvars() {
-    bind_pcvar_float(create_cvar(
-        "regg_nade_refresh", "5.0",
-        .has_min = true,
-        .min_val = 1.0
-    ), Config[CfgNadeRefresh]);
-
     // 0 - off, 1 - steal level, 2 - steal points
     bind_pcvar_num(create_cvar(
         "regg_steal_mode", "1",

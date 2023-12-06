@@ -15,7 +15,7 @@ bool:start(const ReGG_Mode:mode) {
 	EnableHookChain(Hooks[HookHasRestrictItem]);
 	EnableHookChain(Hooks[HookDropPlayerItem]);
 	EnableHookChain(Hooks[HookOnSpawnEquip]);
-	EnableHookChain(Hooks[HookThrowHeGrenade]);
+	EnableHookChain(Hooks[HookExplodeHeGrenade]);
 	EnableHookChain(Hooks[HookKilled]);
 
 	EXECUTE_FORWARD_POST_ARGS(FWD_Start, mode);

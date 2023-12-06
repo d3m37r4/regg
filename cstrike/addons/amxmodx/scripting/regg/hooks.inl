@@ -11,7 +11,7 @@ enum _:hook_s {
 	HookChain:HookDropPlayerItem,
 	HookChain:HookFShouldSwitchWeapon,
 	HookChain:HookOnSpawnEquip,
-	HookChain:HookThrowHeGrenade,
+	HookChain:HookExplodeHeGrenade,
 	HookChain:HookKilled,
 };
 
@@ -24,7 +24,7 @@ registerHooks() {
 	Hooks[HookDropPlayerItem] = RegisterHookChain(RG_CBasePlayer_DropPlayerItem, "CBasePlayer_DropPlayerItem_Pre", false);
 	Hooks[HookFShouldSwitchWeapon] = RegisterHookChain(RG_CSGameRules_FShouldSwitchWeapon, "CSGameRules_FShouldSwitchWeapon_Pre", false);
 	Hooks[HookOnSpawnEquip] = RegisterHookChain(RG_CBasePlayer_OnSpawnEquip, "CBasePlayer_OnSpawnEquip_Post", true);
-	Hooks[HookThrowHeGrenade] = RegisterHookChain(RG_ThrowHeGrenade, "CBasePlayer_ThrowHeGrenade_Post", true);
+	Hooks[HookExplodeHeGrenade] = RegisterHookChain(RG_CGrenade_ExplodeHeGrenade, "CGrenade_ExplodeHeGrenade_Pre", false);
 	Hooks[HookKilled] = RegisterHookChain(RG_CBasePlayer_Killed, "CBasePlayer_Killed_Post", true);
 }
 
@@ -108,8 +108,26 @@ public CBasePlayer_OnSpawnEquip_Post(const id) {
 	return HC_CONTINUE;
 }
 
-public CBasePlayer_ThrowHeGrenade_Post(const id) {
-	set_task(Config[CfgNadeRefresh], "TaskGiveGrenade", TASK_GRENADE_ID + id);
+public CGrenade_ExplodeHeGrenade_Pre(const this) {
+	new id = get_entvar(this, var_owner);
+	
+	if(!is_user_connected(id)) {
+		return HC_CONTINUE;
+	}
+
+	new level;
+	if(Mode == ReGG_ModeTeam) {
+		new slot = getTeamSlot(id);
+		level = Teams[slot][TeamLevel];
+	} else {
+		level = Players[id][PlayerLevel];
+	}
+	
+	if(Levels[level][LevelWeaponID] == WEAPON_HEGRENADE) {
+		rg_give_item(id, "weapon_hegrenade");
+	}
+
+	return HC_CONTINUE;
 }
 
 public CBasePlayer_Killed_Post(const victim, const killer) {
@@ -133,6 +151,5 @@ public CBasePlayer_Killed_Post(const victim, const killer) {
 		}
 	}
 
-	remove_task(TASK_GRENADE_ID + victim);
 	return HC_CONTINUE;
 }

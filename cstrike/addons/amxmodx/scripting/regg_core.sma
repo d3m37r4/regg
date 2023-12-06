@@ -4,7 +4,6 @@
 #include <reapi>
 #include <regg>
 
-const TASK_GRENADE_ID = 50;
 const MAX_LEVELS = 30;
 const MAX_LEVEL_TITLE_LENGTH = 32;
 const MAX_GRENADE_WEAPONS = 5;
@@ -87,23 +86,4 @@ public client_putinserver(id) {
 	Players[id][PlayerJoined] = false;
 	Players[id][PlayerPoints] = 0;
 	Players[id][PlayerLevel] = 0;
-}
-
-public TaskGiveGrenade(id) {
-	id -= TASK_GRENADE_ID;
-	if(!is_user_connected(id)) {
-		return;
-	}
-
-	new level;
-	if(Mode == ReGG_ModeTeam) {
-		new slot = getTeamSlot(id);
-		level = Teams[slot][TeamLevel];
-	} else {
-		level = Players[id][PlayerLevel];
-	}
-	
-	if(Levels[level][LevelWeaponID] == WEAPON_HEGRENADE) {
-		rg_give_item(id, "weapon_hegrenade");
-	}
 }
