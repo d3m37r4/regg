@@ -8,9 +8,6 @@
 
 bool:start(const ReGG_Mode:mode) {
 	EXECUTE_FORWARD_PRE_ARGS(FWD_Start, false, mode);
-
-	// Mode = mode;
-
 	changeGameCvars();
 
 	EnableHookChain(Hooks[HookDropClient]);
@@ -25,13 +22,12 @@ bool:start(const ReGG_Mode:mode) {
 
 	Mode = mode;
 	set_member_game(m_bCompleteReset, true);
-	// rg_restart_round();
 
 	rg_round_end(
 		.tmDelay = 3.0, 
 		.st = WINSTATUS_DRAW, 
 		.event = ROUND_END_DRAW, 
-		.message = "Message", 
+		.message = "GunGame Mod started!", 
 		.sentence = "", 
 		.trigger = true
 	);
@@ -40,7 +36,6 @@ bool:start(const ReGG_Mode:mode) {
 }
 
 bool:finish(const killer, const victim) {
-	log_amx(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> finish");
 	EXECUTE_FORWARD_PRE_ARGS(FWD_Finish, false, killer, victim);
 	restoreGameCvars();
 	disableHooks();
@@ -157,7 +152,6 @@ bool:giveWeapon(const id, const level) {
 	EXECUTE_FORWARD_PRE_ARGS(FWD_GiveWeapon, false, id, Levels[level][LevelWeaponID]);
 	switch (Levels[level][LevelWeaponID]) {
 		case WEAPON_KNIFE: {}
-
 		case WEAPON_HEGRENADE: {
 			rg_give_item(id, "weapon_hegrenade");
 			for(new i = 0, weapon, wname[32]; i < GrenadeWeaponsNum; i++) {
@@ -168,7 +162,6 @@ bool:giveWeapon(const id, const level) {
 				}
 			}
 		}
-
 		case WEAPON_AWP: {
 			new weapon = rg_give_item(id, "weapon_awp");
 			if(!is_nullent(weapon)) {
@@ -180,7 +173,6 @@ bool:giveWeapon(const id, const level) {
 				}
 			}
 		}
-
 		default: {
 			new wname[32];
 			new WeaponIdType:wid = Levels[level][LevelWeaponID];
@@ -637,7 +629,6 @@ getTeamPlayers(const slot) {
 }
 
 resetPlayersStats() {
-	log_amx(">>> >>> >>> resetPlayersStats");
 	for(new player = 1; player <= MaxClients; player++) {
 		log_amx("Players[%d][PlayerPoints] = %d | Players[%d][PlayerLevel] = %d", player, Players[player][PlayerPoints], player, Players[player][PlayerLevel]);
 		Players[player][PlayerPoints] = 0;
@@ -646,7 +637,6 @@ resetPlayersStats() {
 }
 
 resetTeamsStats() {
-	log_amx(">>> >>> >>> resetTeamssStats");
 	for(new slot = ReGG_SlotT; slot <= ReGG_SlotCT; slot++) {
 		log_amx("Teams[%d][TeamPoints] = %d | Teams[%d][TeamLevel] = %d", slot, Teams[slot][TeamPoints], slot, Teams[slot][TeamLevel]);
 		Teams[slot][TeamPoints] = 0;
