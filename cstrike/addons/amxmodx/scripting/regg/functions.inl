@@ -622,7 +622,6 @@ roundPoints(num1, num2) {
 }
 
 getTeamPlayers(const slot) {
-	// rg_initialize_player_counts();
 	return slot == ReGG_SlotT
 		? get_member_game(m_iNumTerrorist)
 		: get_member_game(m_iNumCT);

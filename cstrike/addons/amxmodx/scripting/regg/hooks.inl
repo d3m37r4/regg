@@ -31,7 +31,6 @@ registerHooks() {
 disableHooks() {
 	for(new i = 0; i < sizeof(Hooks); i++) {
 		Hooks[i] && DisableHookChain(Hooks[i]);
-		// DisableHookChain(HookChain:Hooks[i]);
 	}
 }
 
@@ -48,28 +47,10 @@ public SV_DropClient_Post(const id) {
 }
 
 public CSGameRules_RestartRound_Pre() {
-	log_amx(">>>>>>>>>>>>>>>>>>>> CSGameRules_RestartRound_Pre()");
-	// if(!get_member_game(m_bCompleteReset))  {
-	// 	return HC_CONTINUE;
-	// }
-
-	// for(new player = 1; player <= MaxClients; player++) {
-	// 	log_amx("Players[player][PlayerPoints] = %d | Players[player][PlayerLevel] = %d", Players[player][PlayerPoints], Players[player][PlayerLevel]);
-	// 	Players[player][PlayerPoints] = 0;
-	// 	Players[player][PlayerLevel] = 0;
-	// }
-
-	// for(new slot = ReGG_SlotT; slot <= ReGG_SlotCT; slot++) {
-	// 	Teams[slot][TeamPoints] = 0;
-	// 	Teams[slot][TeamLevel] = 0;
-	// }
-
 	if(get_member_game(m_bCompleteReset))  {
 		resetPlayersStats();
 		resetTeamsStats();
 	}
-
-	// return HC_CONTINUE;
 }
 
 public CBasePlayer_HasRestrictItem_Pre() {
