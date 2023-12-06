@@ -9,7 +9,7 @@
 bool:start(const ReGG_Mode:mode) {
 	EXECUTE_FORWARD_PRE_ARGS(FWD_Start, false, mode);
 
-	Mode = mode;
+	// Mode = mode;
 
 	changeGameCvars();
 
@@ -23,18 +23,34 @@ bool:start(const ReGG_Mode:mode) {
 
 	EXECUTE_FORWARD_POST_ARGS(FWD_Start, mode);
 
+	Mode = mode;
 	set_member_game(m_bCompleteReset, true);
-	rg_restart_round();
+	// rg_restart_round();
+
+	rg_round_end(
+		.tmDelay = 3.0, 
+		.st = WINSTATUS_DRAW, 
+		.event = ROUND_END_DRAW, 
+		.message = "Message", 
+		.sentence = "", 
+		.trigger = true
+	);
+
 	return true;
 }
 
 bool:finish(const killer, const victim) {
+	log_amx(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> finish");
 	EXECUTE_FORWARD_PRE_ARGS(FWD_Finish, false, killer, victim);
 	restoreGameCvars();
 	disableHooks();
+	resetPlayersStats();
+	resetTeamsStats();
+
 	EXECUTE_FORWARD_POST_ARGS(FWD_Finish, killer, victim);
 
 	Mode = ReGG_ModeNone;
+	set_member_game(m_bCompleteReset, true);
 	rg_restart_round();
 	return true;
 }
@@ -135,18 +151,6 @@ ReGG_Result:killKnife(const killer, const victim) {
 		finish(killer, victim);
 	}
 	return result;
-}
-
-giveDefaultWeapons(const id) {
-	switch(ArmorType:Config[CfgFreeArmor]) {
-		case ARMOR_KEVLAR: {
-			rg_set_user_armor(id, 100, ARMOR_KEVLAR);
-		}
-		case ARMOR_VESTHELM: {
-			rg_set_user_armor(id, 100, ARMOR_VESTHELM);
-		}
-	}
-	rg_give_item(id, "weapon_knife");
 }
 
 bool:giveWeapon(const id, const level) {
@@ -561,12 +565,7 @@ bool:setPlayerLevel(const id, const value, const bool:forwards = true) {
 	new oldValue = Players[id][PlayerLevel];
 	Players[id][PlayerLevel] = value;
 	if(oldValue != Players[id][PlayerLevel]) {
-		if (Levels[value][LevelWeaponID] != WEAPON_KNIFE) {
-			removeWeapon(id, oldValue);
-		} else {
-			rg_remove_all_items(id);
-			giveDefaultWeapons(id);
-		}
+		Levels[value][LevelWeaponID] != WEAPON_KNIFE ? removeWeapon(id, oldValue) : rg_give_default_items(id);
 		giveWeapon(id, Players[id][PlayerLevel]);
 	}
 
@@ -586,12 +585,7 @@ bool:setTeamLevel(const slot, const value, const bool:forwards = true) {
 		playerSlot = getTeamSlot(player);
 		if(playerSlot == slot) {
 			if(oldValue != Teams[slot][TeamLevel]) {
-				if(Levels[value][LevelWeaponID] != WEAPON_KNIFE) {
-					removeWeapon(player, oldValue);
-				} else {
-					rg_remove_all_items(player);
-					giveDefaultWeapons(player);
-				}
+				Levels[value][LevelWeaponID] != WEAPON_KNIFE ? removeWeapon(player, oldValue) : rg_give_default_items(player);
 				giveWeapon(player, Teams[slot][TeamLevel]);
 			}
 		}
@@ -606,7 +600,6 @@ getTeamSlot(const id) {
 		case TEAM_TERRORIST: {
 			return ReGG_SlotT;
 		}
-
 		case TEAM_CT: {
 			return ReGG_SlotCT;
 		}
@@ -641,4 +634,22 @@ getTeamPlayers(const slot) {
 	return slot == ReGG_SlotT
 		? get_member_game(m_iNumTerrorist)
 		: get_member_game(m_iNumCT);
+}
+
+resetPlayersStats() {
+	log_amx(">>> >>> >>> resetPlayersStats");
+	for(new player = 1; player <= MaxClients; player++) {
+		log_amx("Players[%d][PlayerPoints] = %d | Players[%d][PlayerLevel] = %d", player, Players[player][PlayerPoints], player, Players[player][PlayerLevel]);
+		Players[player][PlayerPoints] = 0;
+		Players[player][PlayerLevel] = 0;
+	}
+}
+
+resetTeamsStats() {
+	log_amx(">>> >>> >>> resetTeamssStats");
+	for(new slot = ReGG_SlotT; slot <= ReGG_SlotCT; slot++) {
+		log_amx("Teams[%d][TeamPoints] = %d | Teams[%d][TeamLevel] = %d", slot, Teams[slot][TeamPoints], slot, Teams[slot][TeamLevel]);
+		Teams[slot][TeamPoints] = 0;
+		Teams[slot][TeamLevel] = 0;
+	}
 }
