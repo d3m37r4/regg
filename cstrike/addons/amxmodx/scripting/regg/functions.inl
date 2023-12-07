@@ -629,7 +629,6 @@ getTeamPlayers(const slot) {
 
 resetPlayersStats() {
 	for(new player = 1; player <= MaxClients; player++) {
-		log_amx("Players[%d][PlayerPoints] = %d | Players[%d][PlayerLevel] = %d", player, Players[player][PlayerPoints], player, Players[player][PlayerLevel]);
 		Players[player][PlayerPoints] = 0;
 		Players[player][PlayerLevel] = 0;
 	}
@@ -637,7 +636,6 @@ resetPlayersStats() {
 
 resetTeamsStats() {
 	for(new slot = ReGG_SlotT; slot <= ReGG_SlotCT; slot++) {
-		log_amx("Teams[%d][TeamPoints] = %d | Teams[%d][TeamLevel] = %d", slot, Teams[slot][TeamPoints], slot, Teams[slot][TeamLevel]);
 		Teams[slot][TeamPoints] = 0;
 		Teams[slot][TeamLevel] = 0;
 	}
