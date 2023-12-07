@@ -50,8 +50,8 @@ public ReGG_PlayerJoinPre(const id) <enabled> {
 
 	if(mode == ReGG_ModeSingle || mode == ReGG_ModeFFA) {
 		TrieGetArray(Store, auth, store, sizeof store);
-		ReGG_SetPoints(id, store[StorePoints], ReGG_ChangetTypeSet);
-		ReGG_SetLevel(id, store[StoreLevel], ReGG_ChangetTypeSet);
+		ReGG_SetPoints(id, store[StorePoints], ReGG_ChangeTypeSet);
+		ReGG_SetLevel(id, store[StoreLevel], ReGG_ChangeTypeSet);
 	}
 	return PLUGIN_HANDLED;
 }

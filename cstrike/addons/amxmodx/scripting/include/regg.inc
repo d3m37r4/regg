@@ -21,7 +21,7 @@
 
 #define REGG_MAJOR_VERSION				0
 #define REGG_MINOR_VERSION				4
-#define REGG_MAINTENANCE_VERSION		35
+#define REGG_MAINTENANCE_VERSION		36
 
 #define REGG_VERSION					str_to_num(fmt("%d%d%d", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_MAINTENANCE_VERSION))
 #define REGG_VERSION_STR				fmt("%d.%d.%d-alpha", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_MAINTENANCE_VERSION)
@@ -51,10 +51,10 @@ enum ReGG_Result {
 	ReGG_ResultFinish,
 };
 
-enum ReGG_ChangetType {
-	ReGG_ChangetTypeSet,
-	ReGG_ChangetTypeAdd,
-	ReGG_ChangetTypeSub,
+enum ReGG_ChangeType {
+	ReGG_ChangeTypeSet,
+	ReGG_ChangeTypeAdd,
+	ReGG_ChangeTypeSub,
 };
 
 forward ReGG_StartPre(const ReGG_Mode:mode);
