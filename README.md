@@ -14,6 +14,7 @@ In the GunGame modification, players are respawned with a weapon corresponding t
 `regg_informer` - displays the current level of player or team, as well as weapons and number of points <br>
 `regg_leader` - displays current leader of game <br>
 `regg_map_cleaner` - clearing maps from unnecessary entities <br>
+`regg_mapmanager` - wrapper for working with changing maps on server <br>
 `regg_notify` - notification plugin <br>
 `regg_warmup` - warmup mode before starting main mode <br>
 `regg_show_winner` - shows winner at end of game <br>
