@@ -110,9 +110,9 @@ public bool:NativeSetPoints(const plugin, const argc) {
 	new player = get_param(arg_player);
 	CHECK_NATIVE_PLAYER(player, false)
 
-	new ReGG_ChangetType:type = ReGG_ChangetTypeSet;
+	new ReGG_ChangeType:type = ReGG_ChangeTypeSet;
 	if (argc >= arg_type) {
-		type = ReGG_ChangetType:get_param(arg_type);
+		type = ReGG_ChangeType:get_param(arg_type);
 	}
 
 	new bool:forwards = false;
@@ -121,11 +121,11 @@ public bool:NativeSetPoints(const plugin, const argc) {
 	}
 
 	switch (type) {
-		case ReGG_ChangetTypeAdd: {
+		case ReGG_ChangeTypeAdd: {
 			return bool:(addPoints(player, get_param(arg_value), forwards) != ReGG_ResultNone);
 		}
 
-		case ReGG_ChangetTypeSub: {
+		case ReGG_ChangeTypeSub: {
 			return bool:(subPoints(player, get_param(arg_value), forwards) != ReGG_ResultNone);
 		}
 	}
@@ -161,9 +161,9 @@ public bool:NativeSetTeamPoints(const plugin, const argc) {
 	new slot = get_param(arg_slot);
 	CHECK_NATIVE_SLOT(slot, false)
 
-	new ReGG_ChangetType:type = ReGG_ChangetTypeSet;
+	new ReGG_ChangeType:type = ReGG_ChangeTypeSet;
 	if (argc >= arg_type) {
-		type = ReGG_ChangetType:get_param(arg_type);
+		type = ReGG_ChangeType:get_param(arg_type);
 	}
 
 	new bool:forwards = false;
@@ -172,11 +172,11 @@ public bool:NativeSetTeamPoints(const plugin, const argc) {
 	}
 
 	switch (type) {
-		case ReGG_ChangetTypeAdd: {
+		case ReGG_ChangeTypeAdd: {
 			return bool:(addTeamPoints(slot, get_param(arg_value), forwards) != ReGG_ResultNone);
 		}
 
-		case ReGG_ChangetTypeSub: {
+		case ReGG_ChangeTypeSub: {
 			return bool:(subTeamPoints(slot, get_param(arg_value), forwards) != ReGG_ResultNone);
 		}
 	}
@@ -211,9 +211,9 @@ public bool:NativeSetLevel(const plugin, const argc) {
 	new player = get_param(arg_player);
 	CHECK_NATIVE_PLAYER(player, false)
 
-	new ReGG_ChangetType:type = ReGG_ChangetTypeSet;
+	new ReGG_ChangeType:type = ReGG_ChangeTypeSet;
 	if (argc >= arg_type) {
-		type = ReGG_ChangetType:get_param(arg_type);
+		type = ReGG_ChangeType:get_param(arg_type);
 	}
 
 	new bool:forwards = false;
@@ -222,11 +222,11 @@ public bool:NativeSetLevel(const plugin, const argc) {
 	}
 
 	switch (type) {
-		case ReGG_ChangetTypeAdd: {
+		case ReGG_ChangeTypeAdd: {
 			return bool:(addLevel(player, get_param(arg_value), forwards) != ReGG_ResultNone);
 		}
 
-		case ReGG_ChangetTypeSub: {
+		case ReGG_ChangeTypeSub: {
 			return bool:(subLevel(player, get_param(arg_value), forwards) != ReGG_ResultNone);
 		}
 	}
@@ -262,9 +262,9 @@ public bool:NativeSetTeamLevel(const plugin, const argc) {
 	new slot = get_param(arg_slot);
 	CHECK_NATIVE_SLOT(slot, false)
 
-	new ReGG_ChangetType:type = ReGG_ChangetTypeSet;
+	new ReGG_ChangeType:type = ReGG_ChangeTypeSet;
 	if (argc >= arg_type) {
-		type = ReGG_ChangetType:get_param(arg_type);
+		type = ReGG_ChangeType:get_param(arg_type);
 	}
 
 	new bool:forwards = false;
@@ -272,11 +272,11 @@ public bool:NativeSetTeamLevel(const plugin, const argc) {
 		forwards = bool:get_param(arg_forwards);
 	}
 	switch (type) {
-		case ReGG_ChangetTypeAdd: {
+		case ReGG_ChangeTypeAdd: {
 			return bool:(addTeamLevel(slot, get_param(arg_value), forwards) != ReGG_ResultNone);
 		}
 
-		case ReGG_ChangetTypeSub: {
+		case ReGG_ChangeTypeSub: {
 			return bool:(subTeamLevel(slot, get_param(arg_value), forwards) != ReGG_ResultNone);
 		}
 	}
