@@ -11,7 +11,7 @@ enum _:hook_s {
 	HookChain:HookDropPlayerItem,
 	HookChain:HookFShouldSwitchWeapon,
 	HookChain:HookOnSpawnEquip,
-	HookChain:HookThrowHeGrenade,
+	HookChain:HookExplodeHeGrenade,
 	HookChain:HookKilled,
 };
 
@@ -24,14 +24,13 @@ registerHooks() {
 	Hooks[HookDropPlayerItem] = RegisterHookChain(RG_CBasePlayer_DropPlayerItem, "CBasePlayer_DropPlayerItem_Pre", false);
 	Hooks[HookFShouldSwitchWeapon] = RegisterHookChain(RG_CSGameRules_FShouldSwitchWeapon, "CSGameRules_FShouldSwitchWeapon_Pre", false);
 	Hooks[HookOnSpawnEquip] = RegisterHookChain(RG_CBasePlayer_OnSpawnEquip, "CBasePlayer_OnSpawnEquip_Post", true);
-	Hooks[HookThrowHeGrenade] = RegisterHookChain(RG_ThrowHeGrenade, "CBasePlayer_ThrowHeGrenade_Post", true);
+	Hooks[HookExplodeHeGrenade] = RegisterHookChain(RG_CGrenade_ExplodeHeGrenade, "CGrenade_ExplodeHeGrenade_Pre", false);
 	Hooks[HookKilled] = RegisterHookChain(RG_CBasePlayer_Killed, "CBasePlayer_Killed_Post", true);
 }
 
 disableHooks() {
 	for(new i = 0; i < sizeof(Hooks); i++) {
 		Hooks[i] && DisableHookChain(Hooks[i]);
-		// DisableHookChain(HookChain:Hooks[i]);
 	}
 }
 
@@ -48,28 +47,10 @@ public SV_DropClient_Post(const id) {
 }
 
 public CSGameRules_RestartRound_Pre() {
-	log_amx(">>>>>>>>>>>>>>>>>>>> CSGameRules_RestartRound_Pre()");
-	// if(!get_member_game(m_bCompleteReset))  {
-	// 	return HC_CONTINUE;
-	// }
-
-	// for(new player = 1; player <= MaxClients; player++) {
-	// 	log_amx("Players[player][PlayerPoints] = %d | Players[player][PlayerLevel] = %d", Players[player][PlayerPoints], Players[player][PlayerLevel]);
-	// 	Players[player][PlayerPoints] = 0;
-	// 	Players[player][PlayerLevel] = 0;
-	// }
-
-	// for(new slot = ReGG_SlotT; slot <= ReGG_SlotCT; slot++) {
-	// 	Teams[slot][TeamPoints] = 0;
-	// 	Teams[slot][TeamLevel] = 0;
-	// }
-
 	if(get_member_game(m_bCompleteReset))  {
 		resetPlayersStats();
 		resetTeamsStats();
 	}
-
-	// return HC_CONTINUE;
 }
 
 public CBasePlayer_HasRestrictItem_Pre() {
@@ -108,8 +89,25 @@ public CBasePlayer_OnSpawnEquip_Post(const id) {
 	return HC_CONTINUE;
 }
 
-public CBasePlayer_ThrowHeGrenade_Post(const id) {
-	set_task(Config[CfgNadeRefresh], "TaskGiveGrenade", TASK_GRENADE_ID + id);
+public CGrenade_ExplodeHeGrenade_Pre(const grenade) {
+	new player = get_entvar(grenade, var_owner);
+	if(!is_user_connected(player)) {
+		return HC_CONTINUE;
+	}
+
+	new level;
+	if(Mode == ReGG_ModeTeam) {
+		new slot = getTeamSlot(player);
+		level = Teams[slot][TeamLevel];
+	} else {
+		level = Players[player][PlayerLevel];
+	}
+	
+	if(Levels[level][LevelWeaponID] == WEAPON_HEGRENADE) {
+		rg_give_item(player, "weapon_hegrenade");
+	}
+
+	return HC_CONTINUE;
 }
 
 public CBasePlayer_Killed_Post(const victim, const killer) {
@@ -133,6 +131,5 @@ public CBasePlayer_Killed_Post(const victim, const killer) {
 		}
 	}
 
-	remove_task(TASK_GRENADE_ID + victim);
 	return HC_CONTINUE;
 }

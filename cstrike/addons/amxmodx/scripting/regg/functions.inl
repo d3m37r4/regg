@@ -8,9 +8,6 @@
 
 bool:start(const ReGG_Mode:mode) {
 	EXECUTE_FORWARD_PRE_ARGS(FWD_Start, false, mode);
-
-	// Mode = mode;
-
 	changeGameCvars();
 
 	EnableHookChain(Hooks[HookDropClient]);
@@ -18,20 +15,19 @@ bool:start(const ReGG_Mode:mode) {
 	EnableHookChain(Hooks[HookHasRestrictItem]);
 	EnableHookChain(Hooks[HookDropPlayerItem]);
 	EnableHookChain(Hooks[HookOnSpawnEquip]);
-	EnableHookChain(Hooks[HookThrowHeGrenade]);
+	EnableHookChain(Hooks[HookExplodeHeGrenade]);
 	EnableHookChain(Hooks[HookKilled]);
 
 	EXECUTE_FORWARD_POST_ARGS(FWD_Start, mode);
 
 	Mode = mode;
 	set_member_game(m_bCompleteReset, true);
-	// rg_restart_round();
 
 	rg_round_end(
 		.tmDelay = 3.0, 
 		.st = WINSTATUS_DRAW, 
 		.event = ROUND_END_DRAW, 
-		.message = "Message", 
+		.message = "GunGame Mod started!", 
 		.sentence = "", 
 		.trigger = true
 	);
@@ -40,7 +36,6 @@ bool:start(const ReGG_Mode:mode) {
 }
 
 bool:finish(const killer, const victim) {
-	log_amx(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> finish");
 	EXECUTE_FORWARD_PRE_ARGS(FWD_Finish, false, killer, victim);
 	restoreGameCvars();
 	disableHooks();
@@ -132,7 +127,6 @@ ReGG_Result:killGrenade(const killer, const victim) {
 
 	new ReGG_Result:result = addPoints(killer, 1);
 	if(Config[CfgRefillOnKill] && result == ReGG_ResultPointsUp) {
-		remove_task(TASK_GRENADE_ID + killer);
 		rg_give_item(killer, "weapon_hegrenade", GT_REPLACE);
 	}
 	EXECUTE_FORWARD_POST_ARGS(FWD_KillEnemy, killer, victim, WEAPON_HEGRENADE, result, Players[killer][PlayerPoints], Players[killer][PlayerLevel]);
@@ -157,7 +151,6 @@ bool:giveWeapon(const id, const level) {
 	EXECUTE_FORWARD_PRE_ARGS(FWD_GiveWeapon, false, id, Levels[level][LevelWeaponID]);
 	switch (Levels[level][LevelWeaponID]) {
 		case WEAPON_KNIFE: {}
-
 		case WEAPON_HEGRENADE: {
 			rg_give_item(id, "weapon_hegrenade");
 			for(new i = 0, weapon, wname[32]; i < GrenadeWeaponsNum; i++) {
@@ -168,7 +161,6 @@ bool:giveWeapon(const id, const level) {
 				}
 			}
 		}
-
 		case WEAPON_AWP: {
 			new weapon = rg_give_item(id, "weapon_awp");
 			if(!is_nullent(weapon)) {
@@ -180,7 +172,6 @@ bool:giveWeapon(const id, const level) {
 				}
 			}
 		}
-
 		default: {
 			new wname[32];
 			new WeaponIdType:wid = Levels[level][LevelWeaponID];
@@ -630,25 +621,20 @@ roundPoints(num1, num2) {
 }
 
 getTeamPlayers(const slot) {
-	// rg_initialize_player_counts();
 	return slot == ReGG_SlotT
 		? get_member_game(m_iNumTerrorist)
 		: get_member_game(m_iNumCT);
 }
 
 resetPlayersStats() {
-	log_amx(">>> >>> >>> resetPlayersStats");
 	for(new player = 1; player <= MaxClients; player++) {
-		log_amx("Players[%d][PlayerPoints] = %d | Players[%d][PlayerLevel] = %d", player, Players[player][PlayerPoints], player, Players[player][PlayerLevel]);
 		Players[player][PlayerPoints] = 0;
 		Players[player][PlayerLevel] = 0;
 	}
 }
 
 resetTeamsStats() {
-	log_amx(">>> >>> >>> resetTeamssStats");
 	for(new slot = ReGG_SlotT; slot <= ReGG_SlotCT; slot++) {
-		log_amx("Teams[%d][TeamPoints] = %d | Teams[%d][TeamLevel] = %d", slot, Teams[slot][TeamPoints], slot, Teams[slot][TeamLevel]);
 		Teams[slot][TeamPoints] = 0;
 		Teams[slot][TeamLevel] = 0;
 	}
