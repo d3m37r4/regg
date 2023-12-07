@@ -127,7 +127,6 @@ ReGG_Result:killGrenade(const killer, const victim) {
 
 	new ReGG_Result:result = addPoints(killer, 1);
 	if(Config[CfgRefillOnKill] && result == ReGG_ResultPointsUp) {
-		remove_task(TASK_GRENADE_ID + killer);
 		rg_give_item(killer, "weapon_hegrenade", GT_REPLACE);
 	}
 	EXECUTE_FORWARD_POST_ARGS(FWD_KillEnemy, killer, victim, WEAPON_HEGRENADE, result, Players[killer][PlayerPoints], Players[killer][PlayerLevel]);
