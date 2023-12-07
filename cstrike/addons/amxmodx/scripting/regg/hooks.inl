@@ -89,23 +89,22 @@ public CBasePlayer_OnSpawnEquip_Post(const id) {
 	return HC_CONTINUE;
 }
 
-public CGrenade_ExplodeHeGrenade_Pre(const this) {
-	new id = get_entvar(this, var_owner);
-	
-	if(!is_user_connected(id)) {
+public CGrenade_ExplodeHeGrenade_Pre(const grenade) {
+	new player = get_entvar(grenade, var_owner);
+	if(!is_user_connected(player)) {
 		return HC_CONTINUE;
 	}
 
 	new level;
 	if(Mode == ReGG_ModeTeam) {
-		new slot = getTeamSlot(id);
+		new slot = getTeamSlot(player);
 		level = Teams[slot][TeamLevel];
 	} else {
-		level = Players[id][PlayerLevel];
+		level = Players[player][PlayerLevel];
 	}
 	
 	if(Levels[level][LevelWeaponID] == WEAPON_HEGRENADE) {
-		rg_give_item(id, "weapon_hegrenade");
+		rg_give_item(player, "weapon_hegrenade");
 	}
 
 	return HC_CONTINUE;
