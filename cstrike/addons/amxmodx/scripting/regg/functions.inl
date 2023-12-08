@@ -22,6 +22,7 @@ bool:start(const ReGG_Mode:mode) {
 
 	Mode = mode;
 	set_member_game(m_bCompleteReset, true);
+	set_member_game(m_bGameStarted, true);
 
 	rg_round_end(
 		.tmDelay = 3.0, 
@@ -47,7 +48,15 @@ bool:finish(const killer, const victim) {
 
 	Mode = ReGG_ModeNone;
 	set_member_game(m_bCompleteReset, true);
-	rg_restart_round();
+
+	rg_round_end(
+		.tmDelay = 3.0, 
+		.st = WINSTATUS_DRAW, 
+		.event = ROUND_END_DRAW, 
+		.message = "Game over!",
+		.sentence = "",
+		.trigger = true
+	);
 	DebugMode && log_amx("GunGame Mod finished!");
 
 	return true;
