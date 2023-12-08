@@ -35,6 +35,8 @@ new Players[MAX_PLAYERS + 1][player_s];
 new Teams[2][team_s];
 new WeaponIdType:GrenadeWeapons[MAX_GRENADE_WEAPONS], GrenadeWeaponsNum;
 
+new bool:DebugMode;
+
 #include "regg/config.inl"
 #include "regg/forwards.inl"
 #include "regg/hooks.inl"
@@ -57,6 +59,9 @@ public plugin_init() {
 	registerForwards();
 	loadCfg();
 	loadIni();
+
+	DebugMode = bool:(plugin_flags() & AMX_FLAG_DEBUG);
+	DebugMode && log_amx("Debug mode is enable!");
 }
 
 public plugin_cfg() {
