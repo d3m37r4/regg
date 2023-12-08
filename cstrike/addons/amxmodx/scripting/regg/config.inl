@@ -23,6 +23,7 @@ enum config_section_s {
 };
 
 enum _:game_cvars_s {
+	Float:GCRoundTime,
     GCRoundInfinite[32],
     Float:GCForcerespawn,
     GCRefillBpammoWeapons,
@@ -105,6 +106,10 @@ registerCvars() {
 
 changeGameCvars() {
     new pcvar;
+
+    pcvar = get_cvar_pointer("mp_roundtime");
+    GameCvars[GCRoundTime] = get_pcvar_float(pcvar);
+    set_pcvar_float(pcvar, 0.0);
 
     pcvar = get_cvar_pointer("mp_round_infinite");
     get_pcvar_string(pcvar, GameCvars[GCRoundInfinite], charsmax(GameCvars[GCRoundInfinite]));
