@@ -25,11 +25,12 @@ enum _:game_cvars_s {
 	GCBuyAnywhere,
     Float:GCBuyTime,
     GCItemStaytime,
+	GCRoundOver,
 };
 new GameCvars[game_cvars_s];
 
 enum _:hook_s {
-	HookChain:HookHasRestrictItem,
+	HookChain:HookCleanUpMap,
 	HookChain:HookPlayerSpawn,
 	HookChain:HookPlayerKilled,
 	HookChain:HookRoundEnd,
@@ -72,6 +73,9 @@ enum costtype_s {
 	CostTypeClip,
 };
 new WeaponIdType:DefaultWeaponCost[WeaponIdType][costtype_s];
+
+new bool:MapHasBombTarget, bool:MapHasBombZone, bool:MapHasRescueZone, bool:MapHasBuyZone, bool:MapHasEscapeZone, bool:MapHasVIPSafetyZone;
+new bool:CTCantBuy, bool:TCantBuy;
 
 new ReGG_Mode:Mode = ReGG_ModeNone;
 new WarmupTime;
@@ -127,6 +131,12 @@ public ReGG_StartPre(const ReGG_Mode:mode) {
 	startWarmUp();
 
 	return PLUGIN_HANDLED;
+}
+
+public CSGameRules_CleanUpMap_Post() {
+	changeMembersGameData();
+	removeHostageEntities();
+	removeTargetNameEntities();
 }
 
 public CBasePlayer_Spawn_Post(const id) {
@@ -196,6 +206,9 @@ public stopWarmUp() {
 	restoreGameCvars();
 	toggleHooks(StateDisable);
 	(WarmupType == WarmupTypeAllWeapons) && makeAllWeaponsFree(.make_free = false);
+	restoreMembersGameData();
+	restoreHostageEntities();
+	restoreTargetNameEntities();
 
 	for(new player = 1; player <= MaxClients; player++) {
 		if(!is_user_alive(player)) {
@@ -213,6 +226,7 @@ public stopWarmUp() {
 }
 
 registerHooks() {
+	Hooks[HookCleanUpMap] = RegisterHookChain(RG_CSGameRules_CleanUpMap, "CSGameRules_CleanUpMap_Post", true);
 	Hooks[HookPlayerSpawn] = RegisterHookChain(RG_CBasePlayer_Spawn, "CBasePlayer_Spawn_Post", true);
 	Hooks[HookPlayerKilled] = RegisterHookChain(RG_CBasePlayer_Killed, "CBasePlayer_Killed_Post", true);
 	Hooks[HookRoundEnd] = RegisterHookChain(RG_RoundEnd, "RoundEnd_Pre", false);
@@ -235,7 +249,7 @@ changeGameCvars() {
 
 	pcvar = get_cvar_pointer("mp_round_infinite");
 	get_pcvar_string(pcvar, GameCvars[GCRoundInfinite], charsmax(GameCvars[GCRoundInfinite]));
-	set_pcvar_string(pcvar, "bcdefg");
+	set_pcvar_string(pcvar, "bcdefghjk");
 
 	pcvar = get_cvar_pointer("mp_forcerespawn");
 	GameCvars[GCForceRespawn] = get_pcvar_float(pcvar);
@@ -312,6 +326,10 @@ changeGameCvars() {
 	pcvar = get_cvar_pointer("mp_item_staytime");
 	GameCvars[GCItemStaytime] = get_pcvar_num(pcvar);
 	set_pcvar_num(pcvar, 0);
+
+	pcvar = get_cvar_pointer("mp_roundover");
+	GameCvars[GCRoundOver] = get_pcvar_num(pcvar);
+	set_pcvar_num(pcvar, 1);
 }
 
 restoreGameCvars() {
@@ -380,6 +398,9 @@ restoreGameCvars() {
 
 	pcvar = get_cvar_pointer("mp_item_staytime");
 	set_pcvar_num(pcvar, GameCvars[GCItemStaytime]);
+
+	pcvar = get_cvar_pointer("mp_roundover");
+	set_pcvar_num(pcvar, GameCvars[GCRoundOver]);
 }
 
 getDefaultWeaponCost() {
@@ -399,4 +420,99 @@ makeAllWeaponsFree(bool:make_free = true) {
 			rg_set_weapon_info(weapon, WI_CLIP_COST, make_free ? 0 : DefaultWeaponCost[weapon][CostTypeClip]);
 		}          
 	}
+}
+
+getMembersGameData() {
+	MapHasBombTarget = get_member_game(m_bMapHasBombTarget);
+	MapHasBombZone = get_member_game(m_bMapHasBombZone);
+	MapHasRescueZone = get_member_game(m_bMapHasRescueZone);
+	MapHasBuyZone = get_member_game(m_bMapHasBuyZone);
+	MapHasEscapeZone = get_member_game(m_bMapHasEscapeZone);
+	MapHasVIPSafetyZone = get_member_game(m_bMapHasVIPSafetyZone);
+	CTCantBuy = get_member_game(m_bCTCantBuy);
+	TCantBuy = get_member_game(m_bTCantBuy);
+}
+
+changeMembersGameData() {
+	getMembersGameData();	// Remembered the data before changing
+
+	set_member_game(m_bMapHasBombTarget, false);
+	set_member_game(m_bMapHasBombZone, false);
+	set_member_game(m_bMapHasRescueZone, false);
+	set_member_game(m_bMapHasBuyZone, WarmupType == WarmupTypeAllWeapons ? true : false);
+	set_member_game(m_bMapHasEscapeZone, false);
+	set_member_game(m_bMapHasVIPSafetyZone, false);
+	set_member_game(m_bCTCantBuy, WarmupType != WarmupTypeAllWeapons ? true : false);
+	set_member_game(m_bTCantBuy, WarmupType != WarmupTypeAllWeapons ? true : false);
+}
+
+restoreMembersGameData() {
+	set_member_game(m_bMapHasBombTarget, MapHasBombTarget);
+	set_member_game(m_bMapHasBombZone, MapHasBombZone);
+	set_member_game(m_bMapHasRescueZone, MapHasRescueZone);
+	set_member_game(m_bMapHasBuyZone, MapHasBuyZone);
+	set_member_game(m_bMapHasEscapeZone, MapHasEscapeZone);
+	set_member_game(m_bMapHasVIPSafetyZone, MapHasVIPSafetyZone);
+	set_member_game(m_bCTCantBuy, CTCantBuy);
+	set_member_game(m_bTCantBuy, TCantBuy);
+}
+
+removeHostageEntities() {
+	new ent;
+	while((ent = rg_find_ent_by_class(ent, "hostage_entity"))) {
+		removeEntity(ent);
+	}
+	while((ent = rg_find_ent_by_class(ent, "monster_scientist"))) {
+		removeEntity(ent);
+	}
+}
+
+restoreHostageEntities() {
+	new ent;
+	while((ent = rg_find_ent_by_class(ent, "hostage_entity"))) {
+		restoreEntity(ent);
+	}
+	while((ent = rg_find_ent_by_class(ent, "monster_scientist"))) {
+		restoreEntity(ent);
+	}
+}
+
+removeTargetNameEntities() {
+	new ent;
+	while((ent = rg_find_ent_by_class(ent, "player_weaponstrip"))) {
+		set_entvar(ent, var_targetname, "stripper_dummy");
+	}
+	while((ent = rg_find_ent_by_class(ent, "game_player_equip"))) {
+		set_entvar(ent, var_targetname,"equipment_dummy");
+	}
+}
+
+restoreTargetNameEntities() {
+	new ent;
+	while((ent = rg_find_ent_by_class(ent, "player_weaponstrip"))) {
+		set_entvar(ent, var_targetname, "stripper");
+	}
+	while((ent = rg_find_ent_by_class(ent, "game_player_equip"))) {
+		set_entvar(ent, var_targetname,"equipment");
+	}
+}
+
+removeEntity(const entity) {
+	set_entvar(entity, var_health, 0.0);
+	set_entvar(entity, var_takedamage, DAMAGE_NO);
+	set_entvar(entity, var_movetype, MOVETYPE_NONE);
+	set_entvar(entity, var_deadflag, DEAD_DEAD);              
+	set_entvar(entity, var_effects, get_entvar(entity, var_effects) | EF_NODRAW);
+	set_entvar(entity, var_solid, SOLID_NOT);
+	set_entvar(entity, var_nextthink, -1.0);
+}
+
+restoreEntity(const entity) {
+	set_entvar(entity, var_health, Float:get_entvar(entity, var_max_health));
+	set_entvar(entity, var_takedamage, DAMAGE_YES);
+	set_entvar(entity, var_movetype, MOVETYPE_STEP);
+	set_entvar(entity, var_deadflag, DEAD_NO);              
+	set_entvar(entity, var_effects, get_entvar(entity, var_effects) & ~EF_NODRAW);
+	set_entvar(entity, var_solid, SOLID_SLIDEBOX);
+	set_entvar(entity, var_nextthink, get_gametime() + 0.01);
 }
