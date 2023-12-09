@@ -34,7 +34,6 @@ REGG_STEAL_LVL = ^3%n ^1украл уровень у ^4%n
 REGG_STEAL_POINTS = ^3%n ^1украл ^4%d ^1очка у ^4%n
 
 REGG_WARMUP_HUD = Разминочный раунд
-REGG_WARMUP_START = Начался разминочный раунд!
 REGG_WARMUP_END = Разминка завершена!^rПриготовьтесь к бою, игра началась!
 
 REGG_VOTE_MENU = Голосование за выбор режима игры:
