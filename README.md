@@ -22,11 +22,11 @@ In the GunGame modification, players are respawned with a weapon corresponding t
 
 Requirements
 =============
-- [ReHLDS](https://github.com/dreamstalker/rehlds/) 3.8.0.702 or higher
-- [ReGameDLL_CS](https://github.com/s1lentq/ReGameDLL_CS/) 5.19.0.490 or higher
-- Metamod-r (or Metamod-P)
+- [ReHLDS](https://github.com/dreamstalker/rehlds/) 3.13.0.788 or higher
+- [ReGameDLL_CS](https://github.com/s1lentq/ReGameDLL_CS/) 5.22.0.593 or higher
+- [Metamod-r](https://github.com/theAsmodai/metamod-r)  1.3.0.128 or higher (or Metamod-P)
 - [AMX Mod X](https://github.com/alliedmodders/amxmodx/) 1.9.0 or higher
-- [ReAPI](https://github.com/s1lentq/reapi) 5.18.0.205 or higher
+- [ReAPI](https://github.com/s1lentq/reapi) 5.22.0.254 or higher
 * Tip: Recommend using the latest versions.
 
 Installation
