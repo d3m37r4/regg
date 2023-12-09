@@ -27,11 +27,15 @@ Requirements
 - [Metamod-r](https://github.com/theAsmodai/metamod-r)  1.3.0.128 or higher (or Metamod-P)
 - [AMX Mod X](https://github.com/alliedmodders/amxmodx/) 1.9.0 or higher
 - [ReAPI](https://github.com/s1lentq/reapi) 5.22.0.254 or higher
-* Tip: Recommend using the latest versions.
+
+**Tip: Recommend using the latest versions.**
 
 Installation
 =============
 
 - Compile `*.sma` files
 - Move compiled files `*.amxx` to `amxmodx/plugins/`
-- Copy `configs/*.*` files to `amxmodx/configs` directory
+- Move `plugins-regg.ini` file to `amxmodx/configs/` directory
+- Move `configs/*.*` files to `amxmodx/configs/` directory
+- Move `regg.txt` file to `amxmodx/data/lang/` directory
+- Move folder `cstrike/sound/regg` with resources from archive to directory on server `/cstrike/sound`
