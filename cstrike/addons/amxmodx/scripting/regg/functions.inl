@@ -28,7 +28,7 @@ bool:start(const ReGG_Mode:mode) {
 		.tmDelay = 3.0, 
 		.st = WINSTATUS_DRAW, 
 		.event = ROUND_END_DRAW, 
-		.message = "GunGame Mod started!",
+		.message = "",
 		.sentence = "",
 		.trigger = true
 	);
