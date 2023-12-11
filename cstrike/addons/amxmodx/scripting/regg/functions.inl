@@ -334,9 +334,25 @@ ReGG_Result:addPlayerPoints(const id, const value, const bool:forwards = true) {
 			break;
 		}
 
-		points -= needPoints;
-		needPoints = Levels[level][LevelPoints];
-		result = ReGG_ResultLevelUp;
+		switch(Levels[level][LevelWeaponID]) {
+			case WEAPON_KNIFE: {
+				points = 0;
+				needPoints = Levels[level][LevelPoints];
+				result = ReGG_ResultLevelUp;
+			}
+
+			case WEAPON_HEGRENADE: {
+				points = 0;
+				needPoints = Levels[level][LevelPoints];
+				result = ReGG_ResultLevelUp;
+			}
+
+			default: {
+				points -= needPoints;
+				needPoints = Levels[level][LevelPoints];
+				result = ReGG_ResultLevelUp;
+			}
+		}
 	}
 
 	if(result != ReGG_ResultPointsUp && !setPlayerLevel(id, level, forwards)) {
@@ -364,9 +380,25 @@ ReGG_Result:addTeamPoints(const slot, const value, const bool:forwards = true) {
 			break;
 		}
 
-		points -= needPoints;
-		needPoints = getTeamLevelPoints(slot, level);
-		result = ReGG_ResultLevelUp;
+		switch(Levels[level][LevelWeaponID]) {
+			case WEAPON_KNIFE: {
+				points = 0;
+				needPoints = getTeamLevelPoints(slot, level);
+				result = ReGG_ResultLevelUp;
+			}
+
+			case WEAPON_HEGRENADE: {
+				points = 0;
+				needPoints = getTeamLevelPoints(slot, level);
+				result = ReGG_ResultLevelUp;
+			}
+
+			default: {
+				points -= needPoints;
+				needPoints = getTeamLevelPoints(slot, level);
+				result = ReGG_ResultLevelUp;
+			}
+		}
 	}
 
 	if(result != ReGG_ResultPointsUp && !setTeamLevel(slot, level, forwards)) {
