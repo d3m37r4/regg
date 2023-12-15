@@ -26,11 +26,10 @@ public ReGG_FinishPost(const killer, const victim) {
 public MapChange() {
 	switch(VoteType){
 		case 0: {
-			new mapname[MAX_NAME_LENGTH];
-			ArrayGetString(gMapName, random(gMapNums), mapname, charsmax(mapname));
-			message_begin(MSG_ALL, SVC_INTERMISSION);
-			message_end();
-			engine_changelevel(mapname);
+			new next_map[MAX_NAME_LENGTH];
+			ArrayGetString(gMapName, random(gMapNums), next_map, charsmax(next_map));
+			intermission();
+			set_task(3.0, "delay_MapChange", 0, next_map, strlen(next_map) + 1);
 		}
 		case 1: {
 			server_cmd("mapm_start_vote");
@@ -101,4 +100,13 @@ stock bool:isValidMap(mapname[]) {
 	}
 
 	return false;
+}
+
+stock intermission() {
+	message_begin(MSG_ALL, SVC_INTERMISSION);
+	message_end();
+}
+
+public delay_MapChange(mapname[]) {
+	engine_changelevel(mapname);
 }
