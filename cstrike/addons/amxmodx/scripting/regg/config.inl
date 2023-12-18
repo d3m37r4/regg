@@ -9,7 +9,6 @@
 enum _:config_s {
     CfgStealMode,
     CfgStealValue,
-    CfgTeamStealValue,
     CfgAWPOneShot,
     CfgAmmoAmount,
     CfgRefillOnKill,
@@ -52,13 +51,12 @@ new Config[config_s];
 new GameCvars[game_cvars_s];
 
 registerCvars() {
-    // 0 - off, 1 - steal level, 2 - steal points
     bind_pcvar_num(create_cvar(
         "regg_steal_mode", "1",
         .has_min = true,
         .min_val = 0.0,
         .has_max = true,
-        .max_val = 2.0
+        .max_val = 3.0
     ), Config[CfgStealMode]);
 
     bind_pcvar_num(create_cvar(
@@ -66,12 +64,6 @@ registerCvars() {
         .has_min = true,
         .min_val = 1.0
     ), Config[CfgStealValue]);
-
-    bind_pcvar_num(create_cvar(
-        "regg_team_steal_value", "3",
-        .has_min = true,
-        .min_val = 1.0
-    ), Config[CfgTeamStealValue]);
 
     bind_pcvar_num(create_cvar(
         "regg_awp_oneshot", "1",
