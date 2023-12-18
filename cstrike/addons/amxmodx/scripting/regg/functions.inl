@@ -645,7 +645,7 @@ getTeamSlot(const id) {
 getTeamLevelPoints(const slot, const level) {
 	new points;
 	new point_s = getTeamPlayers(slot) * Levels[level][LevelPoints];
-	new lvlmod = Levels[level][LevelMod];
+	new lvlmod = Levels[level][LevelRatio];
 	if(lvlmod != 100) {
 		points = roundPoints(lvlmod, point_s);
 	} else {

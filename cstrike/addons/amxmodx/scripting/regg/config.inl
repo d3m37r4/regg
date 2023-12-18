@@ -329,7 +329,7 @@ public bool:ConfigOnKeyValue(const INIParser:handle, const key[], const value[])
             } else if (strcmp(key, "points") == 0) {
                 Levels[LevelsNum][LevelPoints] = str_to_num(value);
             } else if (strcmp(key, "mod") == 0) {
-                Levels[LevelsNum][LevelMod] = str_to_num(value);
+                Levels[LevelsNum][LevelRatio] = str_to_num(value);
             }
         }
     }
