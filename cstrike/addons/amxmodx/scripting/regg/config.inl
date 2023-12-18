@@ -320,7 +320,7 @@ public bool:ConfigOnKeyValue(const INIParser:handle, const key[], const value[])
                 Levels[LevelsNum][LevelWeaponID] = WeaponIdType:rg_get_weapon_info(value, WI_ID);
             } else if (strcmp(key, "points") == 0) {
                 Levels[LevelsNum][LevelPoints] = str_to_num(value);
-            } else if (strcmp(key, "mod") == 0) {
+            } else if (strcmp(key, "ratio") == 0) {
                 Levels[LevelsNum][LevelRatio] = str_to_num(value);
             }
         }
