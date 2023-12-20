@@ -242,10 +242,10 @@ ReGG_Result:steal(const killer, const victim) {
 		case 3: {
 			new level;
 			if(Mode == ReGG_ModeTeam) {
-			new slot = getTeamSlot(killer);
+			new slot = getTeamSlot(victim);
 				level = Teams[slot][TeamLevel];
 			} else {
-				level = Players[killer][PlayerLevel];
+				level = Players[victim][PlayerLevel];
 			}
 			return stealPoints(killer, victim, Levels[level][LevelPoints]);
 		}
