@@ -354,7 +354,11 @@ ReGG_Result:addPlayerPoints(const id, const value, const bool:forwards = true) {
 			}
 
 			default: {
-				points -= needPoints;
+				if(Config[CfgRollingPoints] > 0) {
+					points -= needPoints;
+				} else {
+					points = 0;
+				}
 				needPoints = Levels[level][LevelPoints];
 				result = ReGG_ResultLevelUp;
 			}
@@ -400,7 +404,11 @@ ReGG_Result:addTeamPoints(const slot, const value, const bool:forwards = true) {
 			}
 
 			default: {
-				points -= needPoints;
+				if(Config[CfgRollingPoints] > 0) {
+					points -= needPoints;
+				} else {
+					points = 0;
+				}
 				needPoints = getTeamLevelPoints(slot, level);
 				result = ReGG_ResultLevelUp;
 			}
