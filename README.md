@@ -1,5 +1,9 @@
 # GunGame Mod for Counter-Strike 1.6
 
+<a href="https://github.com/d3m37r4/regg/releases/latest"><img alt="Latest Release" src="https://img.shields.io/github/v/release/d3m37r4/regg?style=for-the-badge&logo=github"></a>
+<a href="https://github.com/d3m37r4/regg/releases"><img alt="Total Downloads" src="https://img.shields.io/github/downloads/d3m37r4/regg/total?label=total%20downloads&style=for-the-badge&logo=github"></a>
+<a href="https://github.com/d3m37r4/regg/actions"><img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/d3m37r4/regg/regg_build.yml?label=tests&style=for-the-badge&logo=github"></a>
+
 ## What is this?
 GunGame is one of most dynamic modifications in terms of gameplay. In this it is similar to CSDM mod, which uses a similar game mechanic: <br>
 – purchase menu is not available; <br>
@@ -41,13 +45,19 @@ Installation
 - Move `regg.txt` file to `amxmodx/data/lang/` directory
 - Move folder `cstrike/sound/regg` with resources from archive to directory on server `/cstrike/sound`
 
+Downloads
+=============
+- [Release builds](https://github.com/d3m37r4/regg/releases)
+- [Dev builds](https://github.com/d3m37r4/regg/actions/workflows/regg_build.yml)
+
 Contribution and support
 =============
 If you have any thoughts or suggestions to improve the product, contact me at one of the following places:
 
-<a href="https://github.com/d3m37r4/regg/issues/"><img width="18px" alt="Github Issues" src="https://github.com/d3m37r4/regg/assets/26052038/4783befd-1d08-4294-a984-772f5160024d"/> Github Issues</a><br>
-<a href="https://github.com/d3m37r4/regg/discussions/"><img width="18px" alt="Github Discussions" src="https://github.com/d3m37r4/regg/assets/26052038/4783befd-1d08-4294-a984-772f5160024d"/> Github Discussions</a><br>
-<a href="https://t.me/dmitry_isakow"><img width="18px" alt="Telegram d3m37r4" src="https://github.com/d3m37r4/regg/assets/26052038/63e845e0-3222-4186-83a9-6df17e554ada"/> Telegram d3m37r4</a><br>
-<a href="https://t.me/jumperya"><img width="18px" alt="Telegram byjumpe" src="https://github.com/d3m37r4/regg/assets/26052038/63e845e0-3222-4186-83a9-6df17e554ada"/> Telegram byjumpe</a><br>
+<a href="https://github.com/d3m37r4/regg/issues/"><img alt="Github Issues" src="https://img.shields.io/badge/github-issues-blue?style=for-the-badge&logo=github"></a>
+<a href="https://github.com/d3m37r4/regg/discussions/"><img alt="Github Discussions" src="https://img.shields.io/badge/github-discussions-blue?style=for-the-badge&logo=github"></a>
+<a href="https://dev-cs.ru/threads/14389/"><img alt="Thread on dev-cs.ru" src="https://img.shields.io/badge/Thread_on_dev--cs.ru-fff?style=for-the-badge"></a>
+<a href="https://t.me/dmitry_isakow"><img alt="Static Badge" src="https://img.shields.io/badge/telegram-d3m37r4-0088CC?style=for-the-badge&logo=telegram"></a>
+<a href="https://t.me/jumperya"><img alt="Static Badge" src="https://img.shields.io/badge/telegram-byjumpe-0088CC?style=for-the-badge&logo=telegram"></a>
 
 You can also submit a <a href="https://github.com/d3m37r4/regg/pulls/">pull request</a>.
