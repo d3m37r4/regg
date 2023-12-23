@@ -9,22 +9,23 @@
 	native is_user_authorized(index);
 #endif
 
-/********************************************************
-*			   NOTE ON SEMANTIC VERSIONING				*
-********************************************************/
-
 /**
-*	MAJOR_VERSION: When backward incompatible API changes are made.
-*	MINOR_VERSION: When adding new functionality without breaking backward compatibility.
-*	MAINTENANCE_VERSION: When backward compatible corrections are made.
+*	Given a version number MAJOR.MINOR.PATCH, increment the:
+*	
+*	MAJOR version when you make incompatible API changes
+*	MINOR version when you add functionality in a backward compatible manner
+*	PATCH version when you make backward compatible bug fixes
+*	
+*	Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+*	For an in-depth look at semantic versioning, check out this: https://semver.org
 **/
 
 #define REGG_MAJOR_VERSION				0
-#define REGG_MINOR_VERSION				4
-#define REGG_MAINTENANCE_VERSION		40
+#define REGG_MINOR_VERSION				5
+#define REGG_PATCH_VERSION				41
 
-#define REGG_VERSION					str_to_num(fmt("%d%d%d", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_MAINTENANCE_VERSION))
-#define REGG_VERSION_STR				fmt("%d.%d.%d-alpha", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_MAINTENANCE_VERSION)
+#define REGG_VERSION					str_to_num(fmt("%d%d%d", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_PATCH_VERSION))
+#define REGG_VERSION_STR				fmt("%d.%d.%d-alpha", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_PATCH_VERSION)
 
 stock const REGG_DIR_NAME[MAX_NAME_LENGTH] = "regg";		// Mod directory name
 stock const REGG_MAIN_CFG_FILE[] = "regg-main.cfg";		// Main config file of mod
