@@ -6,11 +6,12 @@ GunGame is one of most dynamic modifications in terms of gameplay. In this it is
 – money is not given out; <br>
 – weapon cannot be thrown away and it disappears after death of the owner. <br>
 In the GunGame modification, players are respawned with a weapon corresponding to their level and a knife. For killing enemy, player is awarded a new level, and with it a weapon. By default, knife - is last weapon you can get. Winner will be player who is the first to commit murders with a knife (in team mode, team that was this player in wins).
- 
+
 ## Composition of the modification
 `regg_core` - basis of modification <br>
 `regg_balancer` - plugin allows you to control the balance of teams <br>
 `regg_controller` - control of game modes (single, team, FFA) <br>
+`regg_vote` - plugin is responsible for launching voting for mode selection of game $\textcolor{red}{(need testing!)}$ <br>
 `regg_informer` - displays the current level of player or team, as well as weapons and number of points <br>
 `regg_leader` - displays current leader of game <br>
 `regg_map_cleaner` - clearing maps from unnecessary entities <br>
