@@ -25,7 +25,7 @@
 #define REGG_PATCH_VERSION				41
 
 #define REGG_VERSION					str_to_num(fmt("%d%d%d", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_PATCH_VERSION))
-#define REGG_VERSION_STR				fmt("%d.%d.%d-alpha", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_PATCH_VERSION)
+#define REGG_VERSION_STR				fmt("%d.%d.%d-beta", REGG_MAJOR_VERSION, REGG_MINOR_VERSION, REGG_PATCH_VERSION)
 
 stock const REGG_DIR_NAME[MAX_NAME_LENGTH] = "regg";		// Mod directory name
 stock const REGG_MAIN_CFG_FILE[] = "regg-main.cfg";		// Main config file of mod
