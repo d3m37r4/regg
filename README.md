@@ -40,3 +40,14 @@ Installation
 - Move `configs/*.*` files to `amxmodx/configs/` directory
 - Move `regg.txt` file to `amxmodx/data/lang/` directory
 - Move folder `cstrike/sound/regg` with resources from archive to directory on server `/cstrike/sound`
+
+Contribution and support
+=============
+If you have any thoughts or suggestions to improve the product, contact me at one of the following places:
+
+<a href="https://github.com/d3m37r4/regg/issues/"><img width="18px" alt="Github Issues" src="https://github.com/d3m37r4/regg/assets/26052038/4783befd-1d08-4294-a984-772f5160024d"/> Github Issues</a><br>
+<a href="https://github.com/d3m37r4/regg/discussions/"><img width="18px" alt="Github Discussions" src="https://github.com/d3m37r4/regg/assets/26052038/4783befd-1d08-4294-a984-772f5160024d"/> Github Discussions</a><br>
+<a href="https://t.me/dmitry_isakow"><img width="18px" alt="Telegram d3m37r4" src="https://github.com/d3m37r4/regg/assets/26052038/63e845e0-3222-4186-83a9-6df17e554ada"/> Telegram d3m37r4</a><br>
+<a href="https://t.me/jumperya"><img width="18px" alt="Telegram byjumpe" src="https://github.com/d3m37r4/regg/assets/26052038/63e845e0-3222-4186-83a9-6df17e554ada"/> Telegram byjumpe</a><br>
+
+You can also submit a <a href="https://github.com/d3m37r4/regg/pulls/">pull request</a>.
