@@ -12,7 +12,7 @@ enum _:level_s {
 	WeaponIdType:LevelWeaponID,
 	LevelPoints,
 	LevelTitle[MAX_LEVEL_TITLE_LENGTH],
-	LevelMod,
+	LevelRatio,
 };
 
 enum _:player_s {

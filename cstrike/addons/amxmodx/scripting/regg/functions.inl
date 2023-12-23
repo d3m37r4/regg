@@ -232,18 +232,24 @@ bool:suicide(const id) {
 }
 
 ReGG_Result:steal(const killer, const victim) {
-	if(Mode == ReGG_ModeTeam) {
-		return stealPoints(killer, victim, Config[CfgTeamStealValue]);
-	} else {
-		switch(Config[CfgStealMode]) {
-			case 1: {
-				return stealLevels(killer, victim, Config[CfgStealValue]);
-			}
-			case 2: {
-				return stealPoints(killer, victim, Config[CfgStealValue]);
-			}
+	switch(Config[CfgStealMode]) {
+		case 1: {
+			return stealLevels(killer, victim, Config[CfgStealValue]);
 		}
-    }
+		case 2: {
+			return stealPoints(killer, victim, Config[CfgStealValue]);
+		}
+		case 3: {
+			new level;
+			if(Mode == ReGG_ModeTeam) {
+			new slot = getTeamSlot(victim);
+				level = Teams[slot][TeamLevel];
+			} else {
+				level = Players[victim][PlayerLevel];
+			}
+			return stealPoints(killer, victim, Levels[level][LevelPoints]);
+		}
+	}
 	return addPoints(killer, 1);
 }
 
@@ -334,9 +340,29 @@ ReGG_Result:addPlayerPoints(const id, const value, const bool:forwards = true) {
 			break;
 		}
 
-		points -= needPoints;
-		needPoints = Levels[level][LevelPoints];
-		result = ReGG_ResultLevelUp;
+		switch(Levels[level][LevelWeaponID]) {
+			case WEAPON_KNIFE: {
+				points = 0;
+				needPoints = Levels[level][LevelPoints];
+				result = ReGG_ResultLevelUp;
+			}
+
+			case WEAPON_HEGRENADE: {
+				points = 0;
+				needPoints = Levels[level][LevelPoints];
+				result = ReGG_ResultLevelUp;
+			}
+
+			default: {
+				if(Config[CfgRollingPoints] > 0) {
+					points -= needPoints;
+				} else {
+					points = 0;
+				}
+				needPoints = Levels[level][LevelPoints];
+				result = ReGG_ResultLevelUp;
+			}
+		}
 	}
 
 	if(result != ReGG_ResultPointsUp && !setPlayerLevel(id, level, forwards)) {
@@ -364,9 +390,29 @@ ReGG_Result:addTeamPoints(const slot, const value, const bool:forwards = true) {
 			break;
 		}
 
-		points -= needPoints;
-		needPoints = getTeamLevelPoints(slot, level);
-		result = ReGG_ResultLevelUp;
+		switch(Levels[level][LevelWeaponID]) {
+			case WEAPON_KNIFE: {
+				points = 0;
+				needPoints = getTeamLevelPoints(slot, level);
+				result = ReGG_ResultLevelUp;
+			}
+
+			case WEAPON_HEGRENADE: {
+				points = 0;
+				needPoints = getTeamLevelPoints(slot, level);
+				result = ReGG_ResultLevelUp;
+			}
+
+			default: {
+				if(Config[CfgRollingPoints] > 0) {
+					points -= needPoints;
+				} else {
+					points = 0;
+				}
+				needPoints = getTeamLevelPoints(slot, level);
+				result = ReGG_ResultLevelUp;
+			}
+		}
 	}
 
 	if(result != ReGG_ResultPointsUp && !setTeamLevel(slot, level, forwards)) {
@@ -613,7 +659,7 @@ getTeamSlot(const id) {
 getTeamLevelPoints(const slot, const level) {
 	new points;
 	new point_s = getTeamPlayers(slot) * Levels[level][LevelPoints];
-	new lvlmod = Levels[level][LevelMod];
+	new lvlmod = Levels[level][LevelRatio];
 	if(lvlmod != 100) {
 		points = roundPoints(lvlmod, point_s);
 	} else {

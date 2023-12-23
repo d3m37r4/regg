@@ -9,7 +9,7 @@
 enum _:config_s {
     CfgStealMode,
     CfgStealValue,
-    CfgTeamStealValue,
+    CfgRollingPoints,
     CfgAWPOneShot,
     CfgAmmoAmount,
     CfgRefillOnKill,
@@ -52,13 +52,12 @@ new Config[config_s];
 new GameCvars[game_cvars_s];
 
 registerCvars() {
-    // 0 - off, 1 - steal level, 2 - steal points
     bind_pcvar_num(create_cvar(
         "regg_steal_mode", "1",
         .has_min = true,
         .min_val = 0.0,
         .has_max = true,
-        .max_val = 2.0
+        .max_val = 3.0
     ), Config[CfgStealMode]);
 
     bind_pcvar_num(create_cvar(
@@ -68,10 +67,12 @@ registerCvars() {
     ), Config[CfgStealValue]);
 
     bind_pcvar_num(create_cvar(
-        "regg_team_steal_value", "3",
+        "regg_rolling_points", "1",
         .has_min = true,
-        .min_val = 1.0
-    ), Config[CfgTeamStealValue]);
+        .min_val = 0.0,
+        .has_max = true,
+        .max_val = 1.0
+    ), Config[CfgRollingPoints]);
 
     bind_pcvar_num(create_cvar(
         "regg_awp_oneshot", "1",
@@ -328,8 +329,8 @@ public bool:ConfigOnKeyValue(const INIParser:handle, const key[], const value[])
                 Levels[LevelsNum][LevelWeaponID] = WeaponIdType:rg_get_weapon_info(value, WI_ID);
             } else if (strcmp(key, "points") == 0) {
                 Levels[LevelsNum][LevelPoints] = str_to_num(value);
-            } else if (strcmp(key, "mod") == 0) {
-                Levels[LevelsNum][LevelMod] = str_to_num(value);
+            } else if (strcmp(key, "ratio") == 0) {
+                Levels[LevelsNum][LevelRatio] = str_to_num(value);
             }
         }
     }
