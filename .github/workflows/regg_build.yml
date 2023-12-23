@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ "alpha-release" ]
+    branches: [ "beta-release" ]
     paths-ignore:
       - "**.md"
       - "**.css"
