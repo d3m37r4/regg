@@ -162,26 +162,27 @@ ReGG_Result:killKnife(const killer, const victim) {
 
 bool:giveWeapon(const id, const level) {
 	EXECUTE_FORWARD_PRE_ARGS(FWD_GiveWeapon, false, id, Levels[level][LevelWeaponID]);
+	new deployedWeapon;
 	switch (Levels[level][LevelWeaponID]) {
 		case WEAPON_KNIFE: {}
 		case WEAPON_HEGRENADE: {
 			rg_give_item(id, "weapon_hegrenade");
-			for(new i = 0, weapon, wname[32]; i < GrenadeWeaponsNum; i++) {
+			for(new i = 0, wname[32]; i < GrenadeWeaponsNum; i++) {
 				rg_get_weapon_info(GrenadeWeapons[i], WI_NAME, wname, charsmax(wname));
-				weapon = rg_give_item(id, wname);
-				if(!is_nullent(weapon)) {
+				deployedWeapon = rg_give_item(id, wname);
+				if(!is_nullent(deployedWeapon)) {
 					rg_set_user_bpammo(id, GrenadeWeapons[i], Config[CfgAmmoAmount]);
 				}
 			}
 		}
 		case WEAPON_AWP: {
-			new weapon = rg_give_item(id, "weapon_awp");
-			if(!is_nullent(weapon)) {
+			deployedWeapon = rg_give_item(id, "weapon_awp");
+			if(!is_nullent(deployedWeapon)) {
 				rg_set_user_bpammo(id, WEAPON_AWP, Config[CfgAmmoAmount]);
 
 				if(Config[CfgAWPOneShot]) {
 					rg_set_user_ammo(id, WEAPON_AWP, 1);
-					rg_set_iteminfo(weapon, ItemInfo_iMaxClip, 1);
+					rg_set_iteminfo(deployedWeapon, ItemInfo_iMaxClip, 1);
 				}
 			}
 		}
@@ -189,11 +190,15 @@ bool:giveWeapon(const id, const level) {
 			new wname[32];
 			new WeaponIdType:wid = Levels[level][LevelWeaponID];
 			rg_get_weapon_info(wid, WI_NAME, wname, charsmax(wname));
-			new weapon = rg_give_item(id, wname);
-			if(!is_nullent(weapon)) {
+			deployedWeapon = rg_give_item(id, wname);
+			if(!is_nullent(deployedWeapon)) {
 				rg_set_user_bpammo(id, wid, Config[CfgAmmoAmount]);
 			}
 		}
+	}
+	if (deployedWeapon > 0) {
+		// Переключаем игрока на выданное оружие(в обход настройки "_cl_autowepswitch = 0")
+		rg_switch_weapon(id, deployedWeapon);
 	}
 	EXECUTE_FORWARD_POST_ARGS(FWD_GiveWeapon, id, Levels[level][LevelWeaponID]);
 	return true;
@@ -243,7 +248,7 @@ ReGG_Result:steal(const killer, const victim) {
 		case 3: {
 			new level;
 			if(Mode == ReGG_ModeTeam) {
-			new slot = getTeamSlot(victim);
+				new slot = getTeamSlot(victim);
 				level = Teams[slot][TeamLevel];
 			} else {
 				level = Players[victim][PlayerLevel];
