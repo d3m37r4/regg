@@ -163,7 +163,7 @@ public vote_menu_handler(id, menu, item) {
 	}
 	
 	if(voteEnded) {
-		client_print_color(0, print_team_default, "%L", LANG_PLAYER, "REGG_VOTE_ENDED");
+		client_print_color(id, print_team_default, "%L", LANG_PLAYER, "REGG_VOTE_ENDED");
 		menu_destroy(menu);
 		return PLUGIN_HANDLED;
 	}
