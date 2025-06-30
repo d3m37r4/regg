@@ -78,7 +78,7 @@ public ReGG_StartPre(const ReGG_Mode:mode) {
 }
 
 public CBasePlayer_Spawn(id) {
-	if(!is_user_authorized(id)) {
+	if(!is_user_authorized(id) || !is_user_connected(id)) {
 		return HC_CONTINUE;
 	}
 	if(!playerVoted[id] && voteStarted) {

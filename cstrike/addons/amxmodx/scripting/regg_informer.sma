@@ -73,7 +73,7 @@ public plugin_init() {
 public CBasePlayer_Spawn_Post(const id) <disabled> {}
 
 public CBasePlayer_Spawn_Post(const id) <enabled> {
-	if(!is_user_authorized(id)) {
+	if(!is_user_authorized(id) || !is_user_connected(id)) {
 		return;
 	}
 
