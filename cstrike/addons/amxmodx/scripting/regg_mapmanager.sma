@@ -3,6 +3,7 @@
 #include <regg>
 
 new VoteType, gMapNums;
+new Float:MapChangeDelay;
 new Array:gMapName;
 
 public plugin_init() {
@@ -13,6 +14,11 @@ public plugin_init() {
 		.has_min = true, 
 		.min_val = 0.0
 	), VoteType);
+	bind_pcvar_float(create_cvar(
+		"regg_mapchange_delay", "10",
+		.has_min = true, 
+		.min_val = 5.0
+	), MapChangeDelay);
 
 	gMapName = ArrayCreate(MAX_NAME_LENGTH);
 
@@ -20,7 +26,7 @@ public plugin_init() {
 }
 
 public ReGG_FinishPost(const killer, const victim) {
-	MapChange();
+	set_task(MapChangeDelay, "MapChange", 0);
 }
 
 public MapChange() {
@@ -29,7 +35,7 @@ public MapChange() {
 			new next_map[MAX_NAME_LENGTH];
 			ArrayGetString(gMapName, random(gMapNums), next_map, charsmax(next_map));
 			intermission();
-			set_task(3.0, "delay_MapChange", 0, next_map, strlen(next_map) + 1);
+			delay_MapChange(next_map);
 		}
 		case 1: {
 			server_cmd("mapm_start_vote");
